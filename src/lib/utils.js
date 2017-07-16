@@ -6,12 +6,12 @@ const semver = require('semver');
 
 function bootMessage() {
   console.log(`==========================================`)
-  console.log('  ________  .____ ____   ______________ ');
-  console.log('\______ \ |    |\   \ /   /\______   \');
-  console.log(' |    |  \|    | \   Y   /  |       _/');
-  console.log(' |    `   \    |__\     /   |    |   \');
-  console.log('/_______  /_______ \___/    |____|_  /');
-  console.log('        \/        \/               \/ ');
+  console.log('________  .____ ____   ______________ ');
+  console.log('\\______ \\ |    |\\   \\ /   /\\______   \\');
+  console.log(' |    |  \\|    | \\   Y   /  |       _/');
+  console.log(' |    `   \\    |__\\     /   |    |   \\');
+  console.log('/_______  /_______ \\___/    |____|_  /');
+  console.log('        \\/        \\/               \\/ ');
   console.log(`============================] DLVR v${PKG.version}`)
 }
 
