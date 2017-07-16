@@ -1,0 +1,19 @@
+{
+  "name": "rlsr",
+  "version": "0.0.1",
+  "description": "",
+  "bin": {
+    "rlsr": "./src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "node-async-loop": "^1.2.2",
+    "octonode": "^0.7.13",
+    "ora": "^1.3.0",
+    "prompt": "^1.0.0",
+    "semver": "^5.3.0",
+    "simple-git": "^1.73.0"
+  }
+}
