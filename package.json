@@ -1,9 +1,9 @@
 {
-  "name": "rlsr",
+  "name": "dlvr",
   "version": "0.0.1",
   "description": "",
   "bin": {
-    "rlsr": "./src/index.js"
+    "dlvr": "./src/index.js"
   },
   "author": "",
   "license": "ISC",

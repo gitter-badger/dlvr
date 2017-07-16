@@ -1,4 +1,4 @@
-const FILEPATH = `${process.cwd()}/.rlsr`;
+const FILEPATH = `${process.cwd()}/.dlvr`;
 const spinner = require('./spinner');
 const utils = require('./utils');
 const fs = require('fs');

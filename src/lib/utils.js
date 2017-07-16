@@ -6,13 +6,13 @@ const semver = require('semver');
 
 function bootMessage() {
   console.log(`==========================================`)
-  console.log('__________.____       ___________________ ');
-  console.log('\\______   \\    |     /   _____/\\______   \\');
-  console.log(' |       _/    |     \\_____  \\  |       _/');
-  console.log(' |    |   \\    |___  /        \\ |    |   \\');
-  console.log(' |____|_  /_______ \\/_______  / |____|_  /');
-  console.log('        \\/        \\/        \\/         \\/ ');
-  console.log(`============================] RLSR v${PKG.version}`)
+  console.log('  ________  .____ ____   ______________ ');
+  console.log('\______ \ |    |\   \ /   /\______   \');
+  console.log(' |    |  \|    | \   Y   /  |       _/');
+  console.log(' |    `   \    |__\     /   |    |   \');
+  console.log('/_______  /_______ \___/    |____|_  /');
+  console.log('        \/        \/               \/ ');
+  console.log(`============================] DLVR v${PKG.version}`)
 }
 
 const readPackage = () => {
