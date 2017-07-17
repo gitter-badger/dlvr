@@ -1,4 +1,4 @@
-var PKG = require('../../package.json');
+const PKG = require('../../package.json');
 const spinner = require('./spinner');
 const path = require('path');
 const fs = require('fs');
@@ -39,7 +39,8 @@ const saveVersion = (version) => {
           resolve();
         });
       } else {
-        reject('Given Version is not in a valid SEMVER format');
+        console.log('reject');
+        reject(new Error('Given Version is not in a valid SEMVER format'));
       }
     });
   });
@@ -49,9 +50,9 @@ const catchError = (err, msg, reject) => {
   if (err) {
     spinner.fail(err);
     if (reject) {
-      reject(err);
+      reject(new Error(err));
     } else {
-      console.log(msg);
+      console.log(msg); // todo print stacktrace on DEV ?
       process.exit(1);
     }
   }

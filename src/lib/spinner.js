@@ -13,12 +13,11 @@ exports.create = message => {
   global.spinner = ora(message).start();
 };
 
-exports.fail = message => {
+exports.fail = err => {
   if (global.spinner) {
     global.spinner.fail();
     console.log('');
   };
-
-  console.error(`😢  ${red(message)} `);
+  console.error(`😢  ${red(err)} `);
   process.exit(1);
 };

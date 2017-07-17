@@ -6,6 +6,27 @@ const asyncLoop = require('node-async-loop');
 const fs = require('fs');
 const path = require('path');
 
+const checkToken = (config) => {
+  var client = og.client(config.github.token);
+
+  return new Promise((resolve, reject) => {
+    if (config.github) {
+      spinner.create('Check GitHub Token');
+      client.get('/user', {}, (err, status, body, headers) => {
+        utils.catchError(err, err, reject);
+
+        if (!body) {
+          reject(new Error('Github Token invalid'));
+        } else {
+          resolve();
+        }
+      });
+    } else {
+      resolve();
+    }
+  });
+};
+
 const uploadAssets = (config, id) => {
   return new Promise((resolve, reject) => {
     if (id) {
@@ -38,9 +59,12 @@ const gitHubRelease = (config, version) => {
 
   return new Promise((resolve, reject) => {
     git.tags((err, tags) => {
+      utils.catchError(err, err, reject);
       const TAGS = tags.all.reverse();
 
       git.log({from: TAGS[1], to: TAGS[0]}, (err, data) => {
+        utils.catchError(err, err, reject);
+
         data.all.filter((item) => {
           return item.message;
         }).map((item) => {
@@ -103,7 +127,7 @@ const tagExist = (tag) => {
       utils.catchError(err, err, reject);
 
       if (tags.all.indexOf(tag) > -1) {
-        reject(`Tag ${tag} already exists`);
+        reject(new Error(`Tag ${tag} already exists`));
       }
 
       resolve(tag);
@@ -117,9 +141,8 @@ const checkChanges = () => {
   return new Promise((resolve, reject) => {
     git.diffSummary((err, data) => {
       utils.catchError(err, err);
-
       if (data.files.length > 0) {
-        spinner.fail('You have uncommitted changes - Please commit them first!');
+        reject(new Error('You have uncommitted changes - Please commit them first!'));
       }
       resolve();
     });
@@ -127,6 +150,7 @@ const checkChanges = () => {
 };
 
 module.exports = {
+  checkToken,
   uploadAssets,
   gitHubRelease,
   tagAndPush,

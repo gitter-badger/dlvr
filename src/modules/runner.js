@@ -5,13 +5,14 @@ const runner = (cmd, msg, errorMsg) => {
   spinner.create(msg);
   return new Promise((resolve, reject) => {
     const r = spawn(cmd, { shell: true });
+
     r.stderr.on('data', (data) => {
       console.log(`stderr: ${data}`);
     });
 
     r.on('close', (code) => {
       if (code > 0) {
-        spinner.fail(errorMsg, errorMsg, reject);
+        reject(new Error(errorMsg));
       }
       resolve();
     });
@@ -26,7 +27,6 @@ const runTests = (command) => {
         'Run Test suites',
         'Tests failed'
       ).then(() => {
-        spinner.success();
         resolve();
       });
     } else {

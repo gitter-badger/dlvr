@@ -48,7 +48,6 @@ const loadConfig = () => {
   return new Promise((resolve, reject) => {
     fs.readFile(FILEPATH, (err, cfg) => {
       utils.catchError(err, err, reject);
-
       CONFIG = checkIntegrity(JSON.parse(cfg));
       resolve(CONFIG);
     });
