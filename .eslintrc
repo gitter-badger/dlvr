@@ -2,6 +2,7 @@
     "rules": {
         "semi": [2,"always"],
         "curly": [2, "multi-line"],
+        "one-var": [2, { var: "always", let: "never", const: "never" }]
     },
     "env": {
         "es6": true,

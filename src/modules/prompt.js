@@ -1,5 +1,5 @@
-var prompt = require('prompt');
-var git = require('./git');
+const prompt = require('prompt');
+const git = require('./git');
 
 const version = () => {
   return new Promise((resolve, reject) => {

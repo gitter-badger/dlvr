@@ -1,16 +1,16 @@
-var git = require('simple-git')(process.cwd());
-var og = require('octonode');
+const git = require('simple-git')(process.cwd());
+const og = require('octonode');
 const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
-var asyncLoop = require('node-async-loop');
-var fs = require('fs');
-var path = require('path');
+const asyncLoop = require('node-async-loop');
+const fs = require('fs');
+const path = require('path');
 
 const uploadAssets = (config, id) => {
   return new Promise((resolve, reject) => {
     if (id) {
-      var client = og.client(config.github.token);
-      var release = client.release(config.github.repo, id);
+      var client = og.client(config.github.token),
+        release = client.release(config.github.repo, id);
 
       asyncLoop(config.github.release.assets, (item, next) => {
         var asset = fs.readFileSync(path.join(process.cwd(), item.file));
@@ -47,8 +47,8 @@ const gitHubRelease = (config, version) => {
           CHANGELOG += `- ${item.message} \n`;
         });
       }).exec(() => {
-        var client = og.client(config.github.token);
-        var repo = client.repo(config.github.repo);
+        var client = og.client(config.github.token),
+          repo = client.repo(config.github.repo);
 
         repo.release({
           name: version,

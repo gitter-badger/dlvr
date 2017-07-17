@@ -6,6 +6,7 @@
     "dlvr": "./src/index.js"
   },
   "scripts": {
+    "test": "npm run lint",
     "lint": "eslint ./src"
   },
   "author": "",

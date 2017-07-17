@@ -31,8 +31,8 @@ const saveVersion = (version) => {
     readPackage().then((pkg) => {
       if (semver.valid(version) && semver.gt(version, pkg.version)) {
         pkg.version = version;
-        var file = path.join(process.cwd(), 'package.json');
-        var content = JSON.stringify(pkg, null, 2);
+        var file = path.join(process.cwd(), 'package.json'),
+          content = JSON.stringify(pkg, null, 2);
 
         fs.writeFile(file, content, (err) => {
           catchError(err, err, reject);
