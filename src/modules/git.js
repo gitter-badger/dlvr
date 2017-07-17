@@ -35,7 +35,7 @@ const uploadAssets = (config, id) => {
 
       asyncLoop(config.github.release.assets, (item, next) => {
         var asset = fs.readFileSync(path.join(process.cwd(), item.file));
-        spinner.create(`Upload Asset ${item.name}`);
+        spinner.create(`Upload asset ${item.name} to GitHub`);
 
         release.uploadAssets(asset, {
           name: item.name
