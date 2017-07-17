@@ -1,0 +1,13 @@
+{
+    "rules": {
+        "semi": [
+            2,
+            "always"
+        ]
+    },
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": "standard",
+}
