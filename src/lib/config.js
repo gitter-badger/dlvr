@@ -54,11 +54,6 @@ const loadConfig = () => {
   });
 };
 
-const getConfig = () => {
-  return CONFIG;
-};
-
 module.exports = {
-  getConfig,
   loadConfig
 };
