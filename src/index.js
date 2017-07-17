@@ -22,16 +22,16 @@ config.loadConfig().then((config) => {
                   git.uploadAssets(config, id).then(() => {
                     spinner.success();
                     process.exit(0);
-                  })
+                  });
                 });
               });
             });
           });
         }).catch((err) => {
           spinner.fail(err);
-        })
+        });
       }).catch((err) => {
-        spinner.fail(err)
+        spinner.fail(err);
       });
     });
   });

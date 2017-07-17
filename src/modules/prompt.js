@@ -1,5 +1,4 @@
 var prompt = require('prompt');
-var utils = require('../lib/utils');
 var git = require('./git');
 
 const version = () => {
@@ -13,8 +12,8 @@ const version = () => {
       });
     });
   });
-}
+};
 
 module.exports = {
   version
-}
+};

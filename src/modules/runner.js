@@ -16,15 +16,15 @@ const runner = (cmd, msg, errorMsg) => {
       resolve();
     });
   });
-}
+};
 
-runTests = (command) => {
+const runTests = (command) => {
   return new Promise((resolve, reject) => {
     if (command) {
       runner(
         command,
-       'Run Test suites',
-       'Tests failed'
+        'Run Test suites',
+        'Tests failed'
       ).then(() => {
         spinner.success();
         resolve();
@@ -33,7 +33,7 @@ runTests = (command) => {
       resolve();
     }
   });
-}
+};
 
 const npmPublish = (bool) => {
   return new Promise((resolve, reject) => {
@@ -53,9 +53,9 @@ const npmPublish = (bool) => {
       resolve();
     }
   });
-}
+};
 
 module.exports = {
   runTests,
   npmPublish
-}
+};

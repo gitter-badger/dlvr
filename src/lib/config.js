@@ -17,25 +17,30 @@ const checkIntegrity = (cfg) => {
         draft: true
       }
     }
+  };
+
+  if (!cfg.hasOwnProperty('github') || !cfg.github.token) {
+    cfg.github = defGitHubConfig;
   }
 
-  if (!cfg.hasOwnProperty('github') || !cfg.github.token)
+  if (!cfg.hasOwnProperty('github') || !cfg.github.repo) {
     cfg.github = defGitHubConfig;
+  }
 
-  if (!cfg.hasOwnProperty('github') || !cfg.github.repo)
-    cfg.github = defGitHubConfig;
-
-  if (!cfg.hasOwnProperty('github') || Array.isArray(cfg.github.assets))
+  if (!cfg.hasOwnProperty('github') || Array.isArray(cfg.github.assets)) {
     cfg.github.release.assets = [];
+  }
 
-  if (!cfg.hasOwnProperty('test'))
+  if (!cfg.hasOwnProperty('test')) {
     cfg.test = false;
+  }
 
-  if (!cfg.hasOwnProperty('npmpublish'))
+  if (!cfg.hasOwnProperty('npmpublish')) {
     cfg.npmpublish = false;
+  }
 
-  return cfg
-}
+  return cfg;
+};
 
 const loadConfig = () => {
   spinner.create('Load Config ...');
@@ -48,14 +53,13 @@ const loadConfig = () => {
       resolve(CONFIG);
     });
   });
-
-}
+};
 
 const getConfig = () => {
   return CONFIG;
-}
+};
 
 module.exports = {
   getConfig,
   loadConfig
-}
+};

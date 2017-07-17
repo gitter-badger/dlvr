@@ -1,9 +1,7 @@
 {
     "rules": {
-        "semi": [
-            2,
-            "always"
-        ]
+        "semi": [2,"always"],
+        "curly": [2, "multi-line"],
     },
     "env": {
         "es6": true,
