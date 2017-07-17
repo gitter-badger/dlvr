@@ -9,8 +9,13 @@
     "test": "npm run lint",
     "lint": "eslint ./src"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freakzero/dlvr"
+  },
+  "keywords": ["npm", "release", "changelog"],
+  "author": "FreaKzero",
+  "license": "MIT",
   "dependencies": {
     "chalk": "2.0.1",
     "node-async-loop": "1.2.2",
