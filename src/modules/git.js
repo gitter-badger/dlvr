@@ -62,8 +62,9 @@ const gitHubRelease = (config, version) => {
     git.tags((err, tags) => {
       utils.catchError(err, err, reject);
       const TAGS = tags.all.reverse();
+      const opt = TAGS.length >= 2 ? {from: TAGS[1], to: TAGS[0]} : {};
 
-      git.log({from: TAGS[1], to: TAGS[0]}, (err, data) => {
+      git.log(opt, (err, data) => {
         utils.catchError(err, err, reject);
         console.log(data.all);
         data.all.filter(
@@ -82,6 +83,7 @@ const gitHubRelease = (config, version) => {
           draft: config.github.release.draft
         }, (err, data) => {
           utils.catchError(err, err, reject);
+          // TODO: move this into uploadAssets ?
           if (config.github.release.assets.length > 0) {
             resolve(data.id);
           } else {
