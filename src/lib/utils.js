@@ -1,47 +1,35 @@
-const PKG = require('../../package.json');
-const spinner = require('./spinner');
 const path = require('path');
 const fs = require('fs');
-const semver = require('semver');
+const {blue, yellow, green} = require('chalk');
 
-const bootMessage = () => {
-  console.log(`==========================================`);
-  console.log('________  .____ ____   ______________ ');
-  console.log('\\______ \\ |    |\\   \\ /   /\\______   \\');
-  console.log(' |    |  \\|    | \\   Y   /  |       _/');
-  console.log(' |    `   \\    |__\\     /   |    |   \\');
-  console.log('/_______  /_______ \\___/    |____|_  /');
-  console.log('        \\/        \\/               \\/ ');
-  console.log(`============================] DLVR v${PKG.version}`);
+const PKG = require('../../package.json');
+const spinner = require('./spinner');
+
+const bootMessage = (pkg) => {
+  console.log(blue(`=========================================`));
+  console.log(yellow('________  .____ ____   ______________ '));
+  console.log(yellow('\\______ \\ |    |\\   \\ /   /\\______   \\'));
+  console.log(yellow(' |    |  \\|    | \\   Y   /  |       _/'));
+  console.log(yellow(' |    `   \\    |__\\     /   |    |   \\'));
+  console.log(yellow('/_______  /_______ \\___/    |____|_  /'));
+  console.log(yellow('        \\/        \\/               \\/ '));
+  console.log(blue(`============================] DLVR v${PKG.version}`));
+  console.log();
+  console.log(`Releasing ${yellow(pkg.name)}, current Version ${green(pkg.version)}`);
 };
 
-const readPackage = () => {
-  var pack = path.join(process.cwd(), 'package.json');
-  return new Promise((resolve, reject) => {
-    fs.readFile(pack, (err, result) => {
-      catchError(err, err, reject);
-      resolve(JSON.parse(result));
-    });
-  });
-};
-
-const saveVersion = (version) => {
+const saveVersion = (version, pkg) => {
   spinner.create('Write new Version into package.json');
   return new Promise((resolve, reject) => {
-    readPackage().then((pkg) => {
-      if (semver.valid(version) && semver.gt(version, pkg.version)) {
-        pkg.version = version;
-        var file = path.join(process.cwd(), 'package.json'),
-          content = JSON.stringify(pkg, null, 2);
+    // Version is validated by Prompt
+    pkg.version = version;
 
-        fs.writeFile(file, content, (err) => {
-          catchError(err, err, reject);
-          resolve();
-        });
-      } else {
-        console.log('reject');
-        reject(new Error('Given Version is not in a valid SEMVER format'));
-      }
+    var file = path.join(process.cwd(), 'package.json'),
+      content = JSON.stringify(pkg, null, 2);
+
+    fs.writeFile(file, content, (err) => {
+      catchError(err, err, reject);
+      resolve();
     });
   });
 };
@@ -52,7 +40,7 @@ const catchError = (err, msg, reject) => {
     if (reject) {
       reject(new Error(err));
     } else {
-      console.log(msg); // todo print stacktrace on DEV ?
+      console.log(msg); // TODO: print stacktrace on DEV ?
       process.exit(1);
     }
   }

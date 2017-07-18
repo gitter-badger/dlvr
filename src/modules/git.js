@@ -1,10 +1,11 @@
-const git = require('simple-git')(process.cwd());
-const og = require('octonode');
-const spinner = require('../lib/spinner');
-const utils = require('../lib/utils');
-const asyncLoop = require('node-async-loop');
 const fs = require('fs');
 const path = require('path');
+const asyncLoop = require('node-async-loop');
+const git = require('simple-git')(process.cwd());
+const og = require('octonode');
+
+const spinner = require('../lib/spinner');
+const utils = require('../lib/utils');
 
 const checkToken = (config) => {
   var client = og.client(config.github.token);

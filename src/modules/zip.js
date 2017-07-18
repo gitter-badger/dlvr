@@ -1,8 +1,9 @@
+const path = require('path');
 const zip = require('zip-local');
 const asyncLoop = require('node-async-loop');
+
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
-const path = require('path');
 
 const compress = (config) => {
   return new Promise((resolve, reject) => {
