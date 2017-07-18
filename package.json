@@ -7,7 +7,9 @@
   },
   "scripts": {
     "test": "npm run lint",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "release": "npm test && npm run build && dlvr",
+    "build": "rimraf ./dist && pkg . --out-path ./dist/bin"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,7 @@
   "author": "FreaKzero",
   "license": "MIT",
   "dependencies": {
+    "pkg": "4.1.1",
     "chalk": "2.0.1",
     "node-async-loop": "1.2.2",
     "octonode": "0.7.13",
@@ -31,6 +34,7 @@
     "zip-local": "0.3.4"
   },
   "devDependencies": {
+    "rimraf": "2.6.1",
     "eslint": "4.2.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "2.7.0",
