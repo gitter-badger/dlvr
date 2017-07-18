@@ -11,17 +11,21 @@ Command Line tool for easy automated Releasing. See the ASCII cast.
 
 You will get the most out of this Tool when you want to release binaries done with NWJS, Electron or pkg.
 
-Config (.dlvr):
+## Install
+`npm install -g dlvr`
+
+## Config
+Make a `.dlvr file with following configuration
 ```
 {
-  "snyk": {
+  "snyk": {  // or false
     "token": "YOUR API TOKEN"
   },
-  "compress": [
+  "compress": [ // or false
     {"in": "./dist/test.txt", "out": "./dist/test.zip"},
     {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
   ],
-  "github": {
+  "github": { // or false
     "token": "YOUR API TOKEN",
     "repo": "username/repo",
     "release": {
@@ -35,8 +39,8 @@ Config (.dlvr):
       "draft":true
     }
   },
-  "test":"npm run test",
-  "npmpublish": false
+  "test":"npm run test", // or false
+  "npmpublish": false // or false
 }
 
 ```
