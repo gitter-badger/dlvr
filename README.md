@@ -9,7 +9,7 @@
 
 Command Line tool for easy automated Releasing. See the ASCII cast.
 
-Config:
+Config (.dlvr):
 ```
 {
   "snyk": {
