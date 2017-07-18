@@ -65,10 +65,10 @@ const gitHubRelease = (config, version) => {
 
       git.log({from: TAGS[1], to: TAGS[0]}, (err, data) => {
         utils.catchError(err, err, reject);
-
-        data.all.filter((item) => {
-          return item.message;
-        }).map((item) => {
+        console.log(data.all);
+        data.all.filter(
+          (item) => config.github.release.logfilter ? new RegExp(config.github.release.logfilter).test(item.message) : true
+        ).map((item) => {
           CHANGELOG += `- ${item.message} \n`;
         });
       }).exec(() => {

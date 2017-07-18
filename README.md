@@ -1,13 +1,13 @@
-# DLVR (ALPHA) 
+# DLVR (ALPHA)
 [![Known Vulnerabilities](https://snyk.io/test/github/freakzero/dlvr/badge.svg)](https://snyk.io/test/github/freakzero/dlvr)
 [![npm version](https://badge.fury.io/js/dlvr.svg)](https://badge.fury.io/js/dlvr)
-[![Build Status](https://travis-ci.org/FreaKzero/dlvr.svg?branch=master)](https://travis-ci.org/FreaKzero/dlvr)  
+[![Build Status](https://travis-ci.org/FreaKzero/dlvr.svg?branch=master)](https://travis-ci.org/FreaKzero/dlvr)
 
 *(Until real release use at your own risk, fallback from failure is not yet implemented)*
 
 [![asciicast](https://asciinema.org/a/ZCItj9lqc7Y7mjRGdEFCCSxle.png)](https://asciinema.org/a/ZCItj9lqc7Y7mjRGdEFCCSxle)
 
-Command Line tool for easy automated Releasing. See the ASCII cast. 
+Command Line tool for easy automated Releasing. See the ASCII cast.
 
 You will get the most out of this Tool when you want to release binaries done with NWJS, Electron or pkg.
 
@@ -26,6 +26,8 @@ Make a `.dlvr file with following configuration
     {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
   ],
   "github": { // or false
+    "logfilter": ".*#", // regex - every commit with a # in it
+    "draft":true,  // When false publishes instantly - when true you have to confirm the draft at github release pages
     "token": "YOUR API TOKEN",
     "repo": "username/repo",
     "release": {
@@ -35,12 +37,11 @@ Make a `.dlvr file with following configuration
       },{
         "file": "./dist/test2.zip",
         "name": "test2.zip"
-      }],
-      "draft":true
+      }]
     }
   },
   "test":"npm run test", // or false
-  "npmpublish": false // or false
+  "npmpublish": false // or true (uses local login)
 }
 
 ```
