@@ -27,7 +27,7 @@ Make a `.dlvr file with following configuration
   ],
   "github": { // or false
     "logfilter": ".*#", // regex - every commit with a # in it
-    "draft":true,  // When false publishes instantly - when true you have to confirm the draft at github release pages
+    "draft":true,  // false: publishes instantly - true: you have to confirm the draft at github release pages
     "token": "YOUR API TOKEN",
     "repo": "username/repo",
     "release": {
