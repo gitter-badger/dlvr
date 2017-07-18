@@ -7,7 +7,9 @@
 
 [![asciicast](https://asciinema.org/a/ZCItj9lqc7Y7mjRGdEFCCSxle.png)](https://asciinema.org/a/ZCItj9lqc7Y7mjRGdEFCCSxle)
 
-Command Line tool for easy automated Releasing. See the ASCII cast.
+Command Line tool for easy automated Releasing. See the ASCII cast. 
+
+You will get the most out of this Tool when you want to release binaries done with NWJS, Electron or pkg.
 
 Config (.dlvr):
 ```
