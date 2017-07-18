@@ -66,7 +66,6 @@ const gitHubRelease = (config, version) => {
 
       git.log(opt, (err, data) => {
         utils.catchError(err, err, reject);
-        console.log(data.all);
         data.all.filter(
           (item) => config.github.release.logfilter ? new RegExp(config.github.release.logfilter).test(item.message) : true
         ).map((item) => {
