@@ -8,7 +8,9 @@ const spinner = require('../lib/spinner');
 
 const uploadAssets = (config, id) => {
   return new Promise((resolve, reject) => {
-    if (config.github.release.assets.length > 0) {
+    if (!config.github || config.github.release.assets.length < 1) {
+      resolve();
+    } else {
       var client = og.client(config.github.token),
         release = client.release(config.github.repo, id);
 
@@ -26,8 +28,6 @@ const uploadAssets = (config, id) => {
         utils.catchError(err, err, reject);
         resolve();
       });
-    } else {
-      resolve();
     }
   });
 };
@@ -57,18 +57,22 @@ const release = (config, version, changelog) => {
   spinner.create('Publish Release on GitHub');
 
   return new Promise((resolve, reject) => {
-    var client = og.client(config.github.token),
-      repo = client.repo(config.github.repo);
+    if (config.github) {
+      var client = og.client(config.github.token),
+        repo = client.repo(config.github.repo);
 
-    repo.release({
-      name: version,
-      tag_name: version,
-      body: changelog || '',
-      draft: config.github.release.draft
-    }, (err, data) => {
-      utils.catchError(err, err, reject);
-      resolve(data.id);
-    });
+      repo.release({
+        name: version,
+        tag_name: version,
+        body: changelog || '',
+        draft: config.github.release.draft
+      }, (err, data) => {
+        utils.catchError(err, err, reject);
+        resolve(data.id);
+      });
+    } else {
+      resolve();
+    }
   });
 };
 
