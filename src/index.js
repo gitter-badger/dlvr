@@ -11,13 +11,14 @@ const pack = require('./modules/pack');
 const snyk = require('./modules/snyk');
 const runner = require('./modules/runner');
 const prompt = require('./modules/prompt');
+const github = require('./modules/github');
 
 pack.read().then((pkg) => {
   utils.bootMessage(pkg);
 
   prompt.version(pkg).then((version) => {
     config.loadConfig().then((config) => {
-      git.checkToken(config).then(() => {
+      github.checkToken(config).then(() => {
         npm.checkLogin(config).then(() => {
           snyk.login(config).then(() => {
             git.checkChanges().then(() => {
@@ -29,8 +30,8 @@ pack.read().then((pkg) => {
                         git.tagAndPush(version).then(() => {
                           npm.publish(config).then(() => {
                             git.generateChangelog(config, version).then((changelog) => {
-                              git.gitHubRelease(config, version, changelog).then((releaseId) => {
-                                git.uploadAssets(config, releaseId).then(() => {
+                              github.release(config, version, changelog).then((releaseId) => {
+                                github.uploadAssets(config, releaseId).then(() => {
                                   spinner.success();
                                   utils.successMessage(pkg, config, changelog);
                                 }).catch((err) => {

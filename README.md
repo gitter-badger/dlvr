@@ -25,8 +25,8 @@ Make a `.dlvr file with following configuration
     {"in": "./dist/test.txt", "out": "./dist/test.zip"},
     {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
   ],
+  "logfilter": ".*#", // regex - every commit with a # in it - or false,
   "github": { // or false
-    "logfilter": ".*#", // regex - every commit with a # in it - or false 
     "draft":true,  // false: publishes instantly - true: you have to confirm the draft at github release pages
     "token": "YOUR API TOKEN",
     "repo": "username/repo",
