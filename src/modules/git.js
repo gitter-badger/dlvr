@@ -77,7 +77,7 @@ const checkChanges = () => {
     git.diffSummary((err, data) => {
       utils.catchError(err, err);
       if (data.files.length > 0) {
-        reject(new Error('You have uncommitted changes - Please commit them first!'));
+        reject(new Error('You have uncommitted changes - Please commit or stash them before release!'));
       }
       resolve();
     });
