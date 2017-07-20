@@ -18,7 +18,7 @@ const generateChangelog = (config, version) => {
         data.all.filter(
           (item) => config.logfilter ? new RegExp(config.logfilter).test(item.message) : true
         ).map((item) => {
-          changelog === false ? changelog = `**Changelog:** \n\n - ${item.message} \n` : changelog += `- ${item.message} \n`;
+          changelog === false ? changelog = `**Changelog:**\n\n - ${item.message} \n` : changelog += `- ${item.message} \n`;
         });
       }).exec(() => {
         resolve(changelog);
