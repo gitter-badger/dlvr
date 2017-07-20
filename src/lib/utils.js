@@ -1,9 +1,33 @@
 const path = require('path');
 const fs = require('fs');
-const {blue, yellow, green} = require('chalk');
+const {red, blue, yellow, green} = require('chalk');
 
 const PKG = require('../../package.json');
 const spinner = require('./spinner');
+
+const successMessage = (pkg, cfg, changelog) => {
+  console.log('');
+  console.log(`🎉  Successfully released ${yellow(pkg.name)} Version ${green(pkg.version)}`);
+  console.log('');
+
+  // Use tag ? Use id ? no idea...
+  if (cfg.github.token) { // TODO: check draft ... use id
+    console.log(`Check your GitHub Release here: ${blue(`https://github.com/${cfg.github.repo}/releases`)}`);
+  }
+
+  if (cfg.npmpublish) {
+    console.log(`Check your NPM Release here: ${blue(`https://www.npmjs.com/package/${pkg.name}`)}`);
+  }
+
+  if (changelog) {
+    console.log(yellow('Released with following Changelog'));
+    console.log(changelog);
+  } else {
+    console.log(`${yellow('No Changes found with the current logfilter:')} ${red(cfg.github.release.logfilter)}`);
+  }
+
+  process.exit(0);
+};
 
 const bootMessage = (pkg) => {
   console.log(blue(`=========================================`));
@@ -48,6 +72,7 @@ const catchError = (err, msg, reject) => {
 
 module.exports = {
   bootMessage,
+  successMessage,
   catchError,
   saveVersion
 };
