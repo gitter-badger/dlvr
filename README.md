@@ -5,7 +5,7 @@
 
 *(Until real release use at your own risk, fallback from failure is not yet implemented)*
 
-[![asciicast](https://asciinema.org/a/ZCItj9lqc7Y7mjRGdEFCCSxle.png)](https://asciinema.org/a/ZCItj9lqc7Y7mjRGdEFCCSxle)
+[![asciicast](https://asciinema.org/a/SIUNlH9scSMlP8e75F04EiC4T.png)](https://asciinema.org/a/SIUNlH9scSMlP8e75F04EiC4T)
 
 Command Line tool for easy automated Releasing. See the ASCII cast.
 
