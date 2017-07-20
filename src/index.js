@@ -28,10 +28,14 @@ pack.read().then((pkg) => {
                       git.commitAndPush(version).then(() => {
                         git.tagAndPush(version).then(() => {
                           npm.publish(config).then(() => {
-                            git.gitHubRelease(config, version).then((id) => {
-                              git.uploadAssets(config, id).then(() => {
-                                spinner.success('Successful Released');
-                                process.exit(0);
+                            git.generateChangelog(config, version).then((changelog) => {
+                              git.gitHubRelease(config, version, changelog).then((releaseId) => {
+                                git.uploadAssets(config, releaseId).then(() => {
+                                  spinner.success();
+                                  utils.successMessage(pkg, config, changelog);
+                                }).catch((err) => {
+                                  spinner.fail(err.message);
+                                });
                               }).catch((err) => {
                                 spinner.fail(err.message);
                               });

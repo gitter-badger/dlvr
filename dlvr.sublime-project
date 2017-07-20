@@ -1,8 +1,25 @@
 {
-	"folders":
-	[
-		{
-			"path": "."
-		}
-	]
+  "build_systems":
+  [
+    {
+      "name": "ESLINT Fix",
+      "shell_cmd": "$project_path/node_modules/.bin/eslint --fix $file"
+    }
+  ],
+ "folders":
+  [
+    {
+      "folder_exclude_patterns":
+      [
+        "lib",
+        "node_modules",
+        "nw",
+        "docs",
+        "cache",
+        "cfg",
+        "build"
+      ],
+      "path": "./"
+    }
+  ]
 }

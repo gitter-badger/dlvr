@@ -1,5 +1,5 @@
 const ora = require('ora');
-const { red } = require('chalk');
+const {red} = require('chalk');
 
 exports.success = message => {
   global.spinner.succeed();

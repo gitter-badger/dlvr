@@ -30,7 +30,7 @@ const checkToken = (config) => {
 
 const uploadAssets = (config, id) => {
   return new Promise((resolve, reject) => {
-    if (id) {
+    if (config.github.release.assets.length > 0) {
       var client = og.client(config.github.token),
         release = client.release(config.github.repo, id);
 
@@ -54,42 +54,45 @@ const uploadAssets = (config, id) => {
   });
 };
 
-const gitHubRelease = (config, version) => {
-  spinner.create('Publish Release on GitHub');
-  var CHANGELOG = '**Changelog:** \n\n';
+const generateChangelog = (config, version) => {
+  spinner.create('Generating Changelog');
+  var changelog = false;
 
   return new Promise((resolve, reject) => {
     git.tags((err, tags) => {
       utils.catchError(err, err, reject);
-      const TAGS = tags.all.reverse();
-      const opt = TAGS.length >= 2 ? {from: TAGS[1], to: TAGS[0]} : {};
+      const allTags = tags.all.reverse();
+      const opt = allTags.length >= 2 ? {from: allTags[1], to: allTags[0]} : {};
 
       git.log(opt, (err, data) => {
         utils.catchError(err, err, reject);
         data.all.filter(
           (item) => config.github.release.logfilter ? new RegExp(config.github.release.logfilter).test(item.message) : true
         ).map((item) => {
-          CHANGELOG += `- ${item.message} \n`;
+          changelog === false ? changelog = `**Changelog:** \n\n - ${item.message} \n` : changelog += `- ${item.message} \n`;
         });
       }).exec(() => {
-        var client = og.client(config.github.token),
-          repo = client.repo(config.github.repo);
-
-        repo.release({
-          name: version,
-          tag_name: version,
-          body: CHANGELOG,
-          draft: config.github.release.draft
-        }, (err, data) => {
-          utils.catchError(err, err, reject);
-          // TODO: move this into uploadAssets ?
-          if (config.github.release.assets.length > 0) {
-            resolve(data.id);
-          } else {
-            resolve(false);
-          }
-        });
+        resolve(changelog);
       });
+    });
+  });
+};
+
+const gitHubRelease = (config, version, changelog) => {
+  spinner.create('Publish Release on GitHub');
+
+  return new Promise((resolve, reject) => {
+    var client = og.client(config.github.token),
+      repo = client.repo(config.github.repo);
+
+    repo.release({
+      name: version,
+      tag_name: version,
+      body: changelog || '',
+      draft: config.github.release.draft
+    }, (err, data) => {
+      utils.catchError(err, err, reject);
+      resolve(data.id);
     });
   });
 };
@@ -152,6 +155,7 @@ const checkChanges = () => {
 };
 
 module.exports = {
+  generateChangelog,
   checkToken,
   uploadAssets,
   gitHubRelease,
