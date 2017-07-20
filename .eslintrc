@@ -3,7 +3,8 @@
         "semi": [2,"always"],
         "curly": [2, "multi-line"],
         "one-var": [2, { var: "always", let: "never", const: "never" }],
-        "import-order/import-order": 2
+        "import-order/import-order": 2,
+        "no-path-concat": 2
     },
     "env": {
         "es6": true,

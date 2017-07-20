@@ -11,13 +11,9 @@
     {
       "folder_exclude_patterns":
       [
-        "lib",
         "node_modules",
-        "nw",
         "docs",
-        "cache",
-        "cfg",
-        "build"
+        "dist"
       ],
       "path": "./"
     }
