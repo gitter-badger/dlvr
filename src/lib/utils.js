@@ -10,20 +10,12 @@ const successMessage = (pkg, cfg, changelog) => {
   console.log(`🎉  Successfully released ${yellow(pkg.name)} Version ${green(pkg.version)}`);
   console.log('');
 
-  // Use tag ? Use id ? no idea...
-  if (cfg.github.token) { // TODO: check draft ... use id
+  if (cfg.has('github')) {
     console.log(`Check your GitHub Release here: ${blue(`https://github.com/${cfg.github.repo}/releases`)}`);
   }
 
-  if (cfg.npmpublish) {
+  if (cfg.has('npmpublish')) {
     console.log(`Check your NPM Release here: ${blue(`https://www.npmjs.com/package/${pkg.name}`)}`);
-  }
-
-  if (changelog) {
-    console.log(yellow('Released with following Changelog'));
-    console.log(changelog);
-  } else {
-    console.log(`${yellow('No Changes found with the current logfilter:')} ${red(cfg.github.release.logfilter)}`);
   }
 
   process.exit(0);
@@ -37,10 +29,15 @@ const bootMessage = (pkg, changelog) => {
   console.log(yellow(' |    `   \\    |__\\     /   |    |   \\'));
   console.log(yellow('/_______  /_______ \\___/    |____|_  /'));
   console.log(yellow('        \\/        \\/               \\/ '));
-  console.log(blue(`============================] DLVR v${PKG.version}`));
+  console.log(blue(`v${PKG.version} ==================================`));
   console.log();
   console.log(`Releasing ${yellow(pkg.name)}, current Version ${green(pkg.version)}`);
-  console.log(changelog);
+
+  if (changelog) {
+    console.log(changelog);
+  } else {
+    console.log(`${red('No Changes found with the current logfilter')}`);
+  }
 };
 
 const saveVersion = (version, pkg) => {
@@ -65,7 +62,7 @@ const catchError = (err, msg, reject) => {
     if (reject) {
       reject(new Error(err));
     } else {
-      console.log(msg); // TODO: print stacktrace on DEV ?
+      console.log(msg);
       process.exit(1);
     }
   }

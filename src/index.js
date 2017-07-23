@@ -13,29 +13,28 @@ const runner = require('./modules/runner');
 const prompt = require('./modules/prompt');
 const github = require('./modules/github');
 
-// TODO: refactor config varname into cfg
 pack.read().then((pkg) => {
-  config.loadConfig().then((config) => {
-    git.generateChangelog(config).then((changelog) => {
+  config.loadConfig().then((cfg) => {
+    git.generateChangelog(cfg).then((changelog) => {
       spinner.success();
       utils.bootMessage(pkg, changelog);
 
       prompt.version(pkg).then((version) => {
-        github.checkToken(config).then(() => {
-          npm.checkLogin(config).then(() => {
-            snyk.login(config).then(() => {
+        github.checkToken(cfg).then(() => {
+          npm.checkLogin(cfg).then(() => {
+            snyk.login(cfg).then(() => {
               git.checkChanges().then(() => {
-                snyk.check(config).then(() => {
-                  runner.runTests(config.test).then(() => {
-                    zip.compress(config).then(() => {
+                snyk.check(cfg).then(() => {
+                  runner.runTests(cfg.test).then(() => {
+                    zip.compress(cfg).then(() => {
                       utils.saveVersion(version, pkg).then(() => {
                         git.commitAndPush(version).then(() => {
                           git.tagAndPush(version).then(() => {
-                            npm.publish(config).then(() => {
-                              github.release(config, version, changelog).then((releaseId) => {
-                                github.uploadAssets(config, releaseId).then(() => {
+                            npm.publish(cfg).then(() => {
+                              github.release(cfg, version, changelog).then((releaseId) => {
+                                github.uploadAssets(cfg, releaseId).then(() => {
                                   spinner.success();
-                                  utils.successMessage(pkg, config, changelog);
+                                  utils.successMessage(pkg, cfg, changelog);
                                 }).catch((err) => {
                                   spinner.fail(err.message);
                                 });

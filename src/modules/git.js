@@ -5,7 +5,7 @@ const utils = require('../lib/utils');
 
 const generateChangelog = (config) => {
   spinner.create('Generating Changelog');
-  var changelog = '';
+  var changelog = false;
 
   return new Promise((resolve, reject) => {
     git.tags((err, tags) => {
@@ -15,11 +15,10 @@ const generateChangelog = (config) => {
 
       git.log(opt, (err, data) => {
         utils.catchError(err, err, reject);
-        // TODO: abstract this into config object
         data.all.filter(
-          (item) => config.logfilter ? new RegExp(config.logfilter).test(item.message) : true
+          (item) => config.has('logfilter') ? new RegExp(config.logfilter).test(item.message) : true
         ).map((item) => {
-          changelog === '' ? changelog = `**Changelog:**\n\n- ${item.message} \n` : changelog += `- ${item.message} \n`;
+          changelog === false ? changelog = `**Changelog:**\n\n- ${item.message} \n` : changelog += `- ${item.message} \n`;
         });
       }).exec(() => {
         resolve(changelog);
