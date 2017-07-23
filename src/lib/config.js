@@ -1,56 +1,62 @@
 const fs = require('fs');
+const path = require('path');
+const validator = require('is-my-json-valid');
+const {yellow} = require('chalk');
 
-const FILEPATH = `${process.cwd()}/.dlvr`;
+const schemes = require('../schemes');
+
 const spinner = require('./spinner');
 const utils = require('./utils');
 
-let CONFIG = null;
-
-const checkIntegrity = (cfg) => {
-  spinner.create('Check Config integrity ...');
-
-  const defGitHubConfig = {
-    github: {
-      token: false,
-      repo: false,
-      release: {
-        assets: [],
-        draft: true
-      }
-    }
-  };
-
-  if (!cfg.hasOwnProperty('github') || !cfg.github.token) {
-    cfg.github = defGitHubConfig;
-  }
-
-  if (!cfg.hasOwnProperty('github') || !cfg.github.repo) {
-    cfg.github = defGitHubConfig;
-  }
-
-  if (!cfg.hasOwnProperty('github') || Array.isArray(cfg.github.assets)) {
-    cfg.github.release.assets = [];
-  }
-
-  if (!cfg.hasOwnProperty('test')) {
-    cfg.test = false;
-  }
-
-  if (!cfg.hasOwnProperty('npmpublish')) {
-    cfg.npmpublish = false;
-  }
-
-  return cfg;
-};
-
 const loadConfig = () => {
-  spinner.create('Load Config ...');
+  spinner.create('Load Config');
 
   return new Promise((resolve, reject) => {
-    fs.readFile(FILEPATH, (err, cfg) => {
+    fs.readFile(path.join(process.cwd(), '.dlvr'), (err, cfg) => {
       utils.catchError(err, err, reject);
-      CONFIG = checkIntegrity(JSON.parse(cfg));
-      resolve(CONFIG);
+
+      cfg = JSON.parse(cfg);
+
+      cfg.has = function (prop) {
+        return this.hasOwnProperty(prop);
+      };
+
+      cfg.hasRelease = function () {
+        return (this.hasOwnProperty('github') && this.github.hasOwnProperty('release')) && this.github.release !== false;
+      };
+
+      cfg.hasAssets = function () {
+        return this.hasOwnProperty('github') && this.github.hasOwnProperty('assets') && this.github.assets !== false;
+      };
+
+      cfg.failMessage = function (err, prop) {
+        var errStr = '';
+
+        err.map((item) => {
+          var msg = `${item.field} in your config ${item.message} \n`.replace('data.', `${prop}.`);
+          errStr ? errStr += msg : errStr = msg;
+        });
+
+        return errStr;
+      };
+
+      cfg.checkIntegrity = function (prop) {
+        if (this.hasOwnProperty(prop) && this[prop] !== false) {
+          const validate = validator(schemes[prop]);
+          spinner.create(`Check config integrity of ${yellow(prop)}`);
+          validate(this[prop]);
+          if (validate.errors) {
+            return this.failMessage(validate.errors, prop);
+          }
+        }
+        return null;
+      };
+
+      ['github', 'compress'].map((item) => {
+        var err = cfg.checkIntegrity(item);
+        if (err) reject(new Error(err));
+      });
+      resolve(cfg);
     });
   });
 };
