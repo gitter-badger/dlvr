@@ -8,6 +8,29 @@ const schemes = require('../schemes');
 const spinner = require('./spinner');
 const utils = require('./utils');
 
+const failMessage = function (err, prop) {
+  var errStr = '';
+
+  err.map((item) => {
+    var msg = `${item.field} in your config ${item.message} \n`.replace('data.', `${prop}.`);
+    errStr ? errStr += msg : errStr = msg;
+  });
+
+  return errStr;
+};
+
+const checkIntegrity = function (cfg, prop) {
+  if (cfg.hasOwnProperty(prop) && cfg[prop] !== false) {
+    const validate = validator(schemes[prop]);
+    spinner.create(`Check config integrity of ${yellow(prop)}`);
+    validate(cfg[prop]);
+    if (validate.errors) {
+      return failMessage(validate.errors, prop);
+    }
+  }
+  return null;
+};
+
 const loadConfig = () => {
   spinner.create('Load Config');
 
@@ -29,33 +52,8 @@ const loadConfig = () => {
         return this.hasOwnProperty('github') && this.github.hasOwnProperty('assets') && this.github.assets !== false;
       };
 
-      // TODO: shouldnt be in cfg object
-      cfg.failMessage = function (err, prop) {
-        var errStr = '';
-
-        err.map((item) => {
-          var msg = `${item.field} in your config ${item.message} \n`.replace('data.', `${prop}.`);
-          errStr ? errStr += msg : errStr = msg;
-        });
-
-        return errStr;
-      };
-
-      // TODO: shouldnt be in cfg object
-      cfg.checkIntegrity = function (prop) {
-        if (this.hasOwnProperty(prop) && this[prop] !== false) {
-          const validate = validator(schemes[prop]);
-          spinner.create(`Check config integrity of ${yellow(prop)}`);
-          validate(this[prop]);
-          if (validate.errors) {
-            return this.failMessage(validate.errors, prop);
-          }
-        }
-        return null;
-      };
-
       ['github', 'compress'].map((item) => {
-        var err = cfg.checkIntegrity(item);
+        var err = checkIntegrity(cfg, item);
         if (err) reject(new Error(err));
       });
 
