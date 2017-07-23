@@ -29,6 +29,7 @@ const loadConfig = () => {
         return this.hasOwnProperty('github') && this.github.hasOwnProperty('assets') && this.github.assets !== false;
       };
 
+      // TODO: shouldnt be in cfg object
       cfg.failMessage = function (err, prop) {
         var errStr = '';
 
@@ -40,6 +41,7 @@ const loadConfig = () => {
         return errStr;
       };
 
+      // TODO: shouldnt be in cfg object
       cfg.checkIntegrity = function (prop) {
         if (this.hasOwnProperty(prop) && this[prop] !== false) {
           const validate = validator(schemes[prop]);
@@ -56,6 +58,7 @@ const loadConfig = () => {
         var err = cfg.checkIntegrity(item);
         if (err) reject(new Error(err));
       });
+
       resolve(cfg);
     });
   });

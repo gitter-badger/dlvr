@@ -2,7 +2,7 @@ const runner = require('./runner').runner;
 
 const checkLogin = (config) => {
   return new Promise((resolve, reject) => {
-    if (config.npmpublish) {
+    if (config.has('npmpublish')) {
       runner('npm who',
         'Check NPM Login',
         'No NPM Login'
@@ -19,7 +19,7 @@ const checkLogin = (config) => {
 
 const publish = (config) => {
   return new Promise((resolve, reject) => {
-    if (config.npmpublish) {
+    if (config.has('npmpublish')) {
       runner('npm publish',
         'Publishing on NPM',
         'Error while publishing on NPM'

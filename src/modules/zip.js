@@ -7,7 +7,7 @@ const spinner = require('../lib/spinner');
 
 const compress = (config) => {
   return new Promise((resolve, reject) => {
-    if (config.compress) {
+    if (config.has('compress')) {
       asyncLoop(config.compress, (item, next) => {
         var fileIn = path.join(process.cwd(), item.in),
           fileOut = path.join(process.cwd(), item.out);

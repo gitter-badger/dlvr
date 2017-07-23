@@ -8,7 +8,7 @@ const spinner = require('../lib/spinner');
 
 const uploadAssets = (config, id) => {
   return new Promise((resolve, reject) => {
-    if (!config.github || config.github.release.assets.length < 1) {
+    if (!config.hasAssets()) {
       resolve();
     } else {
       var client = og.client(config.github.token),
@@ -36,7 +36,7 @@ const checkToken = (config) => {
   var client = og.client(config.github.token);
 
   return new Promise((resolve, reject) => {
-    if (config.github) {
+    if (config.has('github')) {
       spinner.create('Check GitHub Token');
       client.get('/user', {}, (err, status, body, headers) => {
         utils.catchError(err, err, reject);
@@ -57,7 +57,7 @@ const release = (config, version, changelog) => {
   spinner.create('Publish Release on GitHub');
 
   return new Promise((resolve, reject) => {
-    if (config.github) {
+    if (config.has('github')) {
       var client = og.client(config.github.token),
         repo = client.repo(config.github.repo);
 
