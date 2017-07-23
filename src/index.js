@@ -13,7 +13,6 @@ const runner = require('./modules/runner');
 const prompt = require('./modules/prompt');
 const github = require('./modules/github');
 
-
 // TODO: refactor config varname into cfg
 pack.read().then((pkg) => {
   config.loadConfig().then((config) => {
