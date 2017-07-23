@@ -3,7 +3,7 @@ const git = require('simple-git')(process.cwd());
 const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
 
-const generateChangelog = (config, version) => {
+const generateChangelog = (config) => {
   spinner.create('Generating Changelog');
   var changelog = false;
 
@@ -11,14 +11,15 @@ const generateChangelog = (config, version) => {
     git.tags((err, tags) => {
       utils.catchError(err, err, reject);
       const allTags = tags.all.reverse();
-      const opt = allTags.length >= 2 ? {from: allTags[1], to: allTags[0]} : {};
+      const opt = allTags.length >= 1 ? {from: allTags[0], to: 'HEAD'} : {};
 
       git.log(opt, (err, data) => {
         utils.catchError(err, err, reject);
+        // TODO: abstract this into config object
         data.all.filter(
           (item) => config.logfilter ? new RegExp(config.logfilter).test(item.message) : true
         ).map((item) => {
-          changelog === false ? changelog = `**Changelog:**\n\n - ${item.message} \n` : changelog += `- ${item.message} \n`;
+          changelog === false ? changelog = `**Changelog:**\n\n- ${item.message} \n` : changelog += `- ${item.message} \n`;
         });
       }).exec(() => {
         resolve(changelog);

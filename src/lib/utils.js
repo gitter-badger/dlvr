@@ -29,7 +29,7 @@ const successMessage = (pkg, cfg, changelog) => {
   process.exit(0);
 };
 
-const bootMessage = (pkg) => {
+const bootMessage = (pkg, changelog) => {
   console.log(blue(`=========================================`));
   console.log(yellow('________  .____ ____   ______________ '));
   console.log(yellow('\\______ \\ |    |\\   \\ /   /\\______   \\'));
@@ -40,6 +40,7 @@ const bootMessage = (pkg) => {
   console.log(blue(`============================] DLVR v${PKG.version}`));
   console.log();
   console.log(`Releasing ${yellow(pkg.name)}, current Version ${green(pkg.version)}`);
+  console.log(changelog);
 };
 
 const saveVersion = (version, pkg) => {
