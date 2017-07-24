@@ -55,7 +55,7 @@ const loadConfig = () => {
       };
 
       cfg.hasAssets = function () {
-        return this.hasOwnProperty('github') && this.github.hasOwnProperty('assets') && this.github.assets !== false;
+        return (this.hasRelease() && this.github.release.hasOwnProperty('assets')) && this.github.release.assets !== false
       };
 
       ['root', 'github', 'compress'].map((item) => {
