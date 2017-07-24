@@ -16,12 +16,13 @@ const github = require('./modules/github');
 // TODO: unify parameter handover
 // cfg, pkg, version, changelog
 
+utils.intro();
 pack.read().then((pkg) => {
   config.loadConfig().then((cfg) => {
     git.checkRepo(cfg).then(() => {
       git.generateChangelog(cfg).then((changelog) => {
         spinner.success();
-        utils.bootMessage(pkg, changelog);
+        utils.info(pkg, changelog);
 
         prompt.version(pkg).then((version) => {
           github.checkToken(cfg).then(() => {
