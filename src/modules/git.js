@@ -27,31 +27,26 @@ const generateChangelog = (config) => {
   });
 };
 
-const tagAndPush = (tag) => {
+const tagAndPush = (tag, cfg) => {
   spinner.create('Tag Release');
   return new Promise((resolve, reject) => {
-    var REMOTE;
     git
-      .listRemote(['--get-url'], (err, data) => {
-        utils.catchError(err, err, reject);
-        REMOTE = data;
-      })
       .addTag(tag, (err, res) => {
         utils.catchError(err, err, reject);
       })
-      .pushTags(REMOTE, (err, res) => {
+      .pushTags(cfg.getRemote(), (err, res) => {
         utils.catchError(err, err, reject);
         resolve('Tag created and pushed');
       });
   });
 };
 
-const commitAndPush = (version) => {
+const commitAndPush = (version, cfg) => {
   spinner.create('Commit and Push Release');
   return new Promise((resolve, reject) => {
     git.add('./*')
       .commit(`🎉 Release ${version}`)
-      .push(['origin', 'master']);
+      .push([cfg.getRemote(), 'master']);
     resolve();
   });
 };
@@ -70,16 +65,34 @@ const tagExist = (tag) => {
   });
 };
 
-const checkChanges = () => {
-  spinner.create('Check git Repository');
-
+const checkRepo = (cfg) => {
   return new Promise((resolve, reject) => {
-    git.diffSummary((err, data) => {
-      utils.catchError(err, err);
-      if (data.files.length > 0) {
+    spinner.create('Check git Repository');
+    git.status((err, status) => {
+      utils.catchError(err, err, reject);
+      if (status.files.length > 0) {
         reject(new Error('You have uncommitted changes - Please commit or stash them before release!'));
       }
-      resolve();
+
+      if (status.current !== 'master') {
+        reject(new Error('You are not on the master branch'));
+      }
+    }).exec(() => {
+      git.getRemotes(true, (err, data) => {
+        utils.catchError(err, err, reject);
+
+        if (data.length < 0) {
+          reject(new Error(`No Remote found`));
+        }
+
+        var remoteExists = data.filter((item) => item.name === cfg.getRemote()).length > 0;
+
+        if (!remoteExists) {
+          reject(new Error(`Remote in config (${cfg.getRemote()}) is not available`));
+        }
+
+        resolve();
+      });
     });
   });
 };
@@ -88,6 +101,6 @@ module.exports = {
   generateChangelog,
   tagAndPush,
   commitAndPush,
-  checkChanges,
+  checkRepo,
   tagExist
 };

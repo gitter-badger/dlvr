@@ -13,23 +13,26 @@ const runner = require('./modules/runner');
 const prompt = require('./modules/prompt');
 const github = require('./modules/github');
 
+// TODO: unify parameter handover
+// cfg, pkg, version, changelog
+
 pack.read().then((pkg) => {
   config.loadConfig().then((cfg) => {
-    git.generateChangelog(cfg).then((changelog) => {
-      spinner.success();
-      utils.bootMessage(pkg, changelog);
+    git.checkRepo(cfg).then(() => {
+      git.generateChangelog(cfg).then((changelog) => {
+        spinner.success();
+        utils.bootMessage(pkg, changelog);
 
-      prompt.version(pkg).then((version) => {
-        github.checkToken(cfg).then(() => {
-          npm.checkLogin(cfg).then(() => {
-            snyk.login(cfg).then(() => {
-              git.checkChanges().then(() => {
+        prompt.version(pkg).then((version) => {
+          github.checkToken(cfg).then(() => {
+            npm.checkLogin(cfg).then(() => {
+              snyk.login(cfg).then(() => {
                 snyk.check(cfg).then(() => {
                   runner.runTests(cfg.test).then(() => {
                     zip.compress(cfg).then(() => {
                       utils.saveVersion(version, pkg).then(() => {
-                        git.commitAndPush(version).then(() => {
-                          git.tagAndPush(version).then(() => {
+                        git.commitAndPush(version, cfg).then(() => {
+                          git.tagAndPush(version, cfg).then(() => {
                             npm.publish(cfg).then(() => {
                               github.release(cfg, version, changelog).then((releaseId) => {
                                 github.uploadAssets(cfg, releaseId).then(() => {
