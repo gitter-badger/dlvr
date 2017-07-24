@@ -21,7 +21,7 @@ const successMessage = (pkg, cfg, changelog) => {
   process.exit(0);
 };
 
-const bootMessage = (pkg, changelog) => {
+const intro = () => {
   console.log(blue(`=========================================`));
   console.log(yellow('________  .____ ____   ______________ '));
   console.log(yellow('\\______ \\ |    |\\   \\ /   /\\______   \\'));
@@ -30,7 +30,10 @@ const bootMessage = (pkg, changelog) => {
   console.log(yellow('/_______  /_______ \\___/    |____|_  /'));
   console.log(yellow('        \\/        \\/               \\/ '));
   console.log(blue(`v${PKG.version} ==================================`));
-  console.log();
+};
+
+const info = (pkg, changelog) => {
+  console.log(blue(`=========================================`));
   console.log(`Releasing ${yellow(pkg.name)}, current Version ${green(pkg.version)}`);
 
   if (changelog) {
@@ -69,7 +72,8 @@ const catchError = (err, msg, reject) => {
 };
 
 module.exports = {
-  bootMessage,
+  intro,
+  info,
   successMessage,
   catchError,
   saveVersion
