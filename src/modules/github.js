@@ -40,11 +40,10 @@ const checkToken = (config) => {
       spinner.create('Check GitHub Token');
       client.get('/user', {}, (err, status, body, headers) => {
         utils.catchError(err, err, reject);
-
-        if (!body) {
+        if (!body || Object.keys(body).length === 0) {
           reject(new Error('Github Token invalid'));
         } else {
-          resolve();
+          resolve(body);
         }
       });
     } else {

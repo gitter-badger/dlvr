@@ -1,11 +1,11 @@
-const fs = require('fs');
+let fs = require('fs');
 const path = require('path');
 const validator = require('is-my-json-valid');
 const {yellow} = require('chalk');
 
 const schemes = require('../schemes');
 
-const spinner = require('./spinner');
+let spinner = require('./spinner');
 const utils = require('./utils');
 
 const failMessage = function (err, prop) {
