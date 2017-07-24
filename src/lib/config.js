@@ -20,10 +20,12 @@ const failMessage = function (err, prop) {
 };
 
 const checkIntegrity = function (cfg, prop) {
-  if (cfg.hasOwnProperty(prop) && cfg[prop] !== false) {
-    const validate = validator(schemes[prop]);
+  if (prop === 'root' || (cfg.hasOwnProperty(prop) && cfg[prop] !== false)) {
     spinner.create(`Check config integrity of ${yellow(prop)}`);
-    validate(cfg[prop]);
+    const validate = validator(schemes[prop]);
+    const check = prop === 'root' ? cfg : cfg[prop];
+    validate(check);
+
     if (validate.errors) {
       return failMessage(validate.errors, prop);
     }
@@ -44,6 +46,10 @@ const loadConfig = () => {
         return this.hasOwnProperty(prop);
       };
 
+      cfg.getRemote = function () {
+        return this.remote || 'origin';
+      };
+
       cfg.hasRelease = function () {
         return (this.hasOwnProperty('github') && this.github.hasOwnProperty('release')) && this.github.release !== false;
       };
@@ -52,7 +58,7 @@ const loadConfig = () => {
         return this.hasOwnProperty('github') && this.github.hasOwnProperty('assets') && this.github.assets !== false;
       };
 
-      ['github', 'compress'].map((item) => {
+      ['root', 'github', 'compress'].map((item) => {
         var err = checkIntegrity(cfg, item);
         if (err) reject(new Error(err));
       });
