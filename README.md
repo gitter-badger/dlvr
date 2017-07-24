@@ -15,18 +15,20 @@ You will get the most out of this Tool when you want to release binaries done wi
 `npm install -g dlvr`
 
 ## Config
-Make a `.dlvr file with following configuration
+Make a `.dlvr` file with following configuration
+
 ```
 {
-  "snyk": {  // or false
+  "snyk": { // optional
     "token": "YOUR API TOKEN"
   },
-  "compress": [ // or false
+  "compress": [ // optional
     {"in": "./dist/test.txt", "out": "./dist/test.zip"},
     {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
   ],
-  "logfilter": ".*#", // regex - every commit with a # in it - or false,
-  "github": { // or false
+  "logfilter": ".*#", // regex - every commit with a # in it, // required
+  "remote": "origin", // optional
+  "github": { // optional
     "draft":true,  // false: publishes instantly - true: you have to confirm the draft at github release pages
     "token": "YOUR API TOKEN",
     "repo": "username/repo",
@@ -40,8 +42,8 @@ Make a `.dlvr file with following configuration
       }]
     }
   },
-  "test":"npm run test", // or false
-  "npmpublish": false // or true (uses local login)
+  "test":"npm run test", // optional
+  "npmpublish": false // optional
 }
 
 ```
