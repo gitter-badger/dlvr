@@ -54,13 +54,10 @@ const rootInvalidNested = {
 };
 
 describe('#config parse', function () {
-  it('Should have sugar methods', function (done) {
+  it('Should parse the valid config', function (done) {
     config.__set__('fs', rootValid);
     config.loadConfig().then((cfg) => {
       expect(typeof cfg.has).toBe('function');
-      expect(typeof cfg.getRemote).toBe('function');
-      expect(typeof cfg.hasRelease).toBe('function');
-      expect(typeof cfg.hasAssets).toBe('function');
       done();
     });
   });

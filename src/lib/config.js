@@ -43,7 +43,7 @@ const loadConfig = () => {
       cfg = JSON.parse(cfg);
 
       cfg.has = function (prop) {
-        return this.hasOwnProperty(prop);
+        return this.hasOwnProperty(prop) && this[prop] !== false;
       };
 
       cfg.getRemote = function () {
