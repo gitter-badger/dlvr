@@ -63,20 +63,6 @@ describe('#config parse', function () {
   });
 });
 
-const githubInvalidToken = {
-  readFile: function (path, cb) {
-    cb(null, `{
-  "logfilter": ".*#",
-  "github": {
-    "repo": "freakzero/dlvr",
-    "release": {
-      "draft": true
-    }
-  }
-}`);
-  }
-};
-
 const githubInvalidRelease = {
   readFile: function (path, cb) {
     cb(null, `{
@@ -166,4 +152,95 @@ describe('#config check integrity in compress', function () {
       done();
     });
   });
+});
+
+const tokenIntegrityInvalid = {
+  readFile: function (path, cb) {
+    if (path.indexOf('.dlvrtokens') > -1) {
+      cb(null, `{}`);
+    } else {
+      cb(null, `{
+        "logfilter": ".*#",
+        "github": {
+          "draft": "true",
+          "repo": "freakzero/dlvr",
+          "release": {
+            "draft": true
+          }
+        }
+      }`);
+    }
+  }
+};
+
+const tokenIntegrityValid = {
+  readFile: function (path, cb) {
+    if (path.indexOf('.dlvrtokens') > -1) {
+      cb(null, `{"github" : "mah token"}`);
+    } else {
+      cb(null, `{
+        "logfilter": ".*#",
+        "github": {
+          "draft": "true",
+          "repo": "freakzero/dlvr",
+          "release": {
+            "draft": true
+          }
+        }
+      }`);
+    }
+  }
+};
+
+const tokenIntegrityInvalidSnyk = {
+  readFile: function (path, cb) {
+    if (path.indexOf('.dlvrtokens') > -1) {
+      cb(null, `{"github" : "mah token"}`);
+    } else {
+      cb(null, `{
+        "snyk": true,
+        "logfilter": ".*#",
+        "github": {
+          "draft": "true",
+          "repo": "freakzero/dlvr",
+          "release": {
+            "draft": true
+          }
+        }
+      }`);
+    }
+  }
+};
+
+describe('#config check token integrity', function () {
+  it('Should fail because no github token given', function (done) {
+    config.__set__('fs', tokenIntegrityInvalid);
+    config.loadConfig().then((cfg) => {
+      config.loadTokens(cfg).catch((err) => {
+        expect(err.message).toBe('No github token given');
+        done();
+      });
+    });
+  });
+
+  it('Should be successful with github tokenstring given', function (done) {
+    config.__set__('fs', tokenIntegrityValid);
+    config.loadConfig().then((cfg) => {
+      config.loadTokens(cfg).then((tokens) => {
+        expect(tokens.github).toBe('mah token');
+        done();
+      });
+    });
+  });
+
+  it('Should be successful with github tokenstring given', function (done) {
+    config.__set__('fs', tokenIntegrityInvalidSnyk);
+    config.loadConfig().then((cfg) => {
+      config.loadTokens(cfg).catch((err) => {
+        expect(err.message).toBe('No snyk token given');
+        done();
+      });
+    });
+  });
+
 });
