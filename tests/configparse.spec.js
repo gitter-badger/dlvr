@@ -118,21 +118,13 @@ describe('#config check integrity in root', function () {
   it('Should fail when snyk.token is not given', function (done) {
     config.__set__('fs', rootInvalidNested);
     config.loadConfig().catch((err) => {
-      expect(err.message).toBe('root.snyk.token in your config is required \n');
+      expect(err.message).toBe('root.snyk in your config is the wrong type \n');
       done();
     });
   });
 });
 
 describe('#config check integrity in github', function () {
-  it('Should fail when root.token is not given', function (done) {
-    config.__set__('fs', githubInvalidToken);
-    config.loadConfig().catch((err) => {
-      expect(err.message).toBe('github.token in your config is required \n');
-      done();
-    });
-  });
-
   it('Should fail when release.draft is not given', function (done) {
     config.__set__('fs', githubInvalidRelease);
     config.loadConfig().catch((err) => {
