@@ -6,12 +6,12 @@ const og = require('octonode');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 
-const uploadAssets = (config, id) => {
+const uploadAssets = (config, id, tokens) => {
   return new Promise((resolve, reject) => {
     if (!config.hasAssets()) {
       resolve();
     } else {
-      var client = og.client(config.github.token),
+      var client = og.client(tokens.github),
         release = client.release(config.github.repo, id);
 
       asyncLoop(config.github.release.assets, (item, next) => {
@@ -32,8 +32,8 @@ const uploadAssets = (config, id) => {
   });
 };
 
-const checkToken = (config) => {
-  var client = og.client(config.github.token);
+const checkToken = (config, tokens) => {
+  var client = og.client(tokens.github);
 
   return new Promise((resolve, reject) => {
     if (config.has('github')) {
@@ -52,12 +52,12 @@ const checkToken = (config) => {
   });
 };
 
-const release = (config, version, changelog) => {
+const release = (config, version, changelog, tokens) => {
   spinner.create('Publish Release on GitHub');
 
   return new Promise((resolve, reject) => {
     if (config.has('github')) {
-      var client = og.client(config.github.token),
+      var client = og.client(tokens.github),
         repo = client.repo(config.github.repo);
 
       repo.release({

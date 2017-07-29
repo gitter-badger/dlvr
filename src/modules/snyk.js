@@ -1,9 +1,9 @@
 const runner = require('./runner').runner;
 
-const login = (config) => {
+const login = (config, tokens) => {
   return new Promise((resolve, reject) => {
     if (config.has('snyk')) {
-      runner(`snyk auth ${config.snyk.token}`,
+      runner(`snyk auth ${tokens.snyk}`,
         'Authenticate SNYK User',
         'SNYK Auth invalid'
       ).then(() => {
