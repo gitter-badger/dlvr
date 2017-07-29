@@ -1,13 +1,13 @@
 exports.default = {
   properties: {
     snyk: {
-      type: 'object',
-      properties: {
-        token: {
-          type: 'string',
-          required: true
-        }
-      }
+      type: 'boolean'
+    },
+    npmpublish: {
+      type: 'boolean'
+    },
+    test: {
+      type: 'string'
     },
     logfilter: {
       type: 'string',

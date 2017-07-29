@@ -29,10 +29,6 @@ exports.default = {
     repo: {
       required: true,
       type: 'string'
-    },
-    token: {
-      required: true,
-      type: 'string'
     }
   },
   type: 'object'
