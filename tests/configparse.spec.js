@@ -242,5 +242,4 @@ describe('#config check token integrity', function () {
       });
     });
   });
-
 });
