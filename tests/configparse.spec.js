@@ -233,7 +233,7 @@ describe('#config check token integrity', function () {
     });
   });
 
-  it('Should be successful with github tokenstring given', function (done) {
+  it('Should fail because no snyk token given', function (done) {
     config.__set__('fs', tokenIntegrityInvalidSnyk);
     config.loadConfig().then((cfg) => {
       config.loadTokens(cfg).catch((err) => {
