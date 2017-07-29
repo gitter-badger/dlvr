@@ -33,6 +33,31 @@ const checkIntegrity = function (cfg, prop) {
   return null;
 };
 
+const loadTokens = (cfg) => {
+  spinner.create('Load Tokens');
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.join(utils.getHome(), '.dlvrtokens'), (err, json) => {
+      if (err && err.code === 'ENOENT') {
+        json = '{}';
+      } else {
+        utils.catchError(err, err, reject);
+      }
+
+      var tokens = JSON.parse(json);
+
+      if (cfg.has('github') && !tokens.github) {
+        return reject(new Error('No github token given'));
+      }
+
+      if (cfg.has('snyk') && !tokens.snyk) {
+        return reject(new Error('No snyk token given'));
+      }
+
+      return resolve(tokens);
+    });
+  });
+};
+
 const loadConfig = () => {
   spinner.create('Load Config');
 
@@ -69,5 +94,6 @@ const loadConfig = () => {
 };
 
 module.exports = {
-  loadConfig
+  loadConfig,
+  loadTokens
 };
