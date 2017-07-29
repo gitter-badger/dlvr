@@ -29,9 +29,7 @@ Make a `.dlvr` file in your project root with following configuration
 
 ```
 {
-  "snyk": { // optional
-    "token": "YOUR API TOKEN"
-  },
+  "snyk": true, // optional
   "compress": [ // optional
     {"in": "./dist/test.txt", "out": "./dist/test.zip"},
     {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
@@ -40,7 +38,6 @@ Make a `.dlvr` file in your project root with following configuration
   "remote": "origin", // optional
   "github": { // optional
     "draft":true,  // false: publishes instantly - true: you have to confirm the draft at github release pages
-    "token": "YOUR API TOKEN",
     "repo": "username/repo",
     "release": {
       "assets": [{
