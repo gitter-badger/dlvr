@@ -19,26 +19,30 @@ const github = require('./modules/github');
 utils.intro();
 pack.read().then((pkg) => {
   config.loadConfig().then((cfg) => {
-    git.checkRepo(cfg).then(() => {
-      git.generateChangelog(cfg).then((changelog) => {
-        spinner.success();
-        utils.info(pkg, changelog);
+    config.loadTokens(cfg).then((tokens) => {
+      git.checkRepo(cfg).then(() => {
+        git.generateChangelog(cfg).then((changelog) => {
+          spinner.success();
+          utils.info(pkg, changelog);
 
-        prompt.version(pkg).then((version) => {
-          github.checkToken(cfg).then(() => {
-            npm.checkLogin(cfg).then(() => {
-              snyk.login(cfg).then(() => {
-                snyk.check(cfg).then(() => {
-                  runner.runTests(cfg.test).then(() => {
-                    zip.compress(cfg).then(() => {
-                      utils.saveVersion(version, pkg).then(() => {
-                        git.commitAndPush(version, cfg).then(() => {
-                          git.tagAndPush(version, cfg).then(() => {
-                            npm.publish(cfg).then(() => {
-                              github.release(cfg, version, changelog).then((releaseId) => {
-                                github.uploadAssets(cfg, releaseId).then(() => {
-                                  spinner.success();
-                                  utils.successMessage(pkg, cfg, changelog);
+          prompt.version(pkg).then((version) => {
+            github.checkToken(cfg, tokens).then(() => {
+              npm.checkLogin(cfg).then(() => {
+                snyk.login(cfg, tokens).then(() => {
+                  snyk.check(cfg).then(() => {
+                    runner.runTests(cfg.test).then(() => {
+                      zip.compress(cfg).then(() => {
+                        utils.saveVersion(version, pkg).then(() => {
+                          git.commitAndPush(version, cfg).then(() => {
+                            git.tagAndPush(version, cfg).then(() => {
+                              npm.publish(cfg).then(() => {
+                                github.release(cfg, version, changelog, tokens).then((releaseId) => {
+                                  github.uploadAssets(cfg, releaseId, tokens).then(() => {
+                                    spinner.success();
+                                    utils.successMessage(pkg, cfg, changelog);
+                                  }).catch((err) => {
+                                    spinner.fail(err.message);
+                                  });
                                 }).catch((err) => {
                                   spinner.fail(err.message);
                                 });
