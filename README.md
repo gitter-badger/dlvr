@@ -14,8 +14,18 @@ You will get the most out of this Tool when you want to release binaries done wi
 ## Install
 `npm install -g dlvr`
 
+
 ## Config
-Make a `.dlvr` file with following configuration
+
+Make a `.dlvrtokens` file in your Homedirectory
+```
+{
+  "snyk": "your token",
+  "github": "your token"
+}
+```
+
+Make a `.dlvr` file in your project root with following configuration
 
 ```
 {
