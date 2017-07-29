@@ -59,6 +59,10 @@ const saveVersion = (version, pkg) => {
   });
 };
 
+const getHome = () => {
+  return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
+};
+
 const catchError = (err, msg, reject) => {
   if (err) {
     spinner.fail(err);
@@ -76,5 +80,6 @@ module.exports = {
   info,
   successMessage,
   catchError,
-  saveVersion
+  saveVersion,
+  getHome
 };
