@@ -1,12 +1,26 @@
-let fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const validator = require('is-my-json-valid');
-const {yellow} = require('chalk');
-
 const schemes = require('../schemes');
-
-let spinner = require('./spinner');
 const utils = require('./utils');
+
+const boot = () => {
+  return new Promise((resolve, reject) => {
+    loadPackage().then((pkg) => {
+      loadConfig().then((cfg) => {
+        loadTokens(cfg).then((tokens) => {
+          return resolve({cfg, pkg, tokens});
+        }).catch((err) => {
+          reject(err);
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+};
 
 const failMessage = function (err, prop) {
   var errStr = '';
@@ -21,7 +35,6 @@ const failMessage = function (err, prop) {
 
 const checkIntegrity = function (cfg, prop) {
   if (prop === 'root' || (cfg.hasOwnProperty(prop) && cfg[prop] !== false)) {
-    spinner.create(`Check config integrity of ${yellow(prop)}`);
     const validate = validator(schemes[prop]);
     const check = prop === 'root' ? cfg : cfg[prop];
     validate(check);
@@ -33,8 +46,17 @@ const checkIntegrity = function (cfg, prop) {
   return null;
 };
 
+const loadPackage = () => {
+  var pack = path.join(process.cwd(), 'package.json');
+  return new Promise((resolve, reject) => {
+    fs.readFile(pack, (err, result) => {
+      utils.catchError(err, err, reject);
+      resolve(JSON.parse(result));
+    });
+  });
+};
+
 const loadTokens = (cfg) => {
-  spinner.create('Load Tokens');
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(utils.getHome(), '.dlvrtokens'), (err, json) => {
       if (err && err.code === 'ENOENT') {
@@ -44,7 +66,6 @@ const loadTokens = (cfg) => {
       }
 
       var tokens = JSON.parse(json);
-
       if (cfg.has('github') && !tokens.github) {
         return reject(new Error('No github token given'));
       }
@@ -59,8 +80,6 @@ const loadTokens = (cfg) => {
 };
 
 const loadConfig = () => {
-  spinner.create('Load Config');
-
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(process.cwd(), '.dlvr'), (err, cfg) => {
       utils.catchError(err, err, reject);
@@ -94,6 +113,8 @@ const loadConfig = () => {
 };
 
 module.exports = {
+  boot,
+  loadPackage,
   loadConfig,
   loadTokens
 };

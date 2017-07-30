@@ -3,10 +3,8 @@ const GITPATH = process.cwd();
 const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
 
-const generateChangelog = (config) => {
-  spinner.create('Generating Changelog');
+const generateChangelog = ({cfg}) => {
   var changelog = false;
-
   return new Promise((resolve, reject) => {
     git(GITPATH).tags((err, tags) => {
       utils.catchError(err, err, reject);
@@ -16,7 +14,7 @@ const generateChangelog = (config) => {
       git(GITPATH).log(opt, (err, data) => {
         utils.catchError(err, err, reject);
         data.all.filter(
-          (item) => config.has('logfilter') ? new RegExp(config.logfilter).test(item.message) : true
+          (item) => cfg.has('logfilter') ? new RegExp(cfg.logfilter).test(item.message) : true
         ).map((item) => {
           changelog === false ? changelog = `**Changelog:**\n\n- ${item.message} \n` : changelog += `- ${item.message} \n`;
         });
@@ -27,10 +25,10 @@ const generateChangelog = (config) => {
   });
 };
 
-const tagAndPush = (tag, cfg) => {
+const tagAndPush = ({version, cfg}) => {
   spinner.create('Tag Release');
   return new Promise((resolve, reject) => {
-    git(GITPATH).addTag(tag, (err, res) => {
+    git(GITPATH).addTag(version, (err, res) => {
       utils.catchError(err, err, reject);
     })
       .pushTags(cfg.getRemote(), (err, res) => {
@@ -40,7 +38,7 @@ const tagAndPush = (tag, cfg) => {
   });
 };
 
-const commitAndPush = (version, cfg) => {
+const commitAndPush = ({version, cfg}) => {
   spinner.create('Commit and Push Release');
   return new Promise((resolve, reject) => {
     git(GITPATH).add('./*')
@@ -50,21 +48,21 @@ const commitAndPush = (version, cfg) => {
   });
 };
 
-const tagExist = (tag) => {
+const tagExist = ({version}) => {
   return new Promise((resolve, reject) => {
     git(GITPATH).tags((err, tags) => {
       utils.catchError(err, err, reject);
 
-      if (tags.all.indexOf(tag) > -1) {
-        reject(new Error(`Tag ${tag} already exists`));
+      if (tags.all.indexOf(version) > -1) {
+        reject(new Error(`Tag ${version} already exists`));
       }
 
-      resolve(tag);
+      resolve(version);
     });
   });
 };
 
-const checkRepo = (cfg) => {
+const checkRepo = ({cfg}) => {
   return new Promise((resolve, reject) => {
     spinner.create('Check git Repository');
     git(GITPATH).status((err, status) => {

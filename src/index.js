@@ -1,96 +1,51 @@
 #! /usr/bin/env node
 
+const semver = require('semver');
+const prompt = require('prompt');
+const parsedArgs = require('./lib/argparse').parsedArgs;
 const utils = require('./lib/utils');
-const spinner = require('./lib/spinner');
+const output = require('./lib/output');
 const config = require('./lib/config');
-
 const git = require('./modules/git');
-const zip = require('./modules/zip');
-const npm = require('./modules/npm');
-const pack = require('./modules/pack');
-const snyk = require('./modules/snyk');
-const runner = require('./modules/runner');
-const prompt = require('./modules/prompt');
-const github = require('./modules/github');
+const perform = require('./perform');
 
-// TODO: unify parameter handover
-// cfg, pkg, version, changelog
+const args = parsedArgs();
 
-utils.intro();
-pack.read().then((pkg) => {
-  config.loadConfig().then((cfg) => {
-    config.loadTokens(cfg).then((tokens) => {
-      git.checkRepo(cfg).then(() => {
-        git.generateChangelog(cfg).then((changelog) => {
-          spinner.success();
-          utils.info(pkg, changelog);
+const promptSchema = {
+  description: 'Do you really want to release ? y/n',
+  type: 'string',
+  pattern: /^\w+$/,
+  message: 'Only Y/y (yes) or N/n (no) is allowed',
+  default: 'n',
+  required: true
+};
 
-          prompt.version(pkg).then((version) => {
-            github.checkToken(cfg, tokens).then(() => {
-              npm.checkLogin(cfg).then(() => {
-                snyk.login(cfg, tokens).then(() => {
-                  snyk.check(cfg).then(() => {
-                    runner.runTests(cfg.test).then(() => {
-                      zip.compress(cfg).then(() => {
-                        utils.saveVersion(version, pkg).then(() => {
-                          git.commitAndPush(version, cfg).then(() => {
-                            git.tagAndPush(version, cfg).then(() => {
-                              npm.publish(cfg).then(() => {
-                                github.release(cfg, version, changelog, tokens).then((releaseId) => {
-                                  github.uploadAssets(cfg, releaseId, tokens).then(() => {
-                                    spinner.success();
-                                    utils.successMessage(pkg, cfg, changelog);
-                                  }).catch((err) => {
-                                    spinner.fail(err.message);
-                                  });
-                                }).catch((err) => {
-                                  spinner.fail(err.message);
-                                });
-                              }).catch((err) => {
-                                spinner.fail(err.message);
-                              });
-                            }).catch((err) => {
-                              spinner.fail(err.message);
-                            });
-                          }).catch((err) => {
-                            spinner.fail(err.message);
-                          });
-                        }).catch((err) => {
-                          spinner.fail(err.message);
-                        });
-                      }).catch((err) => {
-                        spinner.fail(err.message);
-                      });
-                    }).catch((err) => {
-                      spinner.fail(err.message);
-                    });
-                  }).catch((err) => {
-                    spinner.fail(err.message);
-                  });
-                }).catch((err) => {
-                  spinner.fail(err.message);
-                });
-              }).catch((err) => {
-                spinner.fail(err.message);
-              });
-            }).catch((err) => {
-              spinner.fail(err.message);
-            });
-          }).catch((err) => {
-            spinner.fail(err.message);
+switch (args.subcmd) {
+  case 'release':
+    if (!args.force) {
+      config.boot().then((configs) => {
+        git.generateChangelog(configs).then((changelog) => {
+          configs.changelog = changelog;
+          configs.version = semver.inc(configs.pkg.version, args.VERSION);
+
+          output.intro();
+          output.info(configs);
+
+          prompt.start();
+          prompt.get(promptSchema, (err, result) => {
+            utils.catchError(err);
+            if (result.question.toLowerCase() === 'y') {
+              perform.run(configs);
+            }
           });
         }).catch((err) => {
-          spinner.fail(err.message);
+          console.log(err);
         });
       }).catch((err) => {
-        spinner.fail(err.message);
+        console.log(err);
       });
-    }).catch((err) => {
-      spinner.fail(err.message);
-    });
-  }).catch((err) => {
-    spinner.fail(err.message);
-  });
-}).catch((err) => {
-  spinner.fail(err.message);
-});
+    } else {
+      console.log('RELEASE!');
+    }
+    break;
+};

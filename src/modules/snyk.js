@@ -1,8 +1,8 @@
 const runner = require('./runner').runner;
 
-const login = (config, tokens) => {
+const login = ({cfg, tokens}) => {
   return new Promise((resolve, reject) => {
-    if (config.has('snyk')) {
+    if (cfg.has('snyk')) {
       runner(`snyk auth ${tokens.snyk}`,
         'Authenticate SNYK User',
         'SNYK Auth invalid'
@@ -17,9 +17,9 @@ const login = (config, tokens) => {
   });
 };
 
-const check = (config) => {
+const check = ({cfg}) => {
   return new Promise((resolve, reject) => {
-    if (config.has('snyk')) {
+    if (cfg.has('snyk')) {
       runner('snyk test -q',
         'Checking SNYK for Vulnerabilities',
         'Vulnerabilities found'

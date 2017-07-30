@@ -1,8 +1,8 @@
 const runner = require('./runner').runner;
 
-const checkLogin = (config) => {
+const checkLogin = ({cfg}) => {
   return new Promise((resolve, reject) => {
-    if (config.has('npmpublish')) {
+    if (cfg.has('npmpublish')) {
       runner('npm who',
         'Check NPM Login',
         'No NPM Login'
@@ -17,9 +17,9 @@ const checkLogin = (config) => {
   });
 };
 
-const publish = (config) => {
+const publish = ({cfg}) => {
   return new Promise((resolve, reject) => {
-    if (config.has('npmpublish')) {
+    if (cfg.has('npmpublish')) {
       runner('npm publish',
         'Publishing on NPM',
         'Error while publishing on NPM'

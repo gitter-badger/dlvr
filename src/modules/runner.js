@@ -15,11 +15,11 @@ const runner = (cmd, msg, errorMsg) => {
   });
 };
 
-const runTests = (command) => {
+const runTests = ({cfg}) => {
   return new Promise((resolve, reject) => {
-    if (command) {
+    if (cfg.test) {
       runner(
-        command,
+        cfg.test,
         'Run Test suites',
         'Tests failed'
       ).then(() => {
