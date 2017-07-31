@@ -1,56 +1,12 @@
 var proxyquire = require('proxyquire');
+const {configMock, setStubConfig, eachConfig} = require('./helper');
 
-let configStatus = `{
-    "compress": [
-      {"in": "./dist/test.txt", "out": "./dist/test.zip"},
-      {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
-    ],
-    "logfilter": ".*#",
-    "github": {
-    "token": "token",
-    "repo": "freakzero/test-repo",
-    "release": {
-      "draft":true
-    }
-  }
-}`;
-
-let configStatusNoCompress = `{
-    "logfilter": ".*#",
-    "github": {
-    "token": "token",
-    "repo": "freakzero/test-repo",
-    "release": {
-      "draft":true
-    }
-  }
-}`;
+const config = proxyquire('../src/lib/config', configMock);
 
 let FILES = {
   in: [],
   out: []
 };
-
-let currentConfigStatus = configStatus;
-
-const config = proxyquire('../src/lib/config', {
-  './spinner': {
-    create: function () {
-      return 1;
-    },
-    success: function () {
-      return 1;
-    },
-    fail: function () {
-      return 1;
-    }
-  },
-  fs: {
-    readFile: function (path, cb) {
-      cb(null, currentConfigStatus);
-    }
-  }
-});
 
 let zipStub = {
   '../lib/spinner': {
@@ -84,16 +40,24 @@ let zipStub = {
 describe('#zip compress', function () {
   const zip = proxyquire('../src/modules/zip', zipStub);
 
-  beforeEach(function () {
+  afterEach(function () {
     FILES = {
       in: [],
       out: []
     };
   });
 
+  beforeEach(eachConfig);
+
   it('takes files and compresses them', function (done) {
-    config.loadConfig().then((cfg) => {
-      zip.compress(cfg).then((d) => {
+    setStubConfig({
+      compress: [
+        {in: './dist/test.txt', out: './dist/test.zip'},
+        {in: './dist/test2.txt', out: './dist/test2.zip'}
+      ]
+    }, true);
+    config.boot().then((configs) => {
+      zip.compress(configs).then((d) => {
         expect(FILES.in[0]).toContain('test.txt');
         expect(FILES.in[1]).toContain('test2.txt');
         expect(FILES.out[0]).toContain('test.zip');
@@ -104,9 +68,8 @@ describe('#zip compress', function () {
   });
 
   it('skips compressing when config is not given', function (done) {
-    currentConfigStatus = configStatusNoCompress;
-    config.loadConfig().then((cfg) => {
-      zip.compress(cfg).then((d) => {
+    config.boot().then((configs) => {
+      zip.compress(configs).then((d) => {
         expect(FILES.in.length).toBe(0);
         expect(FILES.out.length).toBe(0);
         done();
