@@ -13,11 +13,11 @@ const output = require('./lib/output');
 
 function run (configs) {
   git.checkRepo(configs).then(() => {
-    github.checkToken(configs).then(() => {
-      npm.checkLogin(configs).then(() => {
-        snyk.login(configs).then(() => {
-          snyk.check(configs).then(() => {
-            runner.runTests(configs).then(() => {
+    runner.runTests(configs).then(() => {
+      github.checkToken(configs).then(() => {
+        npm.checkLogin(configs).then(() => {
+          snyk.login(configs).then(() => {
+            snyk.check(configs).then(() => {
               zip.compress(configs).then(() => {
                 utils.saveVersion(configs).then(() => {
                   git.commitAndPush(configs).then(() => {
