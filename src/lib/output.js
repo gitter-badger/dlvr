@@ -1,15 +1,4 @@
-const {underline, bold, red, blue, yellow, green} = require('chalk');
-const TerminalRenderer = require('marked-terminal');
-const marked = require('marked');
-
-marked.setOptions({
-  renderer: new TerminalRenderer({
-    em: bold.green,
-    strong: underline.bold.green,
-    listitem: yellow,
-  })
-});
-
+const {bold, red, blue, yellow, green} = require('chalk'); // eslint-disable-line no-unused-vars
 
 const successMessage = ({pkg, cfg, changelog}) => {
   console.log('');
@@ -48,7 +37,7 @@ const info = ({pkg, changelog, version}) => {
   }
 
   if (changelog) {
-    console.log(marked(changelog));
+    console.log(changelog);
   } else {
     console.log(`${red('No Changes found with the current logfilter')}`);
   }
