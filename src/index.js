@@ -24,7 +24,8 @@ switch (args.subcmd) {
   case 'status':
     config.boot().then((configs) => {
       git.generateChangelog(configs).then((changelog) => {
-        console.log(changelog);
+        configs.changelog = changelog;
+        output.info(configs);
       });
     });
     break;

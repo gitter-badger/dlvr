@@ -28,8 +28,12 @@ const intro = () => {
 };
 
 const info = ({pkg, changelog, version}) => {
-  console.log(`Releasing ${yellow(pkg.name)}`);
-  console.log(`current Version ${green(pkg.version)}, you want to release Version ${red(version)}`);
+  if (version) {
+    console.log(`Releasing ${yellow(pkg.name)}`);
+    console.log(`current Version ${green(pkg.version)}, you want to release Version ${red(version)}`);
+  } else {
+    console.log(`Project: ${yellow(pkg.name)} Current Version: ${green(pkg.version)}`);
+  }
 
   if (changelog) {
     console.log(changelog);

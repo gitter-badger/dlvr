@@ -1,5 +1,5 @@
 var ArgumentParser = require('argparse').ArgumentParser;
-var pkg = require('../../package.json');
+const pkg = require('../../package.json');
 
 const parsedArgs = () => {
   var parser = new ArgumentParser({
