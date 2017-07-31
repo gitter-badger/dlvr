@@ -14,23 +14,32 @@ const args = parsedArgs();
 const promptSchema = {
   description: 'Do you really want to release ? y/n',
   type: 'string',
-  pattern: /^\w+$/,
+  pattern: /^(y|n)$/i,
   message: 'Only Y/y (yes) or N/n (no) is allowed',
   default: 'n',
   required: true
 };
 
 switch (args.subcmd) {
+  case 'status':
+    config.boot().then((configs) => {
+      git.generateChangelog(configs).then((changelog) => {
+        console.log(changelog);
+      });
+    });
+    break;
   case 'release':
-    if (!args.force) {
-      config.boot().then((configs) => {
-        git.generateChangelog(configs).then((changelog) => {
-          configs.changelog = changelog;
-          configs.version = semver.inc(configs.pkg.version, args.VERSION);
+    config.boot().then((configs) => {
+      git.generateChangelog(configs).then((changelog) => {
+        configs.changelog = changelog;
+        configs.version = semver.inc(configs.pkg.version, args.VERSION);
 
-          output.intro();
-          output.info(configs);
+        output.intro();
+        output.info(configs);
 
+        if (args.force) {
+          perform.run(configs);
+        } else {
           prompt.start();
           prompt.get(promptSchema, (err, result) => {
             utils.catchError(err);
@@ -38,14 +47,12 @@ switch (args.subcmd) {
               perform.run(configs);
             }
           });
-        }).catch((err) => {
-          console.log(err);
-        });
+        }
       }).catch((err) => {
         console.log(err);
       });
-    } else {
-      console.log('RELEASE!');
-    }
+    }).catch((err) => {
+      console.log(err);
+    });
     break;
 };
