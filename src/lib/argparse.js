@@ -1,10 +1,11 @@
 var ArgumentParser = require('argparse').ArgumentParser;
+var pkg = require('../../package.json');
 
 const parsedArgs = () => {
   var parser = new ArgumentParser({
-    version: '0.0.1',
+    version: pkg.version,
     addHelp: true,
-    description: 'Argparse example'
+    description: 'dlvr'
   });
 
   const subparsers = parser.addSubparsers({
@@ -13,6 +14,8 @@ const parsedArgs = () => {
   });
 
   const cmdMain = subparsers.addParser('release', {addHelp: true});
+
+  subparsers.addParser('status', {addHelp: true});
 
   cmdMain.addArgument(['VERSION'], {
     action: 'store',
