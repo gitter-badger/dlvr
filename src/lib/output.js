@@ -1,4 +1,15 @@
-const {red, blue, yellow, green} = require('chalk');
+const {underline, bold, red, blue, yellow, green} = require('chalk');
+const TerminalRenderer = require('marked-terminal');
+const marked = require('marked');
+
+marked.setOptions({
+  renderer: new TerminalRenderer({
+    em: bold.green,
+    strong: underline.bold.green,
+    listitem: yellow,
+  })
+});
+
 
 const successMessage = ({pkg, cfg, changelog}) => {
   console.log('');
@@ -29,14 +40,15 @@ const intro = () => {
 
 const info = ({pkg, changelog, version}) => {
   if (version) {
-    console.log(`Releasing ${yellow(pkg.name)}`);
-    console.log(`current Version ${green(pkg.version)}, you want to release Version ${red(version)}`);
+    console.log(`Releasing ${yellow.bold(pkg.name)}`);
+    console.log(`current Version ${green.bold(pkg.version)}, you want to release Version ${red.bold(version)}`);
   } else {
-    console.log(`Project: ${yellow(pkg.name)} Current Version: ${green(pkg.version)}`);
+    console.log(`Project: ${yellow.bold(pkg.name)} Current Version: ${green.bold(pkg.version)}`);
+    console.log('');
   }
 
   if (changelog) {
-    console.log(changelog);
+    console.log(marked(changelog));
   } else {
     console.log(`${red('No Changes found with the current logfilter')}`);
   }

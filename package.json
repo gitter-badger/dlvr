@@ -31,6 +31,8 @@
   "dependencies": {
     "chalk": "2.0.1",
     "is-my-json-valid": "2.16.0",
+    "marked": "^0.3.6",
+    "marked-terminal": "^2.0.0",
     "node-async-loop": "1.2.2",
     "octonode": "0.7.13",
     "ora": "1.3.0",
