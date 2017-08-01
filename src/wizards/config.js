@@ -1,6 +1,6 @@
 const fs = require('fs');
 const prompt = require('prompt');
-
+const utils = require('../lib/utils');
 const promptSchema = [
   {
     name: 'remote',
@@ -114,11 +114,10 @@ const template = {
   npmpublish: false
 };
 
-// TODO: check if package json exists
-// TODO: check if .dlvr file exists
-// TODO: error handling
 function configWizard () {
   prompt.get(promptSchema, function (err, results) {
+    if (err) utils.quit(err.message);
+
     for (var key in results) {
       if (results[key].toLowerCase() === 'n') {
         if (key === 'githubassets' && template.hasOwnProperty('github')) {
@@ -141,6 +140,8 @@ function configWizard () {
     const fileContent = JSON.stringify(template, null, 2);
 
     fs.writeFile('./.dlvr', fileContent, (err) => {
+      if (err) utils.quit(err.message);
+
       console.log('');
       console.log(fileContent);
       console.log('\n Please edit your .dlvr file before releasing');

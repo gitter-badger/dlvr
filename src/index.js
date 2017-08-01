@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+const fs = require('fs');
+const path = require('path');
 const semver = require('semver');
 const prompt = require('prompt');
 const parsedArgs = require('./lib/argparse').parsedArgs;
@@ -22,7 +24,10 @@ const promptSchema = {
 
 switch (args.subcmd) {
   case 'init':
-    configWizard();
+    fs.access(path.join(process.cwd(), 'package.json'), (err) => {
+      if (err) utils.quit(err.message, 0);
+      configWizard();
+    });
     break;
 
   case 'status':

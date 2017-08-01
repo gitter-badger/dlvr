@@ -3,6 +3,11 @@ const fs = require('fs');
 
 const spinner = require('./spinner');
 
+const quit = (msg, code) => {
+  console.log(`\n ${msg}`);
+  process.exit(code || 1);
+};
+
 const saveVersion = ({version, pkg}) => {
   spinner.create('Write new Version into package.json');
   return new Promise((resolve, reject) => {
@@ -37,6 +42,7 @@ const catchError = (err, msg, reject) => {
 
 module.exports = {
   catchError,
+  getHome,
+  quit,
   saveVersion,
-  getHome
 };
