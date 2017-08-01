@@ -16,6 +16,7 @@ const parsedArgs = () => {
   const cmdMain = subparsers.addParser('release', {addHelp: true});
 
   subparsers.addParser('status', {addHelp: true});
+  subparsers.addParser('init', {addHelp: true});
 
   cmdMain.addArgument(['VERSION'], {
     action: 'store',

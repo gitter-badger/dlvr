@@ -8,7 +8,7 @@ const output = require('./lib/output');
 const config = require('./lib/config');
 const git = require('./modules/git');
 const perform = require('./perform');
-
+const {configWizard} = require('./wizards');
 const args = parsedArgs();
 
 const promptSchema = {
@@ -21,6 +21,10 @@ const promptSchema = {
 };
 
 switch (args.subcmd) {
+  case 'init':
+    configWizard();
+    break;
+
   case 'status':
     config.boot().then((configs) => {
       git.generateChangelog(configs).then((changelog) => {
