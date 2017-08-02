@@ -1,5 +1,7 @@
-var {configWizard} = require('./config');
+const {configWizard} = require('./config');
+const {tokenWizard} = require('./tokens');
 
 module.exports = {
-  configWizard
+  configWizard,
+  tokenWizard
 };

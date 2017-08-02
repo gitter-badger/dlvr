@@ -10,7 +10,7 @@ const output = require('./lib/output');
 const config = require('./lib/config');
 const git = require('./modules/git');
 const perform = require('./perform');
-const {configWizard} = require('./wizards');
+const {configWizard, tokenWizard} = require('./wizards');
 const args = parsedArgs();
 
 const promptSchema = {
@@ -23,6 +23,10 @@ const promptSchema = {
 };
 
 switch (args.subcmd) {
+  case 'tokens':
+    tokenWizard();
+    break;
+
   case 'init':
     fs.access(path.join(process.cwd(), 'package.json'), (err) => {
       if (err) utils.quit(err.message, 0);

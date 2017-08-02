@@ -17,6 +17,7 @@ const parsedArgs = () => {
 
   subparsers.addParser('status', {addHelp: true});
   subparsers.addParser('init', {addHelp: true});
+  subparsers.addParser('tokens', {addHelp: true});
 
   cmdMain.addArgument(['VERSION'], {
     action: 'store',

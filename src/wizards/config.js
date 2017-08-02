@@ -115,6 +115,7 @@ const template = {
 };
 
 function configWizard () {
+  prompt.start();
   prompt.get(promptSchema, function (err, results) {
     if (err) utils.quit(err.message);
 
