@@ -1,12 +1,25 @@
 {
   "snyk": true,
+  "compress": [
+    {
+      "in": "./dist/myfile.bin",
+      "out": "./dist/myfile.zip"
+    }
+  ],
   "logfilter": ".*#",
+  "remote": "origin",
   "github": {
-    "repo": "freakzero/dlvr",
+    "repo": "username/repo",
     "release": {
-      "draft":true
+      "draft": true,
+      "assets": [
+        {
+          "file": "./dist/myfile.zip",
+          "name": "myfile.zip"
+        }
+      ]
     }
   },
-  "test":"npm run test",
-  "npmpublish": true
+  "test": "npm run test",
+  "npmpublish": false
 }

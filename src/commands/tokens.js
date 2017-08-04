@@ -21,7 +21,7 @@ const tokenPromptSchema = [
         if (e.code === 'ENOENT') {
           HASTOKENS = false;
         } else {
-          // exit fatal
+          utils.quit(e.message);
         }
       }
       return HASTOKENS;

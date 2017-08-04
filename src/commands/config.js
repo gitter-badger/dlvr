@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
 const promptSchema = [
@@ -87,9 +88,12 @@ const promptSchema = [
     default: 'n',
     required: true,
     ask: function () {
-      if (prompt.history('githubassets').value.toLowerCase() === 'n') { delete template.compress; }
+      if (prompt.history('github').value.toLowerCase() === 'y' &&
+        prompt.history('githubassets').value.toLowerCase() === 'y') {
+        return true;
+      }
 
-      return prompt.history('githubassets').value.toLowerCase() === 'y';
+      return false;
     }
   }];
 
@@ -115,37 +119,40 @@ const template = {
 };
 
 function configWizard () {
-  prompt.start();
-  prompt.get(promptSchema, function (err, results) {
-    if (err) utils.quit(err.message);
-
-    for (var key in results) {
-      if (results[key].toLowerCase() === 'n') {
-        if (key === 'githubassets' && template.hasOwnProperty('github')) {
-          delete template.github.release.assets;
-        } else if (key === 'githubdraft' && template.hasOwnProperty('github')) {
-          template.github.release.draft = results.githubdraft === 'y';
-        } else {
-          delete template[key];
-        }
-      }
-    }
-
-    template.remote = results.remote;
-    template.logfilter = results.logfilter;
-
-    if (template.github) {
-      template.github.repo = results.repo;
-    }
-
-    const fileContent = JSON.stringify(template, null, 2);
-
-    fs.writeFile('./.dlvr', fileContent, (err) => {
+  fs.access(path.join(process.cwd(), 'package.json'), (err) => {
+    if (err) utils.quit(err.message, 0);
+    prompt.start();
+    prompt.get(promptSchema, function (err, results) {
       if (err) utils.quit(err.message);
 
-      console.log('');
-      console.log(fileContent);
-      console.log('\n Please edit your .dlvr file before releasing');
+      for (var key in results) {
+        if (results[key].toLowerCase() === 'n') {
+          if (key === 'githubassets' && template.hasOwnProperty('github')) {
+            delete template.github.release.assets;
+          } else if (key === 'githubdraft' && template.hasOwnProperty('github')) {
+            template.github.release.draft = results.githubdraft === 'y';
+          } else {
+            delete template[key];
+          }
+        }
+      }
+
+      template.remote = results.remote;
+      template.logfilter = results.logfilter;
+
+      if (template.github) {
+        template.github.repo = results.repo;
+      }
+
+      const fileContent = JSON.stringify(template, null, 2);
+
+      fs.writeFile('./.dlvr', fileContent, (err) => {
+        if (err) utils.quit(err.message);
+
+        console.log('');
+        console.log(fileContent);
+        console.log('\n Please edit your .dlvr file before releasing');
+      });
     });
   });
 }
