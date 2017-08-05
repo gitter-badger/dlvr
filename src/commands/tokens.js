@@ -21,7 +21,7 @@ const tokenPromptSchema = [
         if (e.code === 'ENOENT') {
           HASTOKENS = false;
         } else {
-          utils.quit(e.message);
+          utils.fatal(e.message);
         }
       }
       return HASTOKENS;
@@ -64,12 +64,12 @@ function tokenWizard () {
 
   prompt.start();
   prompt.get(tokenPromptSchema, function (err, tokenContent) {
-    if (err) utils.quit(err.message);
+    if (err) utils.fatal(err.message);
 
     const content = getContent(tokenContent);
     if (content) {
       fs.writeFile(FILE_TOKENS, content, (err) => {
-        if (err) utils.quit(err.message);
+        if (err) utils.fatal(err.message);
         console.log('Tokenfile has been written');
       });
     } else {

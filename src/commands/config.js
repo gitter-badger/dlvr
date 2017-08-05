@@ -122,10 +122,10 @@ const template = {
 
 function configWizard () {
   fs.access(FILE_PACKAGE, (err) => {
-    if (err) utils.quit(err.message, 0);
+    if (err) utils.fatal(err.message, 0);
     prompt.start();
     prompt.get(promptSchema, function (err, results) {
-      if (err) utils.quit(err.message);
+      if (err) utils.fatal(err.message);
 
       for (var key in results) {
         if (results[key].toLowerCase() === 'n') {
@@ -147,9 +147,9 @@ function configWizard () {
       }
 
       const fileContent = JSON.stringify(template, null, 2);
-
+      // TODO: use constant
       fs.writeFile('./.dlvr', fileContent, (err) => {
-        if (err) utils.quit(err.message);
+        if (err) utils.fatal(err.message);
 
         console.log('');
         console.log(fileContent);

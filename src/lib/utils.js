@@ -2,9 +2,14 @@ const fs = require('fs');
 const {FILE_PACKAGE} = require('../constants');
 const spinner = require('./spinner');
 
+const fatal = (msg, code) => {
+  console.log(msg);
+  process.exit(1);
+};
+
 const quit = (msg, code) => {
-  console.log(`\n ${msg}`);
-  process.exit(code || 1);
+  console.log(msg);
+  process.exit(0);
 };
 
 const saveVersion = ({version, pkg}) => {
@@ -35,5 +40,6 @@ const catchError = (err, msg, reject) => {
 module.exports = {
   catchError,
   quit,
+  fatal,
   saveVersion
 };
