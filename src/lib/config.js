@@ -1,6 +1,6 @@
 const fs = require('fs');
-const path = require('path');
 const validator = require('is-my-json-valid');
+const {FILE_TOKENS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
@@ -47,9 +47,8 @@ const checkIntegrity = function (cfg, prop) {
 };
 
 const loadPackage = () => {
-  var pack = path.join(process.cwd(), 'package.json');
   return new Promise((resolve, reject) => {
-    fs.readFile(pack, (err, result) => {
+    fs.readFile(FILE_PACKAGE, (err, result) => {
       utils.catchError(err, err, reject);
       resolve(JSON.parse(result));
     });
@@ -58,7 +57,7 @@ const loadPackage = () => {
 
 const loadTokens = (cfg) => {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.join(utils.getHome(), '.dlvrtokens'), (err, json) => {
+    fs.readFile(FILE_TOKENS, (err, json) => {
       if (err && err.code === 'ENOENT') {
         json = '{}';
       } else {
@@ -81,7 +80,7 @@ const loadTokens = (cfg) => {
 
 const loadConfig = () => {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.join(process.cwd(), '.dlvr'), (err, cfg) => {
+    fs.readFile(FILE_CONFIG, (err, cfg) => {
       utils.catchError(err, err, reject);
 
       cfg = JSON.parse(cfg);

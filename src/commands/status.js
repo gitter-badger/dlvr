@@ -8,7 +8,9 @@ function statusCmd () {
       configs.changelog = changelog;
       output.info(configs);
     });
-  });
+  }).catch((err) => {
+    console.log(err);
+  })
 }
 
 module.exports = {

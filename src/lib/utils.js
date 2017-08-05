@@ -1,6 +1,5 @@
-const path = require('path');
 const fs = require('fs');
-
+const {FILE_PACKAGE} = require('../constants');
 const spinner = require('./spinner');
 
 const quit = (msg, code) => {
@@ -11,21 +10,14 @@ const quit = (msg, code) => {
 const saveVersion = ({version, pkg}) => {
   spinner.create('Write new Version into package.json');
   return new Promise((resolve, reject) => {
-    // Version is validated by Prompt
     pkg.version = version;
+    var content = JSON.stringify(pkg, null, 2);
 
-    var file = path.join(process.cwd(), 'package.json'),
-      content = JSON.stringify(pkg, null, 2);
-
-    fs.writeFile(file, content, (err) => {
+    fs.writeFile(FILE_PACKAGE, content, (err) => {
       catchError(err, err, reject);
       resolve();
     });
   });
-};
-
-const getHome = () => {
-  return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
 };
 
 const catchError = (err, msg, reject) => {
@@ -42,7 +34,6 @@ const catchError = (err, msg, reject) => {
 
 module.exports = {
   catchError,
-  getHome,
   quit,
-  saveVersion,
+  saveVersion
 };

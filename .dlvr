@@ -1,23 +1,11 @@
 {
   "snyk": true,
-  "compress": [
-    {
-      "in": "./dist/myfile.bin",
-      "out": "./dist/myfile.zip"
-    }
-  ],
   "logfilter": ".*#",
   "remote": "origin",
   "github": {
     "repo": "username/repo",
     "release": {
-      "draft": true,
-      "assets": [
-        {
-          "file": "./dist/myfile.zip",
-          "name": "myfile.zip"
-        }
-      ]
+      "draft": true
     }
   },
   "test": "npm run test",

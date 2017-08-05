@@ -1,7 +1,9 @@
 const fs = require('fs');
-const path = require('path');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
+
+const {FILE_PACKAGE} = require('../constants');
+
 const promptSchema = [
   {
     name: 'remote',
@@ -119,7 +121,7 @@ const template = {
 };
 
 function configWizard () {
-  fs.access(path.join(process.cwd(), 'package.json'), (err) => {
+  fs.access(FILE_PACKAGE, (err) => {
     if (err) utils.quit(err.message, 0);
     prompt.start();
     prompt.get(promptSchema, function (err, results) {

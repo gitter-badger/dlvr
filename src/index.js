@@ -15,6 +15,7 @@ switch (args.subcmd) {
   case 'status':
     statusCmd();
     break;
+
   case 'release':
     releaseCmd(args);
     break;

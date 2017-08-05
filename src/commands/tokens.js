@@ -1,7 +1,7 @@
-const path = require('path');
 const fs = require('fs');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
+const {FILE_TOKENS} = require('../constants');
 
 var HASTOKENS = true;
 
@@ -16,7 +16,7 @@ const tokenPromptSchema = [
     required: true,
     ask: function () {
       try {
-        fs.accessSync(path.join(utils.getHome(), '.dlvrtokens'));
+        fs.accessSync(FILE_TOKENS);
       } catch (e) {
         if (e.code === 'ENOENT') {
           HASTOKENS = false;
@@ -68,7 +68,7 @@ function tokenWizard () {
 
     const content = getContent(tokenContent);
     if (content) {
-      fs.writeFile(path.join(utils.getHome(), '.dlvrtokens'), content, (err) => {
+      fs.writeFile(FILE_TOKENS, content, (err) => {
         if (err) utils.quit(err.message);
         console.log('Tokenfile has been written');
       });
