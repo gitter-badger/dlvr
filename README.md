@@ -5,7 +5,7 @@
 
 *(Until real release use at your own risk, fallback from failure is not yet implemented)*
 
-[![asciicast](https://asciinema.org/a/c4V1zYccDwab2w0W8jpEDce4j.png)](https://asciinema.org/a/c4V1zYccDwab2w0W8jpEDce4j)
+[![asciicast](https://asciinema.org/a/GIUTBq8TJPuk8lDtWKPUY163T.png)](https://asciinema.org/a/GIUTBq8TJPuk8lDtWKPUY163T)
 
 Command Line tool for easy automated Releasing. See the ASCII cast.
 
@@ -14,43 +14,60 @@ You will get the most out of this Tool when you want to release binaries done wi
 ## Install
 `npm install -g dlvr`
 
+## Commands
 
-## Config
+### Write initial config
+`dlvr init `  
+Opens a Wizard which guides you through the release configuration ($PROJECT_ROOT/.dlvr), uses examplepaths for compress and release-assets.
 
-Make a `.dlvrtokens` file in your Homedirectory
+### Get current Changelog
+`dlvr status `  
+Checks Tokens based on your current configuration and shows the Changelog for your current project progress.
+
+### Tokensetup
+`dlvr tokens `  
+Opens a wizard which guides you through the configuration of a tokenfile ($HOME/.dlvrtokens)
+
+### release
+`dlvr release (major|minor|patch)`  
+- optional arguments:
+  - `-f [--force] | Omit the "do you want to release" prompt`
+
+Versions and Releases your Project based on your given configuration and release parameter.
+## Config Files
+
+### .dlvrtokens
+**PATH**: `$HOME/.dlvrtokens`    
+**Possible Configuration**  
 ```
 {
-  "snyk": "your token",
-  "github": "your token"
+  "github": "YOUR GITHUB TOKEN",
+  "snyk": "YOUR SNYK TOKEN"
 }
 ```
 
-Make a `.dlvr` file in your project root with following configuration
-
+### .dlvr
+**PATH**: `$PROJECT_DIR/.dlvr`  
+**Possible Configuration**  
 ```
 {
-  "snyk": true, // optional
-  "compress": [ // optional
-    {"in": "./dist/test.txt", "out": "./dist/test.zip"},
-    {"in": "./dist/test2.txt", "out": "./dist/test2.zip"}
+  snyk: true,
+  compress: [
+    {in: './dist/myfile.bin', out: './dist/myfile.zip'}
   ],
-  "logfilter": ".*#", // regex - every commit with a # in it, // required
-  "remote": "origin", // optional
-  "github": { // optional
-    "draft":true,  // false: publishes instantly - true: you have to confirm the draft at github release pages
-    "repo": "username/repo",
-    "release": {
-      "assets": [{
-        "file": "./dist/test.zip",
-        "name": "test.zip"
-      },{
-        "file": "./dist/test2.zip",
-        "name": "test2.zip"
+  logfilter: '.*#',
+  remote: 'origin',
+  github: {
+    repo: 'username/repo',
+    release: {
+      draft: true,
+      assets: [{
+        file: './dist/myfile.zip',
+        name: 'myfile.zip'
       }]
     }
   },
-  "test":"npm run test", // optional
-  "npmpublish": false // optional
+  test: 'npm run test',
+  npmpublish: false
 }
-
 ```
