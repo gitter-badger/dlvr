@@ -33,17 +33,21 @@ const uploadAssets = ({cfg, tokens}, id) => {
 };
 
 const checkToken = ({cfg, tokens}) => {
-  var client = og.client(tokens.github);
+  var client = og.client(tokens.github),
+    repo = client.repo(cfg.github.repo);
 
   return new Promise((resolve, reject) => {
     if (cfg.has('github')) {
-      spinner.create('Check GitHub Token');
+      spinner.create('Check GitHub Token and Repository');
       client.get('/user', {}, (err, status, body, headers) => {
         utils.catchError(err, err, reject);
         if (!body || Object.keys(body).length === 0) {
           reject(new Error('Github Token invalid'));
         } else {
-          resolve(body);
+          repo.collaborators((err) => {
+            utils.catchError(err, err, reject);
+            resolve(body);
+          });
         }
       });
     } else {

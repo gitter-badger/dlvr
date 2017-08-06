@@ -1,13 +1,12 @@
 {
   "snyk": true,
   "logfilter": ".*#",
-  "remote": "origin",
   "github": {
-    "repo": "username/repo",
+    "repo": "freakzero/dlvr",
     "release": {
-      "draft": true
+      "draft":true
     }
   },
-  "test": "npm run test",
-  "npmpublish": false
+  "test":"npm run test",
+  "npmpublish": true
 }
