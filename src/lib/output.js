@@ -26,14 +26,12 @@ const intro = () => {
   console.log(yellow('        \\/        \\/               \\/ '));
   console.log(blue(`=========================================`));
 };
-
 const info = ({pkg, changelog, version}) => {
   if (version) {
     console.log(`Releasing ${yellow.bold(pkg.name)}`);
     console.log(`current Version ${green.bold(pkg.version)}, you want to release Version ${red.bold(version)}`);
   } else {
     console.log(`Project: ${yellow.bold(pkg.name)} Current Version: ${green.bold(pkg.version)}`);
-    console.log('');
   }
 
   if (changelog) {

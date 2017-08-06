@@ -2,7 +2,7 @@ const fs = require('fs');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
 
-const {FILE_PACKAGE} = require('../constants');
+const {FILE_PACKAGE, FILE_CONFIG} = require('../constants');
 
 const promptSchema = [
   {
@@ -121,39 +121,40 @@ const template = {
 };
 
 function configWizard () {
+  function getContent (content) {
+    for (var key in content) {
+      if (content[key].toLowerCase() === 'n') {
+        if (key === 'githubassets' && template.hasOwnProperty('github')) {
+          delete template.github.release.assets;
+        } else if (key === 'githubdraft' && template.hasOwnProperty('github')) {
+          template.github.release.draft = content.githubdraft === 'y';
+        } else {
+          delete template[key];
+        }
+      }
+    }
+
+    template.remote = content.remote;
+    template.logfilter = content.logfilter;
+
+    if (template.github) {
+      template.github.repo = content.repo;
+    }
+
+    return JSON.stringify(template, null, 2);
+  }
+
   fs.access(FILE_PACKAGE, (err) => {
     if (err) utils.fatal(err.message, 0);
     prompt.start();
     prompt.get(promptSchema, function (err, results) {
       if (err) utils.fatal(err.message);
 
-      for (var key in results) {
-        if (results[key].toLowerCase() === 'n') {
-          if (key === 'githubassets' && template.hasOwnProperty('github')) {
-            delete template.github.release.assets;
-          } else if (key === 'githubdraft' && template.hasOwnProperty('github')) {
-            template.github.release.draft = results.githubdraft === 'y';
-          } else {
-            delete template[key];
-          }
-        }
-      }
-
-      template.remote = results.remote;
-      template.logfilter = results.logfilter;
-
-      if (template.github) {
-        template.github.repo = results.repo;
-      }
-
-      const fileContent = JSON.stringify(template, null, 2);
-      // TODO: use constant
-      fs.writeFile('./.dlvr', fileContent, (err) => {
+      const fileContent = getContent(results);
+      fs.writeFile(FILE_CONFIG, fileContent, (err) => {
         if (err) utils.fatal(err.message);
-
-        console.log('');
-        console.log(fileContent);
-        console.log('\n Please edit your .dlvr file before releasing');
+        console.log('Your configfile has been weritten');
+        utils.quit('Please edit your .dlvr file before releasing');
       });
     });
   });

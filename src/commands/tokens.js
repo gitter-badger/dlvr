@@ -58,7 +58,6 @@ function tokenWizard () {
     if (Object.keys(content).length < 1) {
       return null;
     }
-
     return JSON.stringify(content, null, 2);
   }
 
@@ -70,10 +69,10 @@ function tokenWizard () {
     if (content) {
       fs.writeFile(FILE_TOKENS, content, (err) => {
         if (err) utils.fatal(err.message);
-        console.log('Tokenfile has been written');
+        utils.quit('Tokenfile has been written');
       });
     } else {
-      console.log('not written');
+      utils.fatal('No Tokens given');
     }
   });
 };

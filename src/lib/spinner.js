@@ -1,11 +1,11 @@
 const ora = require('ora');
 const {red} = require('chalk');
 
-exports.success = message => {
+const success = message => {
   global.spinner.succeed();
 };
 
-exports.create = message => {
+const create = message => {
   if (global.spinner) {
     global.spinner.succeed();
   }
@@ -13,11 +13,17 @@ exports.create = message => {
   global.spinner = ora(message).start();
 };
 
-exports.fail = err => {
+const fail = err => {
   if (global.spinner) {
     global.spinner.fail();
     console.log('');
   };
   console.error(`😢  ${red(err)} `);
   process.exit(1);
+};
+
+module.exports = {
+  success,
+  create,
+  fail
 };

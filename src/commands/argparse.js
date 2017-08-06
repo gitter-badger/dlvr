@@ -13,15 +13,29 @@ const parsedArgs = () => {
     dest: 'subcmd'
   });
 
-  const cmdMain = subparsers.addParser('release', {addHelp: true});
+  const cmdMain = subparsers.addParser('release', {
+    addHelp: true,
+    help: 'Release your Project [major|minor|patch]'
+  });
 
-  subparsers.addParser('status', {addHelp: true});
-  subparsers.addParser('init', {addHelp: true});
-  subparsers.addParser('tokens', {addHelp: true});
+  subparsers.addParser('status', {
+    addHelp: true,
+    help: 'Checks tokens and shows current changelog'
+  });
+
+  subparsers.addParser('init', {
+    addHelp: true,
+    help: 'Initialize a dlvr release config'
+  });
+
+  subparsers.addParser('tokens', {
+    addHelp: true,
+    help: 'Setup your tokens'
+  });
 
   cmdMain.addArgument(['VERSION'], {
     action: 'store',
-    help: '',
+    help: 'Release-version parameter',
     choices: ['major', 'minor', 'patch']
   });
 
