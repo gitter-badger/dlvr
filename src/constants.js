@@ -1,7 +1,7 @@
 const path = require('path');
 
 const getHome = () => {
-  return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
+  return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 };
 
 const FILE_TOKENS = path.join(getHome(), '.dlvrtokens');

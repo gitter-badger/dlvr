@@ -6,34 +6,43 @@ const utils = require('./utils');
 
 const boot = () => {
   return new Promise((resolve, reject) => {
-    loadPackage().then((pkg) => {
-      loadConfig().then((cfg) => {
-        loadTokens(cfg).then((tokens) => {
-          return resolve({cfg, pkg, tokens});
-        }).catch((err) => {
-          reject(err);
-        });
-      }).catch((err) => {
+    loadPackage()
+      .then(pkg => {
+        loadConfig()
+          .then(cfg => {
+            loadTokens(cfg)
+              .then(tokens => {
+                return resolve({cfg, pkg, tokens});
+              })
+              .catch(err => {
+                reject(err);
+              });
+          })
+          .catch(err => {
+            reject(err);
+          });
+      })
+      .catch(err => {
         reject(err);
       });
-    }).catch((err) => {
-      reject(err);
-    });
   });
 };
 
-const failMessage = function (err, prop) {
+const failMessage = function(err, prop) {
   var errStr = '';
 
-  err.map((item) => {
-    var msg = `${item.field} in your config ${item.message} \n`.replace('data.', `${prop}.`);
-    errStr ? errStr += msg : errStr = msg;
+  err.map(item => {
+    var msg = `${item.field} in your config ${item.message} \n`.replace(
+      'data.',
+      `${prop}.`
+    );
+    errStr ? (errStr += msg) : (errStr = msg);
   });
 
   return errStr;
 };
 
-const checkIntegrity = function (cfg, prop) {
+const checkIntegrity = function(cfg, prop) {
   if (prop === 'root' || (cfg.hasOwnProperty(prop) && cfg[prop] !== false)) {
     const validate = validator(schemes[prop]);
     const check = prop === 'root' ? cfg : cfg[prop];
@@ -55,7 +64,7 @@ const loadPackage = () => {
   });
 };
 
-const loadTokens = (cfg) => {
+const loadTokens = cfg => {
   return new Promise((resolve, reject) => {
     fs.readFile(FILE_TOKENS, (err, json) => {
       if (err && err.code === 'ENOENT') {
@@ -85,23 +94,31 @@ const loadConfig = () => {
 
       cfg = JSON.parse(cfg);
 
-      cfg.has = function (prop) {
+      cfg.has = function(prop) {
         return this.hasOwnProperty(prop) && this[prop] !== false;
       };
 
-      cfg.getRemote = function () {
+      cfg.getRemote = function() {
         return this.remote || 'origin';
       };
 
-      cfg.hasRelease = function () {
-        return (this.hasOwnProperty('github') && this.github.hasOwnProperty('release')) && this.github.release !== false;
+      cfg.hasRelease = function() {
+        return (
+          this.hasOwnProperty('github') &&
+          this.github.hasOwnProperty('release') &&
+          this.github.release !== false
+        );
       };
 
-      cfg.hasAssets = function () {
-        return (this.hasRelease() && this.github.release.hasOwnProperty('assets')) && this.github.release.assets !== false;
+      cfg.hasAssets = function() {
+        return (
+          this.hasRelease() &&
+          this.github.release.hasOwnProperty('assets') &&
+          this.github.release.assets !== false
+        );
       };
 
-      ['root', 'github', 'compress'].map((item) => {
+      ['root', 'github', 'compress'].map(item => {
         var err = checkIntegrity(cfg, item);
         if (err) reject(new Error(err));
       });

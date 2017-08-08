@@ -5,14 +5,22 @@
         "one-var": [2, { var: "always", let: "never", const: "never" }],
         "import-order/import-order": 2,
         "no-path-concat": 2,
-        "quote-props": [2, "as-needed"]
+        "quote-props": [2, "as-needed"],
+        "space-before-function-paren": [2, "never"],
+        "prettier/prettier": ["error", {
+          "singleQuote": true,
+          "bracketSpacing": false,
+          "jsxBracketSameLine": true,
+          "parser": "flow"
+        }]
     },
     "env": {
         "es6": true,
         "node": true
     },
     "plugins": [
-        "import-order"
+        "import-order",
+         "prettier"
     ],
     "extends": "standard",
 }

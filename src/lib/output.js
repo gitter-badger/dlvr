@@ -2,17 +2,27 @@ const {bold, red, blue, yellow, green} = require('chalk'); // eslint-disable-lin
 
 const successMessage = ({pkg, cfg, changelog}) => {
   console.log('');
-  console.log(`🎉  Successfully released ${yellow(pkg.name)} Version ${green(pkg.version)}`);
+  console.log(
+    `🎉  Successfully released ${yellow(pkg.name)} Version ${green(
+      pkg.version
+    )}`
+  );
   console.log('');
 
   if (cfg.has('github')) {
-    console.log(`Check your GitHub Release here: ${blue(`https://github.com/${cfg.github.repo}/releases`)}`);
+    console.log(
+      `Check your GitHub Release here: ${blue(
+        `https://github.com/${cfg.github.repo}/releases`
+      )}`
+    );
   }
-
   if (cfg.has('npmpublish')) {
-    console.log(`Check your NPM Release here: ${blue(`https://www.npmjs.com/package/${pkg.name}`)}`);
+    console.log(
+      `Check your NPM Release here: ${blue(
+        `https://www.npmjs.com/package/${pkg.name}`
+      )}`
+    );
   }
-
   process.exit(0);
 };
 
@@ -29,11 +39,18 @@ const intro = () => {
 const info = ({pkg, changelog, version}) => {
   if (version) {
     console.log(`Releasing ${yellow.bold(pkg.name)}`);
-    console.log(`current Version ${green.bold(pkg.version)}, you want to release Version ${red.bold(version)}`);
+    console.log(
+      `current Version ${green.bold(
+        pkg.version
+      )}, you want to release Version ${red.bold(version)}`
+    );
   } else {
-    console.log(`Project: ${yellow.bold(pkg.name)} Current Version: ${green.bold(pkg.version)}`);
+    console.log(
+      `Project: ${yellow.bold(pkg.name)} Current Version: ${green.bold(
+        pkg.version
+      )}`
+    );
   }
-
   if (changelog) {
     console.log(changelog);
   } else {

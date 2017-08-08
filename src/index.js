@@ -1,6 +1,12 @@
 #! /usr/bin/env node
 
-const {configWizard, tokenWizard, statusCmd, parsedArgs, releaseCmd} = require('./commands');
+const {
+  configWizard,
+  tokenWizard,
+  statusCmd,
+  parsedArgs,
+  releaseCmd
+} = require('./commands');
 const args = parsedArgs();
 
 switch (args.subcmd) {
@@ -19,4 +25,4 @@ switch (args.subcmd) {
   case 'release':
     releaseCmd(args);
     break;
-};
+}

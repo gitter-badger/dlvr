@@ -3,14 +3,13 @@ const runner = require('./runner').runner;
 const checkLogin = ({cfg}) => {
   return new Promise((resolve, reject) => {
     if (cfg.has('npmpublish')) {
-      runner('npm who',
-        'Check NPM Login',
-        'No NPM Login'
-      ).then(() => {
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
+      runner('npm who', 'Check NPM Login', 'No NPM Login')
+        .then(() => {
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
     } else {
       resolve();
     }
@@ -20,14 +19,17 @@ const checkLogin = ({cfg}) => {
 const publish = ({cfg}) => {
   return new Promise((resolve, reject) => {
     if (cfg.has('npmpublish')) {
-      runner('npm publish',
+      runner(
+        'npm publish',
         'Publishing on NPM',
         'Error while publishing on NPM'
-      ).then(() => {
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
+      )
+        .then(() => {
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
     } else {
       resolve();
     }

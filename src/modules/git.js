@@ -11,16 +11,25 @@ const generateChangelog = ({cfg}) => {
       const allTags = tags.all.reverse();
       const opt = allTags.length >= 1 ? {from: allTags[0], to: 'HEAD'} : {};
 
-      git(GITPATH).log(opt, (err, data) => {
-        utils.catchError(err, err, reject);
-        data.all.filter(
-          (item) => cfg.has('logfilter') ? new RegExp(cfg.logfilter).test(item.message) : true
-        ).map((item) => {
-          changelog === false ? changelog = `**Changelog:**\n\n- ${item.message} \n` : changelog += `- ${item.message} \n`;
+      git(GITPATH)
+        .log(opt, (err, data) => {
+          utils.catchError(err, err, reject);
+          data.all
+            .filter(
+              item =>
+                cfg.has('logfilter')
+                  ? new RegExp(cfg.logfilter).test(item.message)
+                  : true
+            )
+            .map(item => {
+              changelog === false
+                ? (changelog = `**Changelog:**\n\n- ${item.message} \n`)
+                : (changelog += `- ${item.message} \n`);
+            });
+        })
+        .exec(() => {
+          resolve(changelog);
         });
-      }).exec(() => {
-        resolve(changelog);
-      });
     });
   });
 };
@@ -28,9 +37,10 @@ const generateChangelog = ({cfg}) => {
 const tagAndPush = ({version, cfg}) => {
   spinner.create('Tag Release');
   return new Promise((resolve, reject) => {
-    git(GITPATH).addTag(version, (err, res) => {
-      utils.catchError(err, err, reject);
-    })
+    git(GITPATH)
+      .addTag(version, (err, res) => {
+        utils.catchError(err, err, reject);
+      })
       .pushTags(cfg.getRemote(), (err, res) => {
         utils.catchError(err, err, reject);
         resolve('Tag created and pushed');
@@ -41,7 +51,8 @@ const tagAndPush = ({version, cfg}) => {
 const commitAndPush = ({version, cfg}) => {
   spinner.create('Commit and Push Release');
   return new Promise((resolve, reject) => {
-    git(GITPATH).add('./*')
+    git(GITPATH)
+      .add('./*')
       .commit(`🎉 Release ${version}`)
       .push([cfg.getRemote(), 'master']);
     resolve();
@@ -56,7 +67,6 @@ const tagExist = ({version}) => {
       if (tags.all.indexOf(version) > -1) {
         reject(new Error(`Tag ${version} already exists`));
       }
-
       resolve(version);
     });
   });
@@ -65,32 +75,40 @@ const tagExist = ({version}) => {
 const checkRepo = ({cfg}) => {
   return new Promise((resolve, reject) => {
     spinner.create('Check git Repository');
-    git(GITPATH).status((err, status) => {
-      utils.catchError(err, err, reject);
-      if (status.files.length > 0) {
-        reject(new Error('You have uncommitted changes - Please commit or stash them before release!'));
-      }
-
-      if (status.current !== 'master') {
-        reject(new Error('You are not on the master branch'));
-      }
-    }).exec(() => {
-      git(GITPATH).getRemotes(true, (err, data) => {
+    git(GITPATH)
+      .status((err, status) => {
         utils.catchError(err, err, reject);
-
-        if (data.length < 0) {
-          reject(new Error(`No Remote found`));
+        if (status.files.length > 0) {
+          reject(
+            new Error(
+              'You have uncommitted changes - Please commit or stash them before release!'
+            )
+          );
         }
-
-        var remoteExists = data.filter((item) => item.name === cfg.getRemote()).length > 0;
-
-        if (!remoteExists) {
-          reject(new Error(`Remote in config (${cfg.getRemote()}) is not available`));
+        if (status.current !== 'master') {
+          reject(new Error('You are not on the master branch'));
         }
+      })
+      .exec(() => {
+        git(GITPATH).getRemotes(true, (err, data) => {
+          utils.catchError(err, err, reject);
 
-        resolve();
+          if (data.length < 0) {
+            reject(new Error(`No Remote found`));
+          }
+          var remoteExists =
+            data.filter(item => item.name === cfg.getRemote()).length > 0;
+
+          if (!remoteExists) {
+            reject(
+              new Error(
+                `Remote in config (${cfg.getRemote()}) is not available`
+              )
+            );
+          }
+          resolve();
+        });
       });
-    });
   });
 };
 

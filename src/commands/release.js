@@ -15,32 +15,38 @@ const promptSchema = {
   required: true
 };
 
-function releaseCmd (args) {
-  config.boot().then((configs) => {
-    git.generateChangelog(configs).then((changelog) => {
-      configs.changelog = changelog;
-      configs.version = semver.inc(configs.pkg.version, args.VERSION);
+function releaseCmd(args) {
+  config
+    .boot()
+    .then(configs => {
+      git
+        .generateChangelog(configs)
+        .then(changelog => {
+          configs.changelog = changelog;
+          configs.version = semver.inc(configs.pkg.version, args.VERSION);
 
-      output.intro();
-      output.info(configs);
+          output.intro();
+          output.info(configs);
 
-      if (args.force) {
-        perform.run(configs);
-      } else {
-        prompt.start();
-        prompt.get(promptSchema, (err, result) => {
-          utils.catchError(err);
-          if (result.question.toLowerCase() === 'y') {
+          if (args.force) {
             perform.run(configs);
+          } else {
+            prompt.start();
+            prompt.get(promptSchema, (err, result) => {
+              utils.catchError(err);
+              if (result.question.toLowerCase() === 'y') {
+                perform.run(configs);
+              }
+            });
           }
+        })
+        .catch(err => {
+          console.log(err);
         });
-      }
-    }).catch((err) => {
+    })
+    .catch(err => {
       console.log(err);
     });
-  }).catch((err) => {
-    console.log(err);
-  });
 }
 
 module.exports = {

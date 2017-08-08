@@ -34,7 +34,8 @@ const promptSchema = [
     message: 'Only Y/y (yes) or N/n (no) is allowed',
     default: 'y',
     required: true
-  }, {
+  },
+  {
     name: 'npmpublish',
     description: 'Do you want to publish on npm ?',
     type: 'string',
@@ -42,7 +43,8 @@ const promptSchema = [
     message: 'Only Y/y (yes) or N/n (no) is allowed',
     default: 'y',
     required: true
-  }, {
+  },
+  {
     name: 'github',
     description: 'Do you want to release on github ?',
     type: 'string',
@@ -50,16 +52,18 @@ const promptSchema = [
     message: 'Only Y/y (yes) or N/n (no) is allowed',
     default: 'y',
     required: true
-  }, {
+  },
+  {
     name: 'repo',
     description: 'Whats your github repo ?',
     type: 'string',
     default: 'username/repo',
     required: true,
-    ask: function () {
+    ask: function() {
       return prompt.history('github').value.toLowerCase() === 'y';
     }
-  }, {
+  },
+  {
     name: 'githubdraft',
     description: 'Should be your Github release a draft ?',
     type: 'string',
@@ -67,10 +71,11 @@ const promptSchema = [
     message: 'Only Y/y (yes) or N/n (no) is allowed',
     default: 'y',
     required: true,
-    ask: function () {
+    ask: function() {
       return prompt.history('github').value.toLowerCase() === 'y';
     }
-  }, {
+  },
+  {
     name: 'githubassets',
     description: 'Do you want to upload assets with your github release ?',
     type: 'string',
@@ -78,10 +83,11 @@ const promptSchema = [
     message: 'Only Y/y (yes) or N/n (no) is allowed',
     default: 'n',
     required: true,
-    ask: function () {
+    ask: function() {
       return prompt.history('github').value.toLowerCase() === 'y';
     }
-  }, {
+  },
+  {
     name: 'compress',
     description: 'Do you want to compress the assets before uplading ?',
     type: 'string',
@@ -89,39 +95,42 @@ const promptSchema = [
     message: 'Only Y/y (yes) or N/n (no) is allowed',
     default: 'n',
     required: true,
-    ask: function () {
-      if (prompt.history('github').value.toLowerCase() === 'y' &&
-        prompt.history('githubassets').value.toLowerCase() === 'y') {
+    ask: function() {
+      if (
+        prompt.history('github').value.toLowerCase() === 'y' &&
+        prompt.history('githubassets').value.toLowerCase() === 'y'
+      ) {
         return true;
       }
 
       return false;
     }
-  }];
+  }
+];
 
 const template = {
   snyk: true,
-  compress: [
-    {in: './dist/myfile.bin', out: './dist/myfile.zip'}
-  ],
+  compress: [{in: './dist/myfile.bin', out: './dist/myfile.zip'}],
   logfilter: '.*#',
   remote: 'origin',
   github: {
     repo: 'username/repo',
     release: {
       draft: true,
-      assets: [{
-        file: './dist/myfile.zip',
-        name: 'myfile.zip'
-      }]
+      assets: [
+        {
+          file: './dist/myfile.zip',
+          name: 'myfile.zip'
+        }
+      ]
     }
   },
   test: 'npm run test',
   npmpublish: false
 };
 
-function configWizard () {
-  function getContent (content) {
+function configWizard() {
+  function getContent(content) {
     for (var key in content) {
       if (content[key].toLowerCase() === 'n') {
         if (key === 'githubassets' && template.hasOwnProperty('github')) {
@@ -144,14 +153,14 @@ function configWizard () {
     return JSON.stringify(template, null, 2);
   }
 
-  fs.access(FILE_PACKAGE, (err) => {
+  fs.access(FILE_PACKAGE, err => {
     if (err) utils.fatal(err.message, 0);
     prompt.start();
-    prompt.get(promptSchema, function (err, results) {
+    prompt.get(promptSchema, function(err, results) {
       if (err) utils.fatal(err.message);
 
       const fileContent = getContent(results);
-      fs.writeFile(FILE_CONFIG, fileContent, (err) => {
+      fs.writeFile(FILE_CONFIG, fileContent, err => {
         if (err) utils.fatal(err.message);
         console.log('Your configfile has been weritten');
         utils.quit('Please edit your .dlvr file before releasing');

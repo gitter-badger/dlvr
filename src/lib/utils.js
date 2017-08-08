@@ -17,7 +17,7 @@ const saveVersion = ({version, pkg}) => {
   return new Promise((resolve, reject) => {
     pkg.version = version;
     var content = JSON.stringify(pkg, null, 2);
-    fs.writeFile(FILE_PACKAGE, content, (err) => {
+    fs.writeFile(FILE_PACKAGE, content, err => {
       catchError(err, err, reject);
       resolve();
     });

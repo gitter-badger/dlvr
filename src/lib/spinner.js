@@ -17,7 +17,7 @@ const fail = err => {
   if (global.spinner) {
     global.spinner.fail();
     console.log('');
-  };
+  }
   console.error(`😢  ${red(err)} `);
   process.exit(1);
 };
