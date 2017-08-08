@@ -1,6 +1,12 @@
 const fs = require('fs');
 const validator = require('is-my-json-valid');
-const {FILE_TOKENS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
+const {
+  ENV_VAR_GITHUB,
+  ENV_VAR_SNYK,
+  FILE_TOKENS,
+  FILE_CONFIG,
+  FILE_PACKAGE
+} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
@@ -64,11 +70,21 @@ const loadPackage = () => {
   });
 };
 
+// TODO: refactor this more generic
 const loadTokens = cfg => {
   return new Promise((resolve, reject) => {
     fs.readFile(FILE_TOKENS, (err, json) => {
       if (err && err.code === 'ENOENT') {
-        json = '{}';
+        json = {};
+        if (process.env[ENV_VAR_GITHUB]) {
+          json.github = process.env[ENV_VAR_GITHUB];
+        }
+
+        if (process.env[ENV_VAR_SNYK]) {
+          json.snyk = process.env[ENV_VAR_SNYK];
+        }
+
+        json = JSON.stringify(json);
       } else {
         utils.catchError(err, err, reject);
       }
