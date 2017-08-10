@@ -22,9 +22,10 @@ const generateChangelog = ({cfg}) => {
                   : true
             )
             .map(item => {
+              const msg = item.message.replace(/\(.* -> .*\)/, '');
               changelog === false
-                ? (changelog = `**Changelog:**\n\n- ${item.message} \n`)
-                : (changelog += `- ${item.message} \n`);
+                ? (changelog = `**Changelog:**\n\n- ${msg} \n`)
+                : (changelog += `- ${msg} \n`);
             });
         })
         .exec(() => {
