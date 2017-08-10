@@ -37,7 +37,13 @@ Versions and Releases your Project based on your given configuration and release
 ## Config Files
 
 ### .dlvrtokens
-**PATH**: `$HOME/.dlvrtokens`    
+**PATH**: `$HOME/.dlvrtokens`   
+Its also possible to use the environment variables 
+```
+DLVR_TOKEN_GITHUB
+DLVR_TOKEN_SNYK
+```
+to provide the Tokens  
 **Possible Configuration**  
 ```
 {
