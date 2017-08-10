@@ -12,52 +12,65 @@ const github = require('./modules/github');
 const output = require('./lib/output');
 
 function run(configs) {
-  git
-    .checkRepo(configs)
+  runner
+    .preRun(configs)
     .then(() => {
-      runner
-        .runTests(configs)
+      git
+        .checkRepo(configs)
         .then(() => {
-          github
-            .checkToken(configs)
+          runner
+            .runTests(configs)
             .then(() => {
-              npm
-                .checkLogin(configs)
+              github
+                .checkToken(configs)
                 .then(() => {
-                  snyk
-                    .login(configs)
+                  npm
+                    .checkLogin(configs)
                     .then(() => {
                       snyk
-                        .check(configs)
+                        .login(configs)
                         .then(() => {
-                          zip
-                            .compress(configs)
+                          snyk
+                            .check(configs)
                             .then(() => {
-                              utils
-                                .saveVersion(configs)
+                              zip
+                                .compress(configs)
                                 .then(() => {
-                                  git
-                                    .commitAndPush(configs)
+                                  utils
+                                    .saveVersion(configs)
                                     .then(() => {
                                       git
-                                        .tagAndPush(configs)
+                                        .commitAndPush(configs)
                                         .then(() => {
-                                          npm
-                                            .publish(configs)
+                                          git
+                                            .tagAndPush(configs)
                                             .then(() => {
-                                              github
-                                                .release(configs)
-                                                .then(releaseId => {
+                                              npm
+                                                .publish(configs)
+                                                .then(() => {
                                                   github
-                                                    .uploadAssets(
-                                                      configs,
-                                                      releaseId
-                                                    )
-                                                    .then(() => {
-                                                      spinner.success();
-                                                      output.successMessage(
-                                                        configs
-                                                      );
+                                                    .release(configs)
+                                                    .then(releaseId => {
+                                                      github
+                                                        .uploadAssets(
+                                                          configs,
+                                                          releaseId
+                                                        )
+                                                        .then(() => {
+                                                          runner
+                                                            .postRun(configs)
+                                                            .then(() => {
+                                                              spinner.success();
+                                                              output.successMessage(
+                                                                configs
+                                                              );
+                                                            });
+                                                        })
+                                                        .catch(err => {
+                                                          spinner.fail(
+                                                            err.message
+                                                          );
+                                                        });
                                                     })
                                                     .catch(err => {
                                                       spinner.fail(err.message);

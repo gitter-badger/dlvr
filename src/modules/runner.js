@@ -15,6 +15,38 @@ const runner = (cmd, msg, errorMsg) => {
   });
 };
 
+const preRun = ({cfg}) => {
+  return new Promise((resolve, reject) => {
+    if (cfg.preRun) {
+      runner(cfg.preRun, `Run ${cfg.preRun}`, 'Pre Run failed')
+        .then(() => {
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    } else {
+      resolve();
+    }
+  });
+};
+
+const postRun = ({cfg}) => {
+  return new Promise((resolve, reject) => {
+    if (cfg.postRun) {
+      runner(cfg.postRun, `Run ${cfg.postRun}`, 'Post Run failed')
+        .then(() => {
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    } else {
+      resolve();
+    }
+  });
+};
+
 const runTests = ({cfg}) => {
   return new Promise((resolve, reject) => {
     if (cfg.test) {
@@ -33,5 +65,7 @@ const runTests = ({cfg}) => {
 
 module.exports = {
   runTests,
-  runner
+  runner,
+  preRun,
+  postRun
 };
