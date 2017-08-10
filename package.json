@@ -1,6 +1,6 @@
 {
   "name": "dlvr",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "",
   "bin": {
     "dlvr": "./src/index.js"
