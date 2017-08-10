@@ -72,6 +72,30 @@ const tagExist = ({version}) => {
   });
 };
 
+const checkChanges = () => {
+  const concatFiles = stat => {
+    let out = [];
+    return out
+      .concat(
+        stat.not_added,
+        stat.conflicted,
+        stat.created,
+        stat.deleted,
+        stat.modified,
+        stat.renamed
+      )
+      .join('\n');
+  };
+
+  return new Promise((resolve, reject) => {
+    git(GITPATH).status((err, status) => {
+      utils.catchError(err, err);
+      // console.log(concatFiles(status));
+      resolve(concatFiles(status));
+    });
+  });
+};
+
 const checkRepo = ({cfg}) => {
   return new Promise((resolve, reject) => {
     spinner.create('Check git Repository');
@@ -113,6 +137,7 @@ const checkRepo = ({cfg}) => {
 };
 
 module.exports = {
+  checkChanges,
   generateChangelog,
   tagAndPush,
   commitAndPush,

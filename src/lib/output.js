@@ -36,6 +36,7 @@ const intro = () => {
   console.log(yellow('        \\/        \\/               \\/ '));
   console.log(blue(`=========================================`));
 };
+
 const info = ({pkg, changelog, version}) => {
   if (version) {
     console.log(`Releasing ${yellow.bold(pkg.name)}`);
@@ -58,8 +59,21 @@ const info = ({pkg, changelog, version}) => {
   }
 };
 
+const fileInfo = files => {
+  if (files.length > 0) {
+    console.log(
+      `${red(
+        'You have uncommitted changes in your Repository, please commit them first'
+      )}`
+    );
+
+    console.log(files);
+  }
+};
+
 module.exports = {
   intro,
   info,
+  fileInfo,
   successMessage
 };

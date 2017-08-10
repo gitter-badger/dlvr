@@ -10,7 +10,10 @@ function statusCmd() {
     .then(configs => {
       git.generateChangelog(configs).then(changelog => {
         configs.changelog = changelog;
-        output.info(configs);
+        git.checkChanges().then(files => {
+          output.info(configs);
+          output.fileInfo(files);
+        });
       });
     })
     .catch(err => {
