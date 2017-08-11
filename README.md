@@ -57,6 +57,8 @@ to provide the Tokens
 **Possible Configuration**  
 ```
 {
+  preRun: 'npm run build',
+  postRun: 'rm -rf ./dist'
   snyk: true,
   compress: [
     {in: './dist/myfile.bin', out: './dist/myfile.zip'}
