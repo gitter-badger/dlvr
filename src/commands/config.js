@@ -6,6 +6,15 @@ const {FILE_PACKAGE, FILE_CONFIG} = require('../constants');
 
 const promptSchema = [
   {
+    name: 'preRun',
+    description: 'Do you want to execute a command before releasing ?',
+    type: 'string',
+    pattern: /^(y|n)$/i,
+    message: 'Only Y/y (yes) or N/n (no) is allowed',
+    default: 'y',
+    required: true
+  },
+  {
     name: 'remote',
     description: 'Whats your default remote for releasing ?',
     type: 'string',
@@ -105,10 +114,21 @@ const promptSchema = [
 
       return false;
     }
+  },
+  {
+    name: 'postRun',
+    description: 'Do you want to execute a command after releasing ?',
+    type: 'string',
+    pattern: /^(y|n)$/i,
+    message: 'Only Y/y (yes) or N/n (no) is allowed',
+    default: 'y',
+    required: true
   }
 ];
 
 const template = {
+  preRun: 'npm run build',
+  postRun: '',
   snyk: true,
   compress: [{in: './dist/myfile.bin', out: './dist/myfile.zip'}],
   logfilter: '.*#',
