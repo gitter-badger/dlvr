@@ -5,7 +5,7 @@
   "github": {
     "repo": "freakzero/dlvr",
     "release": {
-      "draft":true
+      "draft":false
     }
   },
   "test":"npm run test",
