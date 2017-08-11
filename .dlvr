@@ -1,4 +1,5 @@
 {
+  "preRun": "./node_modules/.bin/eslint ./src --fix"
   "snyk": true,
   "logfilter": ".*#",
   "github": {
