@@ -90,6 +90,11 @@ const loadTokens = cfg => {
       }
 
       var tokens = JSON.parse(json);
+
+      if (cfg.has('gitlab') && !tokens.gitlab) {
+        return reject(new Error('No gitlab token given'));
+      }
+
       if (cfg.has('github') && !tokens.github) {
         return reject(new Error('No github token given'));
       }
