@@ -9,10 +9,10 @@ const successMessage = ({pkg, cfg, changelog}) => {
   );
   console.log('');
 
-  if (cfg.has('github')) {
+  if (cfg.has('githost')) {
     console.log(
       `Check your GitHub Release here: ${blue(
-        `https://github.com/${cfg.github.repo}/releases`
+        `https://github.com/${cfg.githost.repo}/releases`
       )}`
     );
   }
