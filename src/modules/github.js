@@ -11,7 +11,7 @@ const uploadAssets = ({cfg, tokens}, id) => {
     if (!cfg.hasAssets()) {
       resolve();
     } else {
-      var client = og.client(tokens.github),
+      var client = og.client(tokens.get('github')),
         release = client.release(cfg.githost.repo, id);
 
       asyncLoop(
@@ -69,7 +69,7 @@ const release = ({cfg, version, changelog, tokens}) => {
 
   return new Promise((resolve, reject) => {
     if (cfg.has('githost')) {
-      var client = og.client(tokens.github),
+      var client = og.client(tokens.get('github')),
         repo = client.repo(cfg.githost.repo);
 
       repo.release(

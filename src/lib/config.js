@@ -85,6 +85,14 @@ const loadTokens = cfg => {
         }
       });
 
+      tokens.get = function(forService) {
+        return (
+          this[forService] ||
+          process.env[`DLVR_TOKEN_${forService.toUpperCase()}`] ||
+          false
+        );
+      };
+
       return resolve(tokens);
     });
   });
