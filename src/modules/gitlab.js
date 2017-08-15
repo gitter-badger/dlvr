@@ -25,7 +25,7 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
     });
 
     var form = req.form();
-    form.append('file', 'readStream', {
+    form.append('file', readStream, {
       filename: 'foo.txt',
       contentType: 'text/plain'
     });
@@ -43,7 +43,7 @@ const release = ({cfg, tokens}) => {
       gitlab.projects.all(projects => {
         var project = projects.filter(p => p.name === 'test-repo-gitlab')[0];
         fetch(
-          `https://gitlab.com/api/v4/projects/${project.id}/repository/tags/0.0.2/release`,
+          `https://gitlab.com/api/v3/projects/${project.id}/repository/tags/0.0.2/release`,
           {
             method: 'POST',
             headers: {
