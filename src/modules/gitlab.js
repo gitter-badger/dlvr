@@ -23,6 +23,8 @@ const release = ({cfg, version, changelog, tokens}, projectId) => {
         utils.catchError(err, err, reject);
         resolve();
       });
+    } else {
+      resolve();
     }
   });
 };
@@ -65,6 +67,8 @@ const getProject = ({cfg, tokens}, userId) => {
         const repo = cfg.githost.repo.split('/')[1];
         resolve(data.filter(project => project.name === repo)[0].id);
       });
+    } else {
+      resolve();
     }
   });
 };
