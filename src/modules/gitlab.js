@@ -14,7 +14,7 @@ const release = ({cfg, version, changelog, tokens}, projectId) => {
         },
         body: {
           tag_name: version,
-          description: changelog
+          description: changelog || ' '
         },
         json: true
       };
