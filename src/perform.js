@@ -9,6 +9,7 @@ const npm = require('./modules/npm');
 const snyk = require('./modules/snyk');
 const runner = require('./modules/runner');
 const github = require('./modules/github');
+const gitlab = require('./modules/gitlab');
 const output = require('./lib/output');
 
 function run(configs) {
@@ -24,45 +25,83 @@ function run(configs) {
               github
                 .checkToken(configs)
                 .then(() => {
-                  npm
-                    .checkLogin(configs)
-                    .then(() => {
-                      snyk
-                        .login(configs)
-                        .then(() => {
-                          snyk
-                            .check(configs)
+                  gitlab
+                    .getUser(configs)
+                    .then(gitlabUser => {
+                      gitlab
+                        .getProject(configs, gitlabUser)
+                        .then(gitlabProject => {
+                          npm
+                            .checkLogin(configs)
                             .then(() => {
-                              zip
-                                .compress(configs)
+                              snyk
+                                .login(configs)
                                 .then(() => {
-                                  utils
-                                    .saveVersion(configs)
+                                  snyk
+                                    .check(configs)
                                     .then(() => {
-                                      git
-                                        .commitAndPush(configs)
+                                      zip
+                                        .compress(configs)
                                         .then(() => {
-                                          git
-                                            .tagAndPush(configs)
+                                          utils
+                                            .saveVersion(configs)
                                             .then(() => {
-                                              npm
-                                                .publish(configs)
+                                              git
+                                                .commitAndPush(configs)
                                                 .then(() => {
-                                                  github
-                                                    .release(configs)
-                                                    .then(releaseId => {
-                                                      github
-                                                        .uploadAssets(
-                                                          configs,
-                                                          releaseId
-                                                        )
+                                                  git
+                                                    .tagAndPush(configs)
+                                                    .then(() => {
+                                                      npm
+                                                        .publish(configs)
                                                         .then(() => {
-                                                          runner
-                                                            .postRun(configs)
-                                                            .then(() => {
-                                                              spinner.success();
-                                                              output.successMessage(
-                                                                configs
+                                                          github
+                                                            .release(configs)
+                                                            .then(releaseId => {
+                                                              github
+                                                                .uploadAssets(
+                                                                  configs,
+                                                                  releaseId
+                                                                )
+                                                                .then(() => {
+                                                                  gitlab
+                                                                    .release(
+                                                                      configs,
+                                                                      gitlabProject
+                                                                    )
+                                                                    .then(
+                                                                      () => {
+                                                                        runner
+                                                                          .postRun(
+                                                                            configs
+                                                                          )
+                                                                          .then(
+                                                                            () => {
+                                                                              spinner.success();
+                                                                              output.successMessage(
+                                                                                configs
+                                                                              );
+                                                                            }
+                                                                          );
+                                                                      }
+                                                                    )
+                                                                    .catch(
+                                                                      err => {
+                                                                        spinner.fail(
+                                                                          err.message
+                                                                        );
+                                                                      }
+                                                                    );
+                                                                })
+                                                                .catch(err => {
+                                                                  spinner.fail(
+                                                                    err.message
+                                                                  );
+                                                                });
+                                                            })
+                                                            .catch(err => {
+                                                              spinner.fail(
+                                                                err.message
                                                               );
                                                             });
                                                         })

@@ -1,68 +1,44 @@
-var FormData = require('form-data');
-var fetch = require('node-fetch');
-let fs = require('fs');
 var request = require('request');
+const utils = require('../lib/utils');
+const spinner = require('../lib/spinner');
 
-const uploadAssets = ({cfg, tokens}, projectId) => {
+const release = ({cfg, version, changelog, tokens}, projectId) => {
   return new Promise((resolve, reject) => {
-    const stats = fs.statSync('foo.txt');
-    const fileSizeInBytes = stats.size;
-    let readStream = fs.readFileSync('foo.txt');
+    if (cfg.isProvider('gitlab')) {
+      spinner.create('Publish release on gitlab');
+      var opt = {
+        url: `https://gitlab.com/api/v3/projects/${projectId}/repository/tags/${version}/release`,
+        headers: {
+          'PRIVATE-TOKEN': tokens.get('gitlab')
+        },
+        body: {
+          tag_name: version,
+          description: changelog
+        },
+        json: true
+      };
 
-    var opt = {
-      url: `https://gitlab.com/api/v3/projects/${projectId}/uploads`,
-      headers: {
-        'PRIVATE-TOKEN': tokens.gitlab
-      }
-    };
-
-    var req = request.post(opt, (err, resp, body) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(body);
-      }
-    });
-
-    var form = req.form();
-    form.append('file', readStream, {
-      filename: 'foo.txt',
-      contentType: 'text/plain'
-    });
+      request.post(opt, (err, res, body) => {
+        utils.catchError(err, err, reject);
+        resolve();
+      });
+    }
   });
 };
 
-const release = ({cfg, tokens}) => {
+const getUser = ({cfg, tokens}) => {
   return new Promise((resolve, reject) => {
-    if (cfg.has('gitlab')) {
-      var gitlab = require('gitlab')({
-        url: 'https://gitlab.com',
-        token: tokens.gitlab
-      });
-
-      gitlab.projects.all(projects => {
-        var project = projects.filter(p => p.name === 'test-repo-gitlab')[0];
-        fetch(
-          `https://gitlab.com/api/v3/projects/${project.id}/repository/tags/0.0.2/release`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'PRIVATE-TOKEN': tokens.gitlab
-            },
-            body: JSON.stringify({
-              tag_name: '0.0.2',
-              description: 'version 2'
-            })
-          }
-        )
-          .then(response => response.json())
-          .then(d => {
-            console.log(d);
-          })
-          .catch(e => {
-            console.log(e);
-          });
+    spinner.create('Check gitlab token and get User');
+    if (cfg.isProvider('gitlab')) {
+      var opt = {
+        url: `https://gitlab.com/api/v3/user`,
+        headers: {
+          'PRIVATE-TOKEN': tokens.get('gitlab')
+        }
+      };
+      request.get(opt, (err, res, body) => {
+        utils.catchError(err, err, reject);
+        resolve(JSON.parse(body).id);
       });
     } else {
       resolve();
@@ -72,59 +48,27 @@ const release = ({cfg, tokens}) => {
 
 const getProject = ({cfg, tokens}, userId) => {
   return new Promise((resolve, reject) => {
-    if (cfg.has('gitlab')) {
-      fetch(`https://gitlab.com/api/v4/users/${userId}/projects`, {
-        method: 'GET',
+    if (cfg.isProvider('gitlab')) {
+      spinner.create('Get gitlab project');
+      var opt = {
+        url: `https://gitlab.com/api/v3/users/${userId}/projects`,
         headers: {
-          'PRIVATE-TOKEN': tokens.gitlab
+          'PRIVATE-TOKEN': tokens.get('gitlab')
         }
-      })
-        .then(response => response.json())
-        .then(data => {
-          resolve(
-            data.filter(project => project.name === cfg.gitlab.repo)[0].id
-          );
-        })
-        .catch(e => {
-          reject(new Error('Gitlab Token invalid'));
-        });
-    } else {
-      resolve('skipped');
-    }
-  });
-};
-/*
-Until gitlab lib is fixed i have to use this...
- */
-const checkToken = ({cfg, tokens}) => {
-  return new Promise((resolve, reject) => {
-    if (cfg.has('gitlab')) {
-      fetch('https://gitlab.com/api/v4/user', {
-        method: 'GET',
-        headers: {
-          'PRIVATE-TOKEN': tokens.gitlab
-        }
-      })
-        .then(response => response.json())
-        .then(user => {
-          if (user.message === '401 Unauthorized') {
-            reject(new Error('Gitlab Token invalid'));
-          } else {
-            resolve(user.id);
-          }
-        })
-        .catch(e => {
-          reject(new Error('Gitlab Token invalid'));
-        });
-    } else {
-      resolve('skipped');
-    }
-  });
-};
+      };
 
+      request.get(opt, (err, res, body) => {
+        utils.catchError(err, err, reject);
+        var data = JSON.parse(body);
+        resolve(
+          data.filter(project => project.name === cfg.githost.repo)[0].id
+        );
+      });
+    }
+  });
+};
 module.exports = {
-  checkToken,
-  release,
-  uploadAssets,
-  getProject
+  getProject,
+  getUser,
+  release
 };

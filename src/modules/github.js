@@ -8,9 +8,7 @@ const spinner = require('../lib/spinner');
 
 const uploadAssets = ({cfg, tokens}, id) => {
   return new Promise((resolve, reject) => {
-    if (!cfg.hasAssets()) {
-      resolve();
-    } else {
+    if (cfg.isProvider('github') && cfg.hasAssets()) {
       var client = og.client(tokens.get('github')),
         release = client.release(cfg.githost.repo, id);
 
@@ -36,6 +34,8 @@ const uploadAssets = ({cfg, tokens}, id) => {
           resolve();
         }
       );
+    } else {
+      resolve();
     }
   });
 };
@@ -45,7 +45,7 @@ const checkToken = ({cfg, tokens}) => {
     repo = client.repo(cfg.githost.repo);
 
   return new Promise((resolve, reject) => {
-    if (cfg.has('githost')) {
+    if (cfg.isProvider('github')) {
       spinner.create('Check GitHub Token and Repository');
       client.get('/user', {}, (err, status, body, headers) => {
         utils.catchError(err, err, reject);
@@ -65,10 +65,9 @@ const checkToken = ({cfg, tokens}) => {
 };
 
 const release = ({cfg, version, changelog, tokens}) => {
-  spinner.create('Publish Release on GitHub');
-
   return new Promise((resolve, reject) => {
-    if (cfg.has('githost')) {
+    if (cfg.isProvider('github')) {
+      spinner.create('Publish Release on GitHub');
       var client = og.client(tokens.get('github')),
         repo = client.repo(cfg.githost.repo);
 
