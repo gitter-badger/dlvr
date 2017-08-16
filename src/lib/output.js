@@ -55,9 +55,9 @@ const info = ({cfg, pkg, changelog, version}) => {
 
     if (cfg.has('githost')) {
       console.log(
-        `On provider ${yellow.bold(cfg.githost.provider)} in repository ${yellow.bold(
-          cfg.githost.repo
-        )}`
+        `On provider ${yellow.bold(
+          cfg.githost.provider
+        )} in repository ${yellow.bold(cfg.githost.repo)}`
       );
     }
   } else {
