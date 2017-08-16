@@ -9,10 +9,17 @@ const successMessage = ({pkg, cfg, changelog}) => {
   );
   console.log('');
 
-  if (cfg.has('githost')) {
+  if (cfg.isProvider('github')) {
     console.log(
       `Check your GitHub Release here: ${blue(
         `https://github.com/${cfg.githost.repo}/releases`
+      )}`
+    );
+  }
+  if (cfg.isProvider('gitlab')) {
+    console.log(
+      `Check your GitLab Release here: ${blue(
+        `https://gitlab.com/${cfg.githost.repo}/tags`
       )}`
     );
   }
@@ -37,7 +44,7 @@ const intro = () => {
   console.log(blue(`=========================================`));
 };
 
-const info = ({pkg, changelog, version}) => {
+const info = ({cfg, pkg, changelog, version}) => {
   if (version) {
     console.log(`Releasing ${yellow.bold(pkg.name)}`);
     console.log(
@@ -45,6 +52,14 @@ const info = ({pkg, changelog, version}) => {
         pkg.version
       )}, you want to release Version ${red.bold(version)}`
     );
+
+    if (cfg.has('githost')) {
+      console.log(
+        `On provider ${yellow.bold(cfg.githost.provider)} in repository ${yellow.bold(
+          cfg.githost.repo
+        )}`
+      );
+    }
   } else {
     console.log(
       `Project: ${yellow.bold(pkg.name)} Current Version: ${green.bold(
@@ -55,7 +70,7 @@ const info = ({pkg, changelog, version}) => {
   if (changelog) {
     console.log(changelog);
   } else {
-    console.log(`${red('No Changes found with the current logfilter')}`);
+    console.log(`${red('No Changelog found with the current logfilter')}`);
   }
 };
 
