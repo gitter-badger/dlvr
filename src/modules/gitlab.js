@@ -34,11 +34,12 @@ const getUser = ({cfg, tokens}) => {
         url: `https://gitlab.com/api/v3/user`,
         headers: {
           'PRIVATE-TOKEN': tokens.get('gitlab')
-        }
+        },
+        json: true
       };
       request.get(opt, (err, res, body) => {
         utils.catchError(err, err, reject);
-        resolve(JSON.parse(body).id);
+        resolve(body.id);
       });
     } else {
       resolve();
@@ -54,15 +55,14 @@ const getProject = ({cfg, tokens}, userId) => {
         url: `https://gitlab.com/api/v3/users/${userId}/projects`,
         headers: {
           'PRIVATE-TOKEN': tokens.get('gitlab')
-        }
+        },
+        json: true
       };
 
-      request.get(opt, (err, res, body) => {
+      request.get(opt, (err, res, data) => {
         utils.catchError(err, err, reject);
-        var data = JSON.parse(body);
-        resolve(
-          data.filter(project => project.name === cfg.githost.repo)[0].id
-        );
+        const repo = cfg.githost.repo.split('/')[1];
+        resolve(data.filter(project => project.name === repo)[0].id);
       });
     }
   });
