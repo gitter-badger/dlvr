@@ -29,8 +29,8 @@ const release = ({cfg, version, changelog, tokens}, projectId) => {
 
 const getUser = ({cfg, tokens}) => {
   return new Promise((resolve, reject) => {
-    spinner.create('Check gitlab token and get User');
     if (cfg.isProvider('gitlab')) {
+      spinner.create('Check gitlab token and get User');
       var opt = {
         url: `${GITHUB_API_URL}/user`,
         headers: {
