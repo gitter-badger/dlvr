@@ -1,12 +1,55 @@
-var request = require('request');
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
+const asyncLoop = require('node-async-loop');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 const {GITHUB_API_URL} = require('../constants');
 
-const release = ({cfg, version, changelog, tokens}, projectId) => {
+const uploadAssets = ({cfg, tokens}, projectId) => {
+  return new Promise((resolve, reject) => {
+    spinner.create('Upload assets to gitlab');
+    if (cfg.isProvider('gitlab') && cfg.hasAssets()) {
+      let releaseMarkdown = '**Releases:**  \n';
+      asyncLoop(
+        cfg.githost.release.assets,
+        (item, next) => {
+          let readStream = fs.readFileSync(path.join(process.cwd(), item.file));
+
+          const opt = {
+            url: `https://gitlab.com/api/v3/projects/${projectId}/uploads`,
+            headers: {
+              'PRIVATE-TOKEN': tokens.get('gitlab')
+            }
+          };
+
+          let req = request.post(opt, (err, resp, body) => {
+            if (err) next(err);
+            releaseMarkdown += JSON.parse(body).markdown;
+            next();
+          });
+
+          const form = req.form();
+          form.append('file', readStream, {
+            filename: item.name,
+            contentType: 'text/plain' // TODO: check mimetype
+          });
+        },
+        err => {
+          resolve(releaseMarkdown);
+        }
+      );
+    } else {
+      resolve();
+    }
+  });
+};
+
+const release = ({cfg, version, changelog, tokens}, projectId, releases) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Publish release on gitlab');
+      const releaseNotes = `${changelog || ''}  \n  ${releases || ''}`;
       var opt = {
         url: `${GITHUB_API_URL}/projects/${projectId}/repository/tags/${version}/release`,
         headers: {
@@ -14,7 +57,7 @@ const release = ({cfg, version, changelog, tokens}, projectId) => {
         },
         body: {
           tag_name: version,
-          description: changelog || ' '
+          description: releaseNotes
         },
         json: true
       };
@@ -75,5 +118,6 @@ const getProject = ({cfg, tokens}, userId) => {
 module.exports = {
   getProject,
   getUser,
-  release
+  release,
+  uploadAssets
 };
