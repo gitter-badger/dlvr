@@ -5,7 +5,8 @@ const asyncLoop = require('node-async-loop');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 const {GITHUB_API_URL} = require('../constants');
-
+// TODO: write tests
+// HACK: write this nicer ...
 const uploadAssets = ({cfg, tokens}, projectId) => {
   return new Promise((resolve, reject) => {
     spinner.create('Upload assets to gitlab');
@@ -36,6 +37,7 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
           });
         },
         err => {
+          // TODO: error handling
           resolve(releaseMarkdown);
         }
       );
@@ -85,6 +87,11 @@ const getUser = ({cfg, tokens}) => {
       };
       request.get(opt, (err, res, body) => {
         utils.catchError(err, err, reject);
+
+        // TODO: write body errormessage
+        if (res.statusCode !== 200) {
+          reject(new Error('GitLab Login is wrong'));
+        }
         resolve(body.id);
       });
     } else {
