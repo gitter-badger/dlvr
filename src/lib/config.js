@@ -4,6 +4,8 @@ const {FILE_TOKENS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
+// NOTE: use underscores for privates
+// TODO: rewrite this with async
 const boot = () => {
   return new Promise((resolve, reject) => {
     loadPackage()

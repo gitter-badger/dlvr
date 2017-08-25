@@ -76,7 +76,7 @@ const release = ({cfg, version, changelog, tokens}) => {
           name: version,
           tag_name: version,
           body: changelog || '',
-          draft: cfg.githost.release.draft
+          draft: cfg.githost.release.draft || true
         },
         (err, data) => {
           utils.catchError(err, err, reject);

@@ -37,7 +37,7 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
           });
         },
         err => {
-          // TODO: error handling
+          utils.catchError(err, err, reject);
           resolve(releaseMarkdown);
         }
       );
