@@ -1,3 +1,4 @@
+// TODO: test provider property ?
 var proxyquire = require('proxyquire');
 const {configMock, eachConfig, setStubConfig} = require('./helper');
 
@@ -20,29 +21,14 @@ describe('#config   parse', function () {
     });
   });
 
-  it('Should fail with github.release and github.repo config missing', function (done) {
+  it('Should fail with githost.release and githost.repo config missing', function (done) {
     setStubConfig({
       logfilter: '.*#',
-      github: {}
+      githost: {}
     });
 
     config.boot().catch((err) => {
-      expect(err.message).toBe('github.release in your config is required \ngithub.repo in your config is required \n');
-      done();
-    });
-  });
-
-  it('Should fail with github.release.draft config missing', function (done) {
-    setStubConfig({
-      logfilter: '.*#',
-      github: {
-        repo: 'freakzero/test-repo',
-        release: {}
-      }
-    });
-
-    config.boot().catch((err) => {
-      expect(err.message).toBe('github.release.draft in your config is required \n');
+      expect(err.message).toBe('githost.provider in your config is required \ngithost.repo in your config is required \ngithost.release in your config is required \n');
       done();
     });
   });

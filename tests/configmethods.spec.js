@@ -18,7 +18,7 @@ describe('#config methods', function () {
 describe('#config minimal', function () {
   it('Optionals should return false', function (done) {
     config.boot().then((configs) => {
-      expect(configs.cfg.has('github')).toBe(true);
+      expect(configs.cfg.isProvider('github')).toBe(true);
       expect(configs.cfg.has('compress')).toBe(false);
       expect(configs.cfg.hasAssets()).toBe(false);
       expect(configs.cfg.hasRelease()).toBe(true);
@@ -29,13 +29,13 @@ describe('#config minimal', function () {
   it('Optionals should return false when prop is false', function (done) {
     setStubConfig({
       logfilter: '.*#',
-      github: false,
+      githost: false,
       compress: false,
       npmpublish: false
     });
 
     config.boot().then((configs) => {
-      expect(configs.cfg.has('github')).toBe(false);
+      expect(configs.cfg.has('githost')).toBe(false);
       expect(configs.cfg.has('compress')).toBe(false);
       expect(configs.cfg.has('npmpublish')).toBe(false);
       expect(configs.cfg.hasAssets()).toBe(false);
@@ -51,7 +51,8 @@ describe('#config minimal', function () {
         {in: './dist/test2.txt', out: './dist/test2.zip'}
       ],
       logfilter: '.*#',
-      github: {
+      githost: {
+        provider: 'github',
         token: 'token',
         repo: 'freakzero/test-repo',
         release: {
@@ -67,7 +68,7 @@ describe('#config minimal', function () {
       }
     });
     config.boot().then((configs) => {
-      expect(configs.cfg.has('github')).toBe(true);
+      expect(configs.cfg.isProvider('github')).toBe(true);
       expect(configs.cfg.has('compress')).toBe(true);
       expect(configs.cfg.hasAssets()).toBe(true);
       expect(configs.cfg.hasRelease()).toBe(true);
