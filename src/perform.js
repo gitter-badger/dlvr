@@ -11,7 +11,7 @@ const runner = require('./modules/runner');
 const github = require('./modules/github');
 const gitlab = require('./modules/gitlab');
 const output = require('./lib/output');
-// NOTE: make a generic releasenotes method ?
+
 const run = async configs => {
   try {
     await runner.preRun(configs);

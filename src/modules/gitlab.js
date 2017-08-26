@@ -2,20 +2,22 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const asyncLoop = require('node-async-loop');
+const mime = require('mime');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 const {GITHUB_API_URL} = require('../constants');
+
 // TODO: write tests
-// HACK: write this nicer ...
 const uploadAssets = ({cfg, tokens}, projectId) => {
   return new Promise((resolve, reject) => {
     spinner.create('Upload assets to gitlab');
     if (cfg.isProvider('gitlab') && cfg.hasAssets()) {
-      let releaseMarkdown = '**Releases:**  \n';
+      let releases = [];
       asyncLoop(
         cfg.githost.release.assets,
         (item, next) => {
           let readStream = fs.readFileSync(path.join(process.cwd(), item.file));
+          let readMime = mime.lookup(item.file);
 
           const opt = {
             url: `https://gitlab.com/api/v3/projects/${projectId}/uploads`,
@@ -26,19 +28,20 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
 
           let req = request.post(opt, (err, resp, body) => {
             if (err) next(err);
-            releaseMarkdown += JSON.parse(body).markdown;
+            releases.push(JSON.parse(body).markdown);
+
             next();
           });
 
           const form = req.form();
           form.append('file', readStream, {
             filename: item.name,
-            contentType: 'text/plain' // TODO: check mimetype
+            contentType: readMime
           });
         },
         err => {
           utils.catchError(err, err, reject);
-          resolve(releaseMarkdown);
+          resolve(releases);
         }
       );
     } else {
@@ -51,7 +54,7 @@ const release = ({cfg, version, changelog, tokens}, projectId, releases) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Publish release on gitlab');
-      const releaseNotes = `${changelog || ''}  \n  ${releases || ''}`;
+
       var opt = {
         url: `${GITHUB_API_URL}/projects/${projectId}/repository/tags/${version}/release`,
         headers: {
@@ -59,7 +62,7 @@ const release = ({cfg, version, changelog, tokens}, projectId, releases) => {
         },
         body: {
           tag_name: version,
-          description: releaseNotes
+          description: utils.composeChangelog(changelog, releases)
         },
         json: true
       };
@@ -90,7 +93,7 @@ const getUser = ({cfg, tokens}) => {
 
         // TODO: write body errormessage
         if (res.statusCode !== 200) {
-          reject(new Error('GitLab Login is wrong'));
+          reject(new Error('gitlab Token invalid'));
         }
         resolve(body.id);
       });

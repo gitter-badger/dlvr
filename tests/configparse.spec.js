@@ -1,4 +1,3 @@
-// TODO: test provider property ?
 var proxyquire = require('proxyquire');
 const {configMock, eachConfig, setStubConfig} = require('./helper');
 

@@ -75,7 +75,7 @@ const release = ({cfg, version, changelog, tokens}) => {
         {
           name: version,
           tag_name: version,
-          body: changelog || '',
+          body: utils.composeChangelog(changelog),
           draft: cfg.githost.release.draft || true
         },
         (err, data) => {

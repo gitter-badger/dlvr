@@ -1,4 +1,5 @@
 const {bold, red, blue, yellow, green} = require('chalk'); // eslint-disable-line no-unused-vars
+const utils = require('./utils');
 
 const successMessage = ({pkg, cfg, changelog}) => {
   console.log('');
@@ -67,8 +68,8 @@ const info = ({cfg, pkg, changelog, version}) => {
       )}`
     );
   }
-  if (changelog) {
-    console.log(changelog);
+  if (changelog.length > 0) {
+    console.log(utils.composeChangelog(changelog));
   } else {
     console.log(`${red('No Changelog found with the current logfilter')}`);
   }
