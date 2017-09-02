@@ -50,7 +50,6 @@ function parse(results) {
   }
 
   for (let item in results) {
-    console.log(isNo(results[item]), item);
     if (isNo(results[item]) && item === 'assets') {
       delete template.githost.release['assets'];
     } else if (isNo(results[item]) && item === 'githubdraft') {
