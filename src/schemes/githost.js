@@ -1,5 +1,13 @@
 exports.default = {
   properties: {
+    provider: {
+      required: true,
+      type: 'string'
+    },
+    repo: {
+      required: true,
+      type: 'string'
+    },
     release: {
       properties: {
         assets: {
@@ -19,16 +27,11 @@ exports.default = {
           }
         },
         draft: {
-          required: true,
           type: 'boolean'
         }
       },
       type: 'object',
       required: true
-    },
-    repo: {
-      required: true,
-      type: 'string'
     }
   },
   type: 'object'

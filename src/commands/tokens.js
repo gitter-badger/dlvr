@@ -40,6 +40,31 @@ const tokenPromptSchema = [
     }
   },
   {
+    name: 'gitlab',
+    description: 'Your GitLab token (enter to skip)',
+    type: 'string',
+    hidden: true,
+    replace: '*',
+    ask: function() {
+      return (
+        !HASTOKENS || prompt.history('overwrite').value.toLowerCase() === 'y'
+      );
+    }
+  },
+  {
+    name: 'gitlab-api',
+    description: 'GitLab API Url ?',
+    type: 'string',
+    default: 'https://gitlab.com/api/v3/',
+    ask: function() {
+      return (
+        (!HASTOKENS ||
+          prompt.history('overwrite').value.toLowerCase() === 'y') &&
+        prompt.history('gitlab').value.trim() !== ''
+      );
+    }
+  },
+  {
     name: 'snyk',
     description: 'Your SNYK token (enter to skip)',
     type: 'string',

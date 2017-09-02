@@ -4,7 +4,7 @@ const login = ({cfg, tokens}) => {
   return new Promise((resolve, reject) => {
     if (cfg.has('snyk')) {
       runner(
-        `snyk auth ${tokens.snyk}`,
+        `snyk auth ${tokens.get('snyk')}`,
         'Authenticate SNYK User',
         'SNYK Auth invalid'
       )

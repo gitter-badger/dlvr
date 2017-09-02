@@ -1,12 +1,8 @@
 #! /usr/bin/env node
 
-const {
-  configWizard,
-  tokenWizard,
-  statusCmd,
-  parsedArgs,
-  releaseCmd
-} = require('./commands');
+const {tokenWizard, statusCmd, parsedArgs, releaseCmd} = require('./commands');
+const generator = require('./generator');
+
 const args = parsedArgs();
 
 switch (args.subcmd) {
@@ -15,7 +11,7 @@ switch (args.subcmd) {
     break;
 
   case 'init':
-    configWizard();
+    generator(args.PROVIDER);
     break;
 
   case 'status':

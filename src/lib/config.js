@@ -1,15 +1,11 @@
 const fs = require('fs');
 const validator = require('is-my-json-valid');
-const {
-  ENV_VAR_GITHUB,
-  ENV_VAR_SNYK,
-  FILE_TOKENS,
-  FILE_CONFIG,
-  FILE_PACKAGE
-} = require('../constants');
+const {FILE_TOKENS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
+// NOTE: use underscores for privates
+// TODO: rewrite this with async
 const boot = () => {
   return new Promise((resolve, reject) => {
     loadPackage()
@@ -75,28 +71,29 @@ const loadTokens = cfg => {
   return new Promise((resolve, reject) => {
     fs.readFile(FILE_TOKENS, (err, json) => {
       if (err && err.code === 'ENOENT') {
-        json = {};
-        if (process.env[ENV_VAR_GITHUB]) {
-          json.github = process.env[ENV_VAR_GITHUB];
-        }
-
-        if (process.env[ENV_VAR_SNYK]) {
-          json.snyk = process.env[ENV_VAR_SNYK];
-        }
-
-        json = JSON.stringify(json);
+        json = JSON.stringify({});
       } else {
         utils.catchError(err, err, reject);
       }
 
       var tokens = JSON.parse(json);
-      if (cfg.has('github') && !tokens.github) {
-        return reject(new Error('No github token given'));
-      }
+      ['github', 'gitlab', 'snyk'].map(item => {
+        if (
+          cfg.githost.provider === item &&
+          !tokens[item] &&
+          !process.env[`DLVR_TOKEN_${item.toUpperCase()}`]
+        ) {
+          return reject(new Error(`No ${item} token given`));
+        }
+      });
 
-      if (cfg.has('snyk') && !tokens.snyk) {
-        return reject(new Error('No snyk token given'));
-      }
+      tokens.get = function(forService) {
+        return (
+          this[forService] ||
+          process.env[`DLVR_TOKEN_${forService.toUpperCase()}`] ||
+          false
+        );
+      };
 
       return resolve(tokens);
     });
@@ -114,27 +111,31 @@ const loadConfig = () => {
         return this.hasOwnProperty(prop) && this[prop] !== false;
       };
 
+      cfg.isProvider = function(provider) {
+        return this.githost.provider === provider;
+      };
+
       cfg.getRemote = function() {
         return this.remote || 'origin';
       };
 
       cfg.hasRelease = function() {
         return (
-          this.hasOwnProperty('github') &&
-          this.github.hasOwnProperty('release') &&
-          this.github.release !== false
+          this.hasOwnProperty('githost') &&
+          this.githost.hasOwnProperty('release') &&
+          this.githost.release !== false
         );
       };
 
       cfg.hasAssets = function() {
         return (
           this.hasRelease() &&
-          this.github.release.hasOwnProperty('assets') &&
-          this.github.release.assets !== false
+          this.githost.release.hasOwnProperty('assets') &&
+          this.githost.release.assets !== false
         );
       };
 
-      ['root', 'github', 'compress'].map(item => {
+      ['root', 'githost', 'compress'].map(item => {
         var err = checkIntegrity(cfg, item);
         if (err) reject(new Error(err));
       });

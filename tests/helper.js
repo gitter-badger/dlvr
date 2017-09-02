@@ -23,7 +23,8 @@ let packageStub = {
 
 let configStub = {
   logfilter: '.*#',
-  github: {
+  githost: {
+    provider: "github",
     repo: 'freakzero/test-repo',
     release: {
       draft: true
@@ -144,7 +145,8 @@ function eachConfig () {
 
   configStub = {
     logfilter: '.*#',
-    github: {
+    githost: {
+      provider: 'github',
       repo: 'freakzero/test-repo',
       release: {
         draft: true

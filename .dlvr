@@ -1,11 +1,9 @@
 {
-  "preRun": "./node_modules/.bin/eslint ./src --fix",
-  "snyk": true,
   "logfilter": ".*#",
-  "github": {
-    "repo": "freakzero/dlvr",
+  "githost": {
+    "provider": "github",
+    "repo": "FreaKzero/test-repo-gitlab",
     "release": {
-      "draft":false
     }
   },
   "test":"npm run test",

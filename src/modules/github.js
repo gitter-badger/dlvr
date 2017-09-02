@@ -8,14 +8,12 @@ const spinner = require('../lib/spinner');
 
 const uploadAssets = ({cfg, tokens}, id) => {
   return new Promise((resolve, reject) => {
-    if (!cfg.hasAssets()) {
-      resolve();
-    } else {
-      var client = og.client(tokens.github),
-        release = client.release(cfg.github.repo, id);
+    if (cfg.isProvider('github') && cfg.hasAssets()) {
+      var client = og.client(tokens.get('github')),
+        release = client.release(cfg.githost.repo, id);
 
       asyncLoop(
-        cfg.github.release.assets,
+        cfg.githost.release.assets,
         (item, next) => {
           var asset = fs.readFileSync(path.join(process.cwd(), item.file));
           spinner.create(`Upload asset ${item.name} to GitHub`);
@@ -36,16 +34,18 @@ const uploadAssets = ({cfg, tokens}, id) => {
           resolve();
         }
       );
+    } else {
+      resolve();
     }
   });
 };
 
 const checkToken = ({cfg, tokens}) => {
   var client = og.client(tokens.github),
-    repo = client.repo(cfg.github.repo);
+    repo = client.repo(cfg.githost.repo);
 
   return new Promise((resolve, reject) => {
-    if (cfg.has('github')) {
+    if (cfg.isProvider('github')) {
       spinner.create('Check GitHub Token and Repository');
       client.get('/user', {}, (err, status, body, headers) => {
         utils.catchError(err, err, reject);
@@ -65,19 +65,18 @@ const checkToken = ({cfg, tokens}) => {
 };
 
 const release = ({cfg, version, changelog, tokens}) => {
-  spinner.create('Publish Release on GitHub');
-
   return new Promise((resolve, reject) => {
-    if (cfg.has('github')) {
-      var client = og.client(tokens.github),
-        repo = client.repo(cfg.github.repo);
+    if (cfg.isProvider('github')) {
+      spinner.create('Publish Release on GitHub');
+      var client = og.client(tokens.get('github')),
+        repo = client.repo(cfg.githost.repo);
 
       repo.release(
         {
           name: version,
           tag_name: version,
-          body: changelog || '',
-          draft: cfg.github.release.draft
+          body: utils.composeChangelog(changelog),
+          draft: cfg.githost.release.draft || true
         },
         (err, data) => {
           utils.catchError(err, err, reject);

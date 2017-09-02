@@ -4,7 +4,7 @@ const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
 
 const generateChangelog = ({cfg}) => {
-  var changelog = false;
+  var changelog = [];
   return new Promise((resolve, reject) => {
     git(GITPATH).tags((err, tags) => {
       utils.catchError(err, err, reject);
@@ -23,9 +23,7 @@ const generateChangelog = ({cfg}) => {
             )
             .map(item => {
               const msg = item.message.replace(/\(.* -> .*\)/, '');
-              changelog === false
-                ? (changelog = `**Changelog:**\n\n- ${msg} \n`)
-                : (changelog += `- ${msg} \n`);
+              changelog.push(`- ${msg}  `);
             });
         })
         .exec(() => {
