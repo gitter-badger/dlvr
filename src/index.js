@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 const {
-  configWizard,
   tokenWizard,
   statusCmd,
   parsedArgs,

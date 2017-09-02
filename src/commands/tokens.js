@@ -52,6 +52,19 @@ const tokenPromptSchema = [
     }
   },
   {
+    name: 'gitlab-api',
+    description: 'GitLab API Url ?',
+    type: 'string',
+    default: 'https://gitlab.com/api/v3/',
+    ask: function() {
+      return (
+        (!HASTOKENS ||
+          prompt.history('overwrite').value.toLowerCase() === 'y') &&
+        prompt.history('gitlab').value.trim() !== ''
+      );
+    }
+  },
+  {
     name: 'snyk',
     description: 'Your SNYK token (enter to skip)',
     type: 'string',

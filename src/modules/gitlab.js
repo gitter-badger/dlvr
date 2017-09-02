@@ -13,6 +13,8 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
     spinner.create('Upload assets to gitlab');
     if (cfg.isProvider('gitlab') && cfg.hasAssets()) {
       let releases = [];
+      const githubapi = tokens.get('gitlab-api');
+
       asyncLoop(
         cfg.githost.release.assets,
         (item, next) => {
@@ -20,7 +22,7 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
           let readMime = mime.lookup(item.file);
 
           const opt = {
-            url: `https://gitlab.com/api/v3/projects/${projectId}/uploads`,
+            url: `${githubapi}/projects/${projectId}/uploads`,
             headers: {
               'PRIVATE-TOKEN': tokens.get('gitlab')
             }
@@ -54,9 +56,10 @@ const release = ({cfg, version, changelog, tokens}, projectId, releases) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Publish release on gitlab');
+      const githubapi = tokens.get('gitlab-api');
 
       var opt = {
-        url: `${GITHUB_API_URL}/projects/${projectId}/repository/tags/${version}/release`,
+        url: `${githubapi}/projects/${projectId}/repository/tags/${version}/release`,
         headers: {
           'PRIVATE-TOKEN': tokens.get('gitlab')
         },
@@ -81,6 +84,8 @@ const getUser = ({cfg, tokens}) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Check gitlab token and get User');
+      const githubapi = tokens.get('gitlab-api');
+
       var opt = {
         url: `${GITHUB_API_URL}/user`,
         headers: {
@@ -108,7 +113,7 @@ const getProject = ({cfg, tokens}, userId) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Get gitlab project');
       var opt = {
-        url: `${GITHUB_API_URL}/users/${userId}/projects`,
+        url: `${githubapi}/users/${userId}/projects`,
         headers: {
           'PRIVATE-TOKEN': tokens.get('gitlab')
         },
