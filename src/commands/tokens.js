@@ -40,6 +40,18 @@ const tokenPromptSchema = [
     }
   },
   {
+    name: 'gitlab',
+    description: 'Your GitLab token (enter to skip)',
+    type: 'string',
+    hidden: true,
+    replace: '*',
+    ask: function() {
+      return (
+        !HASTOKENS || prompt.history('overwrite').value.toLowerCase() === 'y'
+      );
+    }
+  },
+  {
     name: 'snyk',
     description: 'Your SNYK token (enter to skip)',
     type: 'string',

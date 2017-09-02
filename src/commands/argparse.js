@@ -13,24 +13,30 @@ const parsedArgs = () => {
     dest: 'subcmd'
   });
 
-  const cmdMain = subparsers.addParser('release', {
-    addHelp: true,
-    help: 'Release your Project [major|minor|patch]'
-  });
-
   subparsers.addParser('status', {
     addHelp: true,
     help: 'Checks tokens and shows current changelog'
   });
 
-  subparsers.addParser('init', {
-    addHelp: true,
-    help: 'Initialize a dlvr release config'
-  });
-
   subparsers.addParser('tokens', {
     addHelp: true,
     help: 'Setup your tokens'
+  });
+
+  const cmdInit = subparsers.addParser('init', {
+    addHelp: true,
+    help: 'Initialize your Project [github|gitlab]'
+  });
+
+  cmdInit.addArgument(['PROVIDER'], {
+    action: 'store',
+    help: 'CVS (git) Provider',
+    choices: ['github', 'gitlab']
+  });
+
+  const cmdMain = subparsers.addParser('release', {
+    addHelp: true,
+    help: 'Release your Project [major|minor|patch]'
   });
 
   cmdMain.addArgument(['VERSION'], {

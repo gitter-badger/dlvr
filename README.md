@@ -17,19 +17,19 @@ You will get the most out of this Tool when you want to release binaries done wi
 ## Commands
 
 ### Write initial config
-`dlvr init `  
+`dlvr init `
 Opens a Wizard which guides you through the release configuration ($PROJECT_ROOT/.dlvr), uses examplepaths for compress and release-assets.
 
 ### Get current Changelog
-`dlvr status `  
+`dlvr status `
 Checks Tokens based on your current configuration and shows the Changelog for your current project progress.
 
 ### Tokensetup
-`dlvr tokens `  
+`dlvr tokens `
 Opens a wizard which guides you through the configuration of a tokenfile ($HOME/.dlvrtokens)
 
 ### release
-`dlvr release (major|minor|patch)`  
+`dlvr release (major|minor|patch)`
 - optional arguments:
   - `-f [--force] | Omit the "do you want to release" prompt`
 
@@ -37,38 +37,41 @@ Versions and Releases your Project based on your given configuration and release
 ## Config Files
 
 ### .dlvrtokens
-**PATH**: `$HOME/.dlvrtokens`   
-Its also possible to use the environment variables 
-```
-DLVR_TOKEN_GITHUB
-DLVR_TOKEN_SNYK
-```
-to provide the Tokens  
-**Possible Configuration**  
+**PATH**: `$HOME/.dlvrtokens`
+Its also possible to use the environment variables
+**Possible Configuration**
 ```
 {
   "github": "YOUR GITHUB TOKEN",
-  "snyk": "YOUR SNYK TOKEN"
+  "snyk": "YOUR SNYK TOKEN",
+  "gitlab": "YOUR GITLAB TOKEN"
 }
+```
+**This can be also configured with ENVVARS**
+```
+DLVR_TOKEN_GITHUB
+DLVR_TOKEN_SNYK
+DLVR_TOKEN_GITLAB
 ```
 
 ### .dlvr
-**PATH**: `$PROJECT_DIR/.dlvr`  
-**Possible Configuration**  
+**PATH**: `$PROJECT_DIR/.dlvr`
+**Possible Configuration**
 ```
 {
   preRun: 'npm run build',
-  postRun: 'rm -rf ./dist'
+  postRun: 'rm -rf ./dist',
   snyk: true,
   compress: [
     {in: './dist/myfile.bin', out: './dist/myfile.zip'}
   ],
   logfilter: '.*#',
   remote: 'origin',
-  github: {
+  githost: {
+    provider: 'github', // can be github or gitlab
     repo: 'username/repo',
     release: {
-      draft: true,
+      draft: true, // only used for github
       assets: [{
         file: './dist/myfile.zip',
         name: 'myfile.zip'
