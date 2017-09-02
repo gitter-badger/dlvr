@@ -7,14 +7,15 @@ let template = require('./template');
 const common = require('./common');
 const github = require('./github');
 
-function editor() {
-  if (process.env.EDITOR) {
-    const editor = spawn(process.env.EDITOR, [FILE_CONFIG]);
-    editor.stderr.on('data', data => {
+function runEditor() {
+  const EDIT = process.env.EDITOR || process.env.VISUAL || false;
+  if (EDIT) {
+    const editorSpawn = spawn(EDIT, [FILE_CONFIG]);
+    editorSpawn.stderr.on('data', data => {
       console.log(`stderr: ${data}`);
     });
 
-    editor.on('close', code => {
+    editorSpawn.on('close', code => {
       console.log(`child process exited with code ${code}`);
     });
   } else {
@@ -34,7 +35,7 @@ function runSchema(schema, data) {
 
       fs.writeFile(FILE_CONFIG, fileContent, err => {
         if (err) utils.fatal(err.message);
-        editor();
+        runEditor();
       });
     });
   });
