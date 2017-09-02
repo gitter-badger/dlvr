@@ -101,6 +101,14 @@ const checkRepo = ({cfg}) => {
     git(GITPATH)
       .status((err, status) => {
         utils.catchError(err, err, reject);
+
+        if (status.ahead > 0 || status.behind > 0) {
+          reject(
+            new Error(
+              'Your master branch is not up-to-date with origin/master - Please pull/push first'
+            )
+          );
+        }
         if (status.files.length > 0) {
           reject(
             new Error(
