@@ -1,11 +1,6 @@
 #! /usr/bin/env node
 
-const {
-  tokenWizard,
-  statusCmd,
-  parsedArgs,
-  releaseCmd
-} = require('./commands');
+const {tokenWizard, statusCmd, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
 
 const args = parsedArgs();
