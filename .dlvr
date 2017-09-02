@@ -1,9 +1,11 @@
 {
+  "snyk": true,
   "logfilter": ".*#",
   "githost": {
     "provider": "github",
-    "repo": "FreaKzero/test-repo-gitlab",
+    "repo": "freakzero/dlvr",
     "release": {
+      "draft": true
     }
   },
   "test":"npm run test",
