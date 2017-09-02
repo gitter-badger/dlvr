@@ -9,8 +9,8 @@ const spinner = require('../lib/spinner');
 // TODO: write tests
 const uploadAssets = ({cfg, tokens}, projectId) => {
   return new Promise((resolve, reject) => {
-    spinner.create('Upload assets to gitlab');
     if (cfg.isProvider('gitlab') && cfg.hasAssets()) {
+      spinner.create('Upload assets to gitlab');
       let releases = [];
       const gitlabapi = tokens.get('gitlab-api');
 
