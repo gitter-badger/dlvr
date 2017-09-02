@@ -62,23 +62,23 @@ describe('#git tagExist', function () {
 });
 
 describe('#git generateChangelog', function () {
-  it('Should generate a right formatted changelog', function (done) {
+  it('Should give back an array with filtered commit messages', function (done) {
     config.boot().then((configs) => {
       git.generateChangelog(configs).then((data) => {
-        expect(data).toBe('**Changelog:**\n\n- Test success #1 \n- Test success #2 \n');
+        expect(data).toEqual(['- Test success #1  ', '- Test success #2  ']);
         done();
       });
     });
   });
 
-  it('Should return false when no changes can be found', function (done) {
+  it('Should return an empty array', function (done) {
     setStubGitLog({
       all: [{message: 'yep - thats it'}]
     });
 
     config.boot().then((configs) => {
       git.generateChangelog(configs).then((data) => {
-        expect(data).toBe(false);
+        expect(data).toEqual([]);
         done();
       });
     });
@@ -95,7 +95,7 @@ describe('#git generateChangelog', function () {
 
     config.boot().then((configs) => {
       git.generateChangelog(configs).then((data) => {
-        expect(data).toBe('**Changelog:**\n\n- regex rox - hadouken triggers this! \n');
+        expect(data).toEqual( ['- regex rox - hadouken triggers this!  ' ]);
         done();
       });
     });
