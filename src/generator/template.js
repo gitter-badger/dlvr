@@ -5,6 +5,11 @@ let template = {
   compress: [{in: './dist/myfile.bin', out: './dist/myfile.zip'}],
   logfilter: '.*#',
   remote: 'origin',
+  slack: {
+    channel: '#general',
+    icon_emoji: ':shipit:',
+    username: 'dlvr.bot'
+  },
   githost: {
     provider: '',
     repo: 'username/repo',

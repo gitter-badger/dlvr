@@ -132,7 +132,7 @@ const loadConfig = () => {
         );
       };
 
-      ['root', 'githost', 'compress'].map(item => {
+      ['root', 'githost', 'compress', 'slack'].map(item => {
         var err = checkIntegrity(cfg, item);
         if (err) reject(new Error(err));
       });
