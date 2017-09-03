@@ -2,10 +2,12 @@ const fs = require('fs');
 const {spawn} = require('child_process');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
-const {FILE_PACKAGE, FILE_CONFIG} = require('../constants');
+const {FILE_SECRETS, FILE_PACKAGE, FILE_CONFIG} = require('../constants');
 let template = require('./template');
+
 const common = require('./common');
 const github = require('./github');
+const secrets = require('./secrets');
 
 function runEditor() {
   const EDIT = process.env.EDITOR || process.env.VISUAL || false;
@@ -96,7 +98,43 @@ function runGitLab() {
   runSchema(schema, template);
 }
 
-function run(arg) {
+function dotEnv() {
+  const obj2env = obj => {
+    let content = '';
+    for (let entry in obj) {
+      content += obj[entry].trim() !== '' ? `${entry}=${obj[entry]}\n` : '';
+    }
+    return content;
+  };
+
+  const run = () => {
+    prompt.start();
+    prompt.get(secrets.schema, (err, wat) => {
+      if (err) utils.fatal(err.message);
+
+      fs.writeFile(FILE_SECRETS, obj2env(wat), err => {
+        if (err) utils.fatal(err.message);
+        console.log('.env file was written');
+      });
+    });
+  };
+
+  fs.access(FILE_SECRETS, err => {
+    if (!err) {
+      prompt.start();
+      prompt.get([secrets.overwrite], (err, results) => {
+        if (err) utils.fatal(err.message);
+        if (results.overwrite.toLowerCase() === 'y') {
+          run();
+        }
+      });
+    } else {
+      run();
+    }
+  });
+}
+
+function dotDlvr(arg) {
   switch (arg) {
     case 'github':
       runGitHub();
@@ -107,4 +145,7 @@ function run(arg) {
   }
 }
 
-module.exports = run;
+module.exports = {
+  dotDlvr,
+  dotEnv
+};

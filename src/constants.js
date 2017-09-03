@@ -4,7 +4,7 @@ const getHome = () => {
   return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 };
 
-const FILE_SECRETS = path.join(getHome(), '.env');
+const FILE_SECRETS = path.join(process.cwd(), '.env');
 const FILE_PACKAGE = path.join(process.cwd(), 'package.json');
 const FILE_CONFIG = path.join(process.cwd(), '.dlvr');
 

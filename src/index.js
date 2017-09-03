@@ -1,17 +1,17 @@
 #! /usr/bin/env node
 
-const {tokenWizard, statusCmd, parsedArgs, releaseCmd} = require('./commands');
+const {statusCmd, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
 require('dotenv').config();
 const args = parsedArgs();
 
 switch (args.subcmd) {
   case 'secrets':
-    tokenWizard();
+    generator.dotEnv();
     break;
 
   case 'init':
-    generator(args.PROVIDER);
+    generator.dotDlvr(args.PROVIDER);
     break;
 
   case 'status':
