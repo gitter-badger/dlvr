@@ -1,5 +1,9 @@
 exports.default = {
   properties: {
+    dotenv: {
+      type: 'string',
+      required: true
+    },
     snyk: {
       type: 'boolean'
     },

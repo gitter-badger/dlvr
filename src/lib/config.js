@@ -12,6 +12,7 @@ const boot = () => {
       .then(pkg => {
         loadConfig()
           .then(cfg => {
+            require('dotenv').config({path: cfg.dotenv});
             loadSecrets(cfg)
               .then(secrets => {
                 return resolve({cfg, pkg, secrets});

@@ -2,7 +2,6 @@
 
 const {statusCmd, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
-require('dotenv').config();
 const args = parsedArgs();
 
 switch (args.subcmd) {

@@ -68,6 +68,7 @@ function parse(results) {
 function runGitHub() {
   template.githost.provider = 'github';
   const schema = [
+    common.dotenv,
     common.repo,
     common.prerun,
     common.postrun,
@@ -87,6 +88,7 @@ function runGitHub() {
 function runGitLab() {
   template.githost.provider = 'gitlab';
   const schema = [
+    common.dotenv,
     common.repo,
     common.prerun,
     common.postrun,

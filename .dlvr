@@ -1,4 +1,5 @@
 {
+  "dotenv": ".env",
   "snyk": true,
   "logfilter": ".*#",
   "githost": {

@@ -1,3 +1,11 @@
+const dotenv = {
+  name: 'dotenv',
+  description: 'Where is your .env file for this project ?',
+  type: 'string',
+  default: '.env',
+  required: true
+};
+
 const repo = {
   name: 'repo',
   description: 'Whats your repo path ?',
@@ -83,6 +91,7 @@ const compress = {
 };
 
 module.exports = {
+  dotenv,
   slack,
   repo,
   prerun,
