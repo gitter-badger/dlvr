@@ -1,10 +1,18 @@
 let template = {
-  preRun: 'npm run build',
-  postRun: '',
-  snyk: true,
-  compress: [{in: './dist/myfile.bin', out: './dist/myfile.zip'}],
+  dotenv: '.env',
   logfilter: '.*#',
   remote: 'origin',
+  preRun: 'npm run build',
+  postRun: '',
+  test: 'npm run test',
+  npmpublish: false,
+  snyk: true,
+  compress: [
+    {
+      in: './dist/myfile.bin',
+      out: './dist/myfile.zip'
+    }
+  ],
   slack: {
     channel: '#general',
     icon_emoji: ':shipit:',
@@ -22,9 +30,7 @@ let template = {
         }
       ]
     }
-  },
-  test: 'npm run test',
-  npmpublish: false
+  }
 };
 
 module.exports = template;

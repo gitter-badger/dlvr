@@ -105,7 +105,7 @@ const checkRepo = ({cfg}) => {
         if (status.ahead > 0 || status.behind > 0) {
           reject(
             new Error(
-              'Your master branch is not up-to-date with origin/master - Please pull/push first'
+              `Your master branch is not up-to-date with ${cfg.getRemote()}/master - Please pull/push first`
             )
           );
         }
