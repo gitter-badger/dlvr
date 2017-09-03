@@ -27,13 +27,13 @@ DLVR_SLACK-WEBHOOK
 
 ### Write initial config
 `dlvr init [github|gitlab]`
-Opens a Wizard which guides you through the release configuration ($PROJECT_ROOT/.dlvr), uses examplepaths for compress and release-assets.
+Opens a Wizard which guides you through the release configuration `($PROJECT_ROOT/.dlvr)`, uses examplepaths for compress and release-assets.
 
 ### Get current Changelog
 `dlvr status `
-Checks Tokens based on your current configuration and shows the Changelog for your current project progress.
+Checks your configuration integrity and tokens. Shows also the current filtered changelog.
 
-### release
+### Release
 `dlvr release (major|minor|patch)`
 - optional arguments:
   - `-f [--force] | Omit the "do you want to release" prompt`
