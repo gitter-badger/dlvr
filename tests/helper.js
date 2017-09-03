@@ -22,6 +22,7 @@ let packageStub = {
 };
 
 let configStub = {
+  dotenv: '.env',
   logfilter: '.*#',
   githost: {
     provider: "github",
@@ -144,6 +145,7 @@ function eachConfig () {
   };
 
   configStub = {
+    dotenv: '.env',
     logfilter: '.*#',
     githost: {
       provider: 'github',

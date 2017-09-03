@@ -28,6 +28,7 @@ describe('#config minimal', function () {
 
   it('Optionals should return false when prop is false', function (done) {
     setStubConfig({
+      dotenv: '.env',
       logfilter: '.*#',
       githost: false,
       compress: false,
@@ -46,6 +47,7 @@ describe('#config minimal', function () {
 
   it('Optionals should return true', function (done) {
     setStubConfig({
+      dotenv: '.env',
       compress: [
         {in: './dist/test.txt', out: './dist/test.zip'},
         {in: './dist/test2.txt', out: './dist/test2.zip'}
