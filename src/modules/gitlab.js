@@ -7,12 +7,12 @@ const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 
 // TODO: write tests
-const uploadAssets = ({cfg, tokens}, projectId) => {
+const uploadAssets = ({cfg, secrets}, projectId) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab') && cfg.hasAssets()) {
       spinner.create('Upload assets to gitlab');
       let releases = [];
-      const gitlabapi = tokens.get('gitlab-api');
+      const gitlabapi = secrets.get('gitlab-api');
 
       asyncLoop(
         cfg.githost.release.assets,
@@ -23,7 +23,7 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
           const opt = {
             url: `${gitlabapi}/projects/${projectId}/uploads`,
             headers: {
-              'PRIVATE-TOKEN': tokens.get('gitlab')
+              'PRIVATE-TOKEN': secrets.get('gitlab')
             }
           };
 
@@ -51,16 +51,16 @@ const uploadAssets = ({cfg, tokens}, projectId) => {
   });
 };
 
-const release = ({cfg, version, changelog, tokens}, projectId, releases) => {
+const release = ({cfg, version, changelog, secrets}, projectId, releases) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Publish release on gitlab');
-      const gitlabapi = tokens.get('gitlab-api');
+      const gitlabapi = secrets.get('gitlab-api');
 
       var opt = {
         url: `${gitlabapi}/projects/${projectId}/repository/tags/${version}/release`,
         headers: {
-          'PRIVATE-TOKEN': tokens.get('gitlab')
+          'PRIVATE-TOKEN': secrets.get('gitlab')
         },
         body: {
           tag_name: version,
@@ -79,16 +79,16 @@ const release = ({cfg, version, changelog, tokens}, projectId, releases) => {
   });
 };
 
-const getUser = ({cfg, tokens}) => {
+const getUser = ({cfg, secrets}) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Check gitlab token and get User');
-      const gitlabapi = tokens.get('gitlab-api');
+      const gitlabapi = secrets.get('gitlab-api');
 
       var opt = {
         url: `${gitlabapi}/user`,
         headers: {
-          'PRIVATE-TOKEN': tokens.get('gitlab')
+          'PRIVATE-TOKEN': secrets.get('gitlab')
         },
         json: true
       };
@@ -107,16 +107,16 @@ const getUser = ({cfg, tokens}) => {
   });
 };
 
-const getProject = ({cfg, tokens}, userId) => {
+const getProject = ({cfg, secrets}, userId) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab')) {
       spinner.create('Get gitlab project');
-      const gitlabapi = tokens.get('gitlab-api');
+      const gitlabapi = secrets.get('gitlab-api');
 
       var opt = {
         url: `${gitlabapi}/users/${userId}/projects`,
         headers: {
-          'PRIVATE-TOKEN': tokens.get('gitlab')
+          'PRIVATE-TOKEN': secrets.get('gitlab')
         },
         json: true
       };

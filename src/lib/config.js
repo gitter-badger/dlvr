@@ -1,6 +1,6 @@
 const fs = require('fs');
 const validator = require('is-my-json-valid');
-const {FILE_TOKENS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
+const {FILE_CONFIG, FILE_PACKAGE} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
@@ -12,9 +12,9 @@ const boot = () => {
       .then(pkg => {
         loadConfig()
           .then(cfg => {
-            loadTokens(cfg)
-              .then(tokens => {
-                return resolve({cfg, pkg, tokens});
+            loadSecrets(cfg)
+              .then(secrets => {
+                return resolve({cfg, pkg, secrets});
               })
               .catch(err => {
                 reject(err);
@@ -67,36 +67,23 @@ const loadPackage = () => {
 };
 
 // TODO: refactor this more generic
-const loadTokens = cfg => {
+const loadSecrets = cfg => {
   return new Promise((resolve, reject) => {
-    fs.readFile(FILE_TOKENS, (err, json) => {
-      if (err && err.code === 'ENOENT') {
-        json = JSON.stringify({});
-      } else {
-        utils.catchError(err, err, reject);
+    var secrets = {};
+    ['github', 'gitlab', 'snyk'].map(item => {
+      if (
+        cfg.githost.provider === item &&
+        !process.env[`DLVR_${item.toUpperCase()}`]
+      ) {
+        return reject(new Error(`No ${item} token given`));
       }
-
-      var tokens = JSON.parse(json);
-      ['github', 'gitlab', 'snyk'].map(item => {
-        if (
-          cfg.githost.provider === item &&
-          !tokens[item] &&
-          !process.env[`DLVR_TOKEN_${item.toUpperCase()}`]
-        ) {
-          return reject(new Error(`No ${item} token given`));
-        }
-      });
-
-      tokens.get = function(forService) {
-        return (
-          this[forService] ||
-          process.env[`DLVR_TOKEN_${forService.toUpperCase()}`] ||
-          false
-        );
-      };
-
-      return resolve(tokens);
     });
+
+    secrets.get = function(forService) {
+      return process.env[`DLVR_${forService.toUpperCase()}`] || false;
+    };
+
+    return resolve(secrets);
   });
 };
 
@@ -106,6 +93,16 @@ const loadConfig = () => {
       utils.catchError(err, err, reject);
 
       cfg = JSON.parse(cfg);
+
+      cfg.releaseUrl = function() {
+        switch (this.githost.provider) {
+          case 'github':
+            return `https://github.com/${this.githost.repo}/releases`;
+
+          case 'gitlab':
+            return `https://gitlab.com/${cfg.githost.repo}/tags`;
+        }
+      };
 
       cfg.has = function(prop) {
         return this.hasOwnProperty(prop) && this[prop] !== false;
@@ -149,5 +146,5 @@ module.exports = {
   boot,
   loadPackage,
   loadConfig,
-  loadTokens
+  loadSecrets
 };

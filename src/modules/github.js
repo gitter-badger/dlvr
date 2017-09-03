@@ -6,10 +6,10 @@ const og = require('octonode');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 
-const uploadAssets = ({cfg, tokens}, id) => {
+const uploadAssets = ({cfg, secrets}, id) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('github') && cfg.hasAssets()) {
-      var client = og.client(tokens.get('github')),
+      var client = og.client(secrets.get('github')),
         release = client.release(cfg.githost.repo, id);
 
       asyncLoop(
@@ -40,8 +40,8 @@ const uploadAssets = ({cfg, tokens}, id) => {
   });
 };
 
-const checkToken = ({cfg, tokens}) => {
-  var client = og.client(tokens.github),
+const checkToken = ({cfg, secrets}) => {
+  var client = og.client(secrets.get('github')),
     repo = client.repo(cfg.githost.repo);
 
   return new Promise((resolve, reject) => {
@@ -64,11 +64,11 @@ const checkToken = ({cfg, tokens}) => {
   });
 };
 
-const release = ({cfg, version, changelog, tokens}) => {
+const release = ({cfg, version, changelog, secrets}) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('github')) {
       spinner.create('Publish Release on GitHub');
-      var client = og.client(tokens.get('github')),
+      var client = og.client(secrets.get('github')),
         repo = client.repo(cfg.githost.repo);
 
       repo.release(

@@ -2,11 +2,11 @@
 
 const {tokenWizard, statusCmd, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
-
+require('dotenv').config();
 const args = parsedArgs();
 
 switch (args.subcmd) {
-  case 'tokens':
+  case 'secrets':
     tokenWizard();
     break;
 

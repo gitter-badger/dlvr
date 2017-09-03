@@ -1,7 +1,7 @@
 {
   "name": "dlvr",
   "version": "1.0.2",
-  "description": "",
+  "description": "DeLiVeR - Command Line Tool to automate releasing processes on GitHub/GitLab/npm",
   "bin": {
     "dlvr": "./src/index.js"
   },
@@ -30,6 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "2.0.1",
+    "dotenv": "^4.0.0",
     "is-my-json-valid": "2.16.0",
     "mime": "^1.3.6",
     "node-async-loop": "1.2.2",

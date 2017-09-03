@@ -1,10 +1,10 @@
 const runner = require('./runner').runner;
 
-const login = ({cfg, tokens}) => {
+const login = ({cfg, secrets}) => {
   return new Promise((resolve, reject) => {
     if (cfg.has('snyk')) {
       runner(
-        `snyk auth ${tokens.get('snyk')}`,
+        `snyk auth ${secrets.get('snyk')}`,
         'Authenticate SNYK User',
         'SNYK Auth invalid'
       )

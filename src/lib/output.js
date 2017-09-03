@@ -4,25 +4,15 @@ const utils = require('./utils');
 const successMessage = ({pkg, cfg, changelog}) => {
   console.log('');
   console.log(
-    `🎉  Successfully released ${yellow(pkg.name)} Version ${green(
-      pkg.version
-    )}`
+    `🎉  Just released ${yellow(pkg.name)} Version ${green(pkg.version)}`
   );
   console.log('');
 
   if (cfg.isProvider('github')) {
-    console.log(
-      `Check your GitHub Release here: ${blue(
-        `https://github.com/${cfg.githost.repo}/releases`
-      )}`
-    );
+    console.log(`Check your GitHub Release here: ${blue(cfg.releaseUrl())}`);
   }
   if (cfg.isProvider('gitlab')) {
-    console.log(
-      `Check your GitLab Release here: ${blue(
-        `https://gitlab.com/${cfg.githost.repo}/tags`
-      )}`
-    );
+    console.log(`Check your GitLab Release here: ${blue(cfg.releaseUrl())}`);
   }
   if (cfg.has('npmpublish')) {
     console.log(

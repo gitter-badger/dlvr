@@ -15,12 +15,12 @@ const parsedArgs = () => {
 
   subparsers.addParser('status', {
     addHelp: true,
-    help: 'Checks tokens and shows current changelog'
+    help: 'Checks secrets and shows current changelog'
   });
 
-  subparsers.addParser('tokens', {
+  subparsers.addParser('secrets', {
     addHelp: true,
-    help: 'Setup your tokens'
+    help: 'Setup your secrets'
   });
 
   const cmdInit = subparsers.addParser('init', {

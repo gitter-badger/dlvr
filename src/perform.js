@@ -10,6 +10,7 @@ const snyk = require('./modules/snyk');
 const runner = require('./modules/runner');
 const github = require('./modules/github');
 const gitlab = require('./modules/gitlab');
+const slack = require('./modules/slack');
 const output = require('./lib/output');
 
 const run = async configs => {
@@ -42,6 +43,7 @@ const run = async configs => {
 
     await gitlab.release(configs, gitlabProject, releaseMarkdown);
     await runner.postRun(configs);
+    await slack.send(configs);
 
     spinner.success();
     output.successMessage(configs);
