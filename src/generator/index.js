@@ -1,5 +1,7 @@
 const fs = require('fs');
 const {spawn} = require('child_process');
+
+const opn = require('opn');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
 const {FILE_SECRETS, FILE_PACKAGE, FILE_CONFIG} = require('../constants');
@@ -21,7 +23,7 @@ function runEditor() {
       console.log(`child process exited with code ${code}`);
     });
   } else {
-    console.log('Check your configfile before releasing');
+    opn(FILE_CONFIG);
   }
 }
 
@@ -76,7 +78,8 @@ function runGitHub() {
     common.npmpublish,
     github.draft,
     github.assets,
-    common.compress
+    common.compress,
+    common.slack
   ];
   runSchema(schema, template);
 }
@@ -93,7 +96,8 @@ function runGitLab() {
     common.snyk,
     common.npmpublish,
     github.assets,
-    common.compress
+    common.compress,
+    common.slack
   ];
   runSchema(schema, template);
 }
@@ -114,7 +118,9 @@ function dotEnv() {
 
       fs.writeFile(FILE_SECRETS, obj2env(wat), err => {
         if (err) utils.fatal(err.message);
-        console.log('.env file was written');
+        console.log(
+          '.env file was written - please ensure that you .gitignore this file'
+        );
       });
     });
   };
