@@ -45,6 +45,7 @@ Versions and Releases your Project based on your given configuration and release
 **Possible Configuration**
 ```
 {
+  "dotenv": ".env",
   "preRun": "npm run build",
   "postRun": "rm -rf ./dist",
   "snyk": true,
