@@ -1,6 +1,6 @@
 const fs = require('fs');
 const validator = require('is-my-json-valid');
-const {FILE_CONFIG, FILE_PACKAGE} = require('../constants');
+const {FILE_SECRETS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
@@ -12,7 +12,7 @@ const boot = () => {
       .then(pkg => {
         loadConfig()
           .then(cfg => {
-            require('dotenv').config({path: cfg.dotenv});
+            require('dotenv').config({path: cfg.getDotEnv()});
             loadSecrets(cfg)
               .then(secrets => {
                 return resolve({cfg, pkg, secrets});
@@ -116,12 +116,8 @@ const loadConfig = () => {
         return this.remote || 'origin';
       };
 
-      cfg.getLogFilter = function() {
-        return this.logfilter || '.*#';
-      };
-
       cfg.getDotEnv = function() {
-        return this.dotenv || '.env';
+        return this.dotenv || FILE_SECRETS;
       };
 
       cfg.hasRelease = function() {
