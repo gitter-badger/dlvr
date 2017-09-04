@@ -15,22 +15,6 @@ describe('#config   parse', function () {
     });
   });
 
-  it('Should fail with logfilter config missing', function (done) {
-    setStubConfig({dotenv: '.env'});
-    config.boot().catch((err) => {
-      expect(err.message).toBe('root.logfilter in your config is required \n');
-      done();
-    });
-  });
-
-  it('Should fail with dotenv config missing', function (done) {
-    setStubConfig({logfilter: '.*#'});
-    config.boot().catch((err) => {
-      expect(err.message).toBe('root.dotenv in your config is required \n');
-      done();
-    });
-  });
-
   it('Should fail with githost.release and githost.repo config missing', function (done) {
     setStubConfig({
       dotenv: '.env',
