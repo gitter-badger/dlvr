@@ -1,8 +1,7 @@
 exports.default = {
   properties: {
     dotenv: {
-      type: 'string',
-      required: true
+      type: 'string'
     },
     snyk: {
       type: 'boolean'
@@ -14,8 +13,7 @@ exports.default = {
       type: 'string'
     },
     logfilter: {
-      type: 'string',
-      required: true
+      type: 'string'
     }
   },
   type: 'object'

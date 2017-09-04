@@ -67,7 +67,6 @@ const loadPackage = () => {
   });
 };
 
-// TODO: refactor this more generic
 const loadSecrets = cfg => {
   return new Promise((resolve, reject) => {
     var secrets = {};
@@ -115,6 +114,14 @@ const loadConfig = () => {
 
       cfg.getRemote = function() {
         return this.remote || 'origin';
+      };
+
+      cfg.getLogFilter = function() {
+        return this.logfilter || '.*#';
+      };
+
+      cfg.getDotEnv = function() {
+        return this.dotenv || '.env';
       };
 
       cfg.hasRelease = function() {
