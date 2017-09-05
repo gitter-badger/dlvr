@@ -4,30 +4,12 @@ const {FILE_SECRETS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
-// NOTE: use underscores for privates
-// TODO: rewrite this with async
-const boot = () => {
+const loadPackage = () => {
   return new Promise((resolve, reject) => {
-    loadPackage()
-      .then(pkg => {
-        loadConfig()
-          .then(cfg => {
-            require('dotenv').config({path: cfg.getDotEnv()});
-            loadSecrets(cfg)
-              .then(secrets => {
-                return resolve({cfg, pkg, secrets});
-              })
-              .catch(err => {
-                reject(err);
-              });
-          })
-          .catch(err => {
-            reject(err);
-          });
-      })
-      .catch(err => {
-        reject(err);
-      });
+    fs.readFile(FILE_PACKAGE, (err, result) => {
+      utils.catchError(err, err, reject);
+      resolve(JSON.parse(result));
+    });
   });
 };
 
@@ -56,15 +38,6 @@ const checkIntegrity = function(cfg, prop) {
     }
   }
   return null;
-};
-
-const loadPackage = () => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(FILE_PACKAGE, (err, result) => {
-      utils.catchError(err, err, reject);
-      resolve(JSON.parse(result));
-    });
-  });
 };
 
 const loadSecrets = cfg => {
@@ -143,6 +116,33 @@ const loadConfig = () => {
 
       resolve(cfg);
     });
+  });
+};
+
+// NOTE: use underscores for privates
+// TODO: rewrite this with async
+const boot = () => {
+  return new Promise((resolve, reject) => {
+    loadPackage()
+      .then(pkg => {
+        loadConfig()
+          .then(cfg => {
+            require('dotenv').config({path: cfg.getDotEnv()});
+            loadSecrets(cfg)
+              .then(secrets => {
+                return resolve({cfg, pkg, secrets});
+              })
+              .catch(err => {
+                reject(err);
+              });
+          })
+          .catch(err => {
+            reject(err);
+          });
+      })
+      .catch(err => {
+        reject(err);
+      });
   });
 };
 

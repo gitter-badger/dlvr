@@ -2,7 +2,8 @@ let gitLogStatusStub = {
   all: [
     {message: 'More tests (HEAD -> master, origin/master, origin/HEAD)'},
     {message: 'Test success #1'},
-    {message: 'Test success #2'}
+    {message: 'Test success #2'},
+    {message: 'Shouldnt be filtered'},
   ],
   latest: {message: 'More tests (HEAD -> master, origin/master, origin/HEAD)'},
   total: 3 };
