@@ -111,7 +111,9 @@ const loadConfig = () => {
 
       ['root', 'githost', 'compress', 'slack'].map(item => {
         var err = checkIntegrity(cfg, item);
-        if (err) reject(new Error(err));
+        if (err) {
+          reject(new Error(err));
+        }
       });
 
       resolve(cfg);
