@@ -27,24 +27,6 @@ function runEditor() {
   }
 }
 
-function runSchema(schema, data) {
-  prompt.start();
-  prompt.get(schema, function(err, results) {
-    if (err) utils.fatal(err.message);
-
-    fs.access(FILE_PACKAGE, err => {
-      if (err) utils.fatal(err.message, 0);
-
-      var fileContent = parse(results);
-
-      fs.writeFile(FILE_CONFIG, fileContent, err => {
-        if (err) utils.fatal(err.message);
-        runEditor();
-      });
-    });
-  });
-}
-
 function parse(results) {
   function isNo(item) {
     return (
@@ -63,6 +45,30 @@ function parse(results) {
     }
   }
   return JSON.stringify(template, null, 2);
+}
+
+function runSchema(schema, data) {
+  prompt.start();
+  prompt.get(schema, function(err, results) {
+    if (err) {
+      utils.fatal(err.message);
+    }
+
+    fs.access(FILE_PACKAGE, err => {
+      if (err) {
+        utils.fatal(err.message, 0);
+      }
+
+      var fileContent = parse(results);
+
+      fs.writeFile(FILE_CONFIG, fileContent, err => {
+        if (err) {
+          utils.fatal(err.message);
+        }
+        runEditor();
+      });
+    });
+  });
 }
 
 function runGitHub() {
@@ -108,7 +114,9 @@ function dotEnv() {
   const obj2env = obj => {
     let content = '';
     for (let entry in obj) {
-      content += obj[entry].trim() !== '' ? `${entry}=${obj[entry]}\n` : '';
+      if ({}.hasOwnProperty.call(obj, entry)) {
+        content += obj[entry].trim() !== '' ? `${entry}=${obj[entry]}\n` : '';
+      }
     }
     return content;
   };
@@ -116,10 +124,14 @@ function dotEnv() {
   const run = () => {
     prompt.start();
     prompt.get(secrets.schema, (err, wat) => {
-      if (err) utils.fatal(err.message);
+      if (err) {
+        utils.fatal(err.message);
+      }
 
       fs.writeFile(FILE_SECRETS, obj2env(wat), err => {
-        if (err) utils.fatal(err.message);
+        if (err) {
+          utils.fatal(err.message);
+        }
         console.log(
           '.env file was written - please ensure that you .gitignore this file'
         );
@@ -131,7 +143,9 @@ function dotEnv() {
     if (!err) {
       prompt.start();
       prompt.get([secrets.overwrite], (err, results) => {
-        if (err) utils.fatal(err.message);
+        if (err) {
+          utils.fatal(err.message);
+        }
         if (results.overwrite.toLowerCase() === 'y') {
           run();
         }

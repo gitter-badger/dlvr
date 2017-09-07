@@ -35,6 +35,8 @@ const determineVersion = ({cfg}) => {
   });
 };
 
+// TODO: test this
+// TODO: rename this to readTags or parseTags
 const generateChangelog = ({cfg}) => {
   var changelog = [];
   return new Promise((resolve, reject) => {
@@ -59,6 +61,7 @@ const generateChangelog = ({cfg}) => {
             });
         })
         .exec(() => {
+          // TODO: return object with filtered logs, and a suggest SEMVWER release based on the logs
           resolve(changelog);
         });
     });

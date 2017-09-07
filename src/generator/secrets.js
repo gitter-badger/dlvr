@@ -30,7 +30,7 @@ const schema = [
     description: 'GitLab API Url ',
     type: 'string',
     default: 'https://gitlab.com/api/v3/',
-    ask: function() {
+    ask() {
       return prompt.history('gitlab');
     }
   },

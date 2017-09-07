@@ -28,7 +28,10 @@ const uploadAssets = ({cfg, secrets}, projectId) => {
           };
 
           let req = request.post(opt, (err, resp, body) => {
-            if (err) next(err);
+            if (err) {
+              next(err);
+            }
+
             releases.push(JSON.parse(body).markdown);
 
             next();
