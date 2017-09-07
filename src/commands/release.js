@@ -22,23 +22,33 @@ function releaseCmd(args) {
       git
         .generateChangelog(configs)
         .then(changelog => {
-          configs.changelog = changelog;
-          configs.version = semver.inc(configs.pkg.version, args.VERSION);
+          git
+            .determineVersion(configs)
+            .then(determinedVersion => {
+              const useVersion =
+                args.VERSION === 'auto' ? determinedVersion : args.VERSION;
 
-          output.intro();
-          output.info(configs);
+              configs.changelog = changelog;
+              configs.version = semver.inc(configs.pkg.version, useVersion);
 
-          if (args.force) {
-            perform.run(configs);
-          } else {
-            prompt.start();
-            prompt.get(promptSchema, (err, result) => {
-              utils.catchError(err);
-              if (result.question.toLowerCase() === 'y') {
+              output.intro();
+              output.info(configs);
+
+              if (args.force) {
                 perform.run(configs);
+              } else {
+                prompt.start();
+                prompt.get(promptSchema, (err, result) => {
+                  utils.catchError(err);
+                  if (result.question.toLowerCase() === 'y') {
+                    perform.run(configs);
+                  }
+                });
               }
+            })
+            .catch(err => {
+              console.log(err);
             });
-          }
         })
         .catch(err => {
           console.log(err);

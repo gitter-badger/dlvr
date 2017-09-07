@@ -42,7 +42,7 @@ const parsedArgs = () => {
   cmdMain.addArgument(['VERSION'], {
     action: 'store',
     help: 'Release-version parameter',
-    choices: ['major', 'minor', 'patch']
+    choices: ['major', 'minor', 'patch', 'auto']
   });
 
   cmdMain.addArgument(['-f', '--force'], {
