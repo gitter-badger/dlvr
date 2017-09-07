@@ -5,69 +5,72 @@ const utils = require('../lib/utils');
 const {AUTO_FILTER_MAJOR, AUTO_FILTER_MINOR} = require('../constants');
 
 // TODO: internal method - getAllTags();
-
-const determineVersion = ({cfg}) => {
+const getLogsFromLastTag = cfg => {
   return new Promise((resolve, reject) => {
     git(GITPATH).tags((err, tags) => {
       utils.catchError(err, err, reject);
       const allTags = tags.all.reverse();
       const opt = allTags.length >= 1 ? {from: allTags[0], to: 'HEAD'} : {};
-      const VERSIONS = ['patch', 'minor', 'major'];
-      let versionId = 0;
-
-      git(GITPATH)
-        .log(opt, (err, data) => {
-          utils.catchError(err, err, reject);
-          data.all.map(item => {
-            if (
-              new RegExp(AUTO_FILTER_MINOR, 'i').test(item.message) &&
-              versionId < 2
-            ) {
-              versionId = 1;
-            }
-
-            if (new RegExp(AUTO_FILTER_MAJOR, 'i').test(item.message)) {
-              versionId = 2;
-            }
-          });
-        })
-        .exec(() => {
-          resolve(VERSIONS[versionId]);
-        });
+      git(GITPATH).log(opt, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(data);
+      });
     });
   });
 };
 
-// TODO: test this
+const determineVersion = ({cfg}) => {
+  return new Promise((resolve, reject) => {
+    getLogsFromLastTag(cfg)
+      .then(data => {
+        const VERSIONS = ['patch', 'minor', 'major'];
+        let versionId = 0;
+        data.all.map(item => {
+          if (
+            new RegExp(AUTO_FILTER_MINOR, 'i').test(item.message) &&
+            versionId < 2
+          ) {
+            versionId = 1;
+          }
+
+          if (new RegExp(AUTO_FILTER_MAJOR, 'i').test(item.message)) {
+            versionId = 2;
+          }
+        });
+
+        resolve(VERSIONS[versionId]);
+      })
+      .catch(err => {
+        utils.catchError(err, err, reject);
+      });
+  });
+};
+
 // TODO: rename this to readTags or parseTags
 const generateChangelog = ({cfg}) => {
   var changelog = [];
-  return new Promise((resolve, reject) => {
-    git(GITPATH).tags((err, tags) => {
-      utils.catchError(err, err, reject);
-      const allTags = tags.all.reverse();
-      const opt = allTags.length >= 1 ? {from: allTags[0], to: 'HEAD'} : {};
 
-      git(GITPATH)
-        .log(opt, (err, data) => {
-          utils.catchError(err, err, reject);
-          data.all
-            .filter(
-              item =>
-                cfg.has('logfilter')
-                  ? new RegExp(cfg.logfilter).test(item.message)
-                  : true
-            )
-            .map(item => {
-              const msg = item.message.replace(/\(.* -> .*\)/, '');
-              changelog.push(`- ${msg}  `);
-            });
-        })
-        .exec(() => {
-          // TODO: return object with filtered logs, and a suggest SEMVWER release based on the logs
-          resolve(changelog);
-        });
-    });
+  return new Promise((resolve, reject) => {
+    getLogsFromLastTag(cfg)
+      .then(data => {
+        data.all
+          .filter(
+            item =>
+              cfg.has('logfilter')
+                ? new RegExp(cfg.logfilter).test(item.message)
+                : true
+          )
+          .map(item => {
+            const msg = item.message.replace(/\(.* -> .*\)/, '');
+            changelog.push(`- ${msg}  `);
+          });
+        resolve(changelog);
+      })
+      .catch(err => {
+        utils.catchError(err, err, reject);
+      });
   });
 };
 
