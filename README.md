@@ -35,11 +35,14 @@ Opens a Wizard which guides you through the release configuration `($PROJECT_ROO
 Checks your configuration integrity and tokens. Shows also the current filtered changelog.
 
 ### Release
-`dlvr release (major|minor|patch)`
+`dlvr release (major|minor|patch|auto)`
 - optional arguments:
   - `-f [--force] | Omit the "do you want to release" prompt`
 
 Versions and Releases your Project based on your given configuration and release parameter.
+
+If you use auto - SEMVER will be automatically determined by keywords "breaking" and "feature" in your commit messages.
+
 ## Config File
 ### .dlvr
 **PATH**: `$PROJECT_DIR/.dlvr`
