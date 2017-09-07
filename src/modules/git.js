@@ -2,6 +2,38 @@ const git = require('simple-git');
 const GITPATH = process.cwd();
 const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
+const {AUTO_FILTER_MAJOR, AUTO_FILTER_MINOR} = require('../constants');
+
+//TODO: internal method - getAllTags();
+
+const determineVersion = ({cfg}) => {
+  return new Promise((resolve, reject) => {
+    git(GITPATH).tags((err, tags) => {
+      utils.catchError(err, err, reject);
+      const allTags = tags.all.reverse();
+      const opt = allTags.length >= 1 ? {from: allTags[0], to: 'HEAD'} : {};
+      const VERSIONS = ['patch', 'minor', 'major'];
+      let versionId = 0;
+
+      git(GITPATH)
+        .log(opt, (err, data) => {
+          utils.catchError(err, err, reject);
+          data.all.map(item => {
+            if (new RegExp(AUTO_FILTER_MINOR, 'i').test(item.message) && versionId < 2) {
+              versionId = 1;
+            }
+
+            if (new RegExp(AUTO_FILTER_MAJOR, 'i').test(item.message)) {
+              versionId = 2;
+            }
+          });
+        })
+        .exec(() => {
+          resolve(VERSIONS[versionId]);
+        });
+    });
+  });
+};
 
 const generateChangelog = ({cfg}) => {
   var changelog = [];
@@ -144,6 +176,7 @@ const checkRepo = ({cfg}) => {
 };
 
 module.exports = {
+  determineVersion,
   checkChanges,
   generateChangelog,
   tagAndPush,

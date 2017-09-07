@@ -4,12 +4,14 @@ const {configMock, gitMock, setStubGitLog, setStubGitStatus, setStubConfig} = re
 const config = proxyquire('../src/lib/config', configMock);
 const git = proxyquire('../src/modules/git', gitMock);
 
+process.env.DLVR_GITHUB='ma github token';
+
 describe('#git checkRepo', function () {
   it('Should resolve', function (done) {
     config.boot().then((configs) => {
       git.checkRepo(configs).then((d) => {
         done();
-      });
+      }).catch(e => console.log(e));
     });
   });
 
@@ -57,6 +59,74 @@ describe('#git tagExist', function () {
     git.tagExist({version: '0.0.2'}).catch((err) => {
       expect(err.message).toBe('Tag 0.0.2 already exists');
       done();
+    });
+  });
+});
+
+
+describe('#git determineVersion', function() {
+    it('Should determine the correct version (patch)', function (done) {
+    setStubConfig({
+      logfilter: 'hadouken'
+    }, true);
+
+    setStubGitLog({
+      all: [
+        {message: 'some arbitary fix'},
+        {message: 'make ci happy'},
+        {message: 'linting sux'},
+        ]
+    });
+
+    config.boot().then((configs) => {
+      git.determineVersion(configs).then((data) => {
+        expect(data).toEqual('patch');
+        done();
+      });
+    });
+  });
+
+  it('Should determine the correct version (minor)', function (done) {
+    setStubConfig({
+      logfilter: 'hadouken'
+    }, true);
+
+    setStubGitLog({
+      all: [
+        {message: 'some arbitary fix'},
+        {message: 'make ci happy'},
+        {message: 'feature added'}
+        ]
+    });
+
+    config.boot().then((configs) => {
+      git.determineVersion(configs).then((data) => {
+        expect(data).toEqual('minor');
+        done();
+      });
+    });
+  });
+
+  it('Should determine the correct version (major)', function (done) {
+    setStubConfig({
+      logfilter: 'hadouken'
+    }, true);
+
+    setStubGitLog({
+      all: [
+        {message: 'some arbitary fix'},
+        {message: 'make ci happy'},
+        {message: 'feature added'},
+        {message: 'some other fix'},
+        {message: 'breaking change config'}
+        ]
+    });
+
+    config.boot().then((configs) => {
+      git.determineVersion(configs).then((data) => {
+        expect(data).toEqual('major');
+        done();
+      });
     });
   });
 });
