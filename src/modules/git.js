@@ -4,7 +4,6 @@ const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
 const {AUTO_FILTER_MAJOR, AUTO_FILTER_MINOR} = require('../constants');
 
-// TODO: internal method - getAllTags();
 const getLogsFromLastTag = cfg => {
   return new Promise((resolve, reject) => {
     git(GITPATH).tags((err, tags) => {
@@ -48,7 +47,6 @@ const determineVersion = ({cfg}) => {
   });
 };
 
-// TODO: rename this to readTags or parseTags
 const generateChangelog = ({cfg}) => {
   var changelog = [];
 
