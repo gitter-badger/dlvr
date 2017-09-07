@@ -4,7 +4,7 @@ const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
 const {AUTO_FILTER_MAJOR, AUTO_FILTER_MINOR} = require('../constants');
 
-//TODO: internal method - getAllTags();
+// TODO: internal method - getAllTags();
 
 const determineVersion = ({cfg}) => {
   return new Promise((resolve, reject) => {
@@ -19,7 +19,10 @@ const determineVersion = ({cfg}) => {
         .log(opt, (err, data) => {
           utils.catchError(err, err, reject);
           data.all.map(item => {
-            if (new RegExp(AUTO_FILTER_MINOR, 'i').test(item.message) && versionId < 2) {
+            if (
+              new RegExp(AUTO_FILTER_MINOR, 'i').test(item.message) &&
+              versionId < 2
+            ) {
               versionId = 1;
             }
 

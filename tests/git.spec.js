@@ -133,6 +133,19 @@ describe('#git determineVersion', function() {
 
 describe('#git generateChangelog', function () {
   it('Should give back an array with filtered commit messages', function (done) {
+    setStubConfig({
+      logfilter: '.*#'
+    }, true);
+
+    setStubGitLog({
+      all: [
+        {message: 'More tests (HEAD -> master, origin/master, origin/HEAD)'},
+        {message: 'Test success #1'},
+        {message: 'Test success #2'},
+        {message: 'Shouldnt be filtered'}
+      ]
+    });
+
     config.boot().then((configs) => {
       git.generateChangelog(configs).then((data) => {
         expect(data).toEqual(['- Test success #1  ', '- Test success #2  ']);
