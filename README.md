@@ -41,7 +41,7 @@ Checks your configuration integrity and tokens. Shows also the current filtered 
 
 Versions and Releases your Project based on your given configuration and release parameter.
 
-If you use auto - SEMVER will be automatically determined by keywords "breaking" and "feature" in your commit messages.
+If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature" (0.x.0) in your commit messages.
 
 ## Config File
 ### .dlvr
