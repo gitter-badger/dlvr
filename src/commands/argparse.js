@@ -23,6 +23,11 @@ const parsedArgs = () => {
     help: 'Setup your secrets'
   });
 
+  subparsers.addParser('createhook', {
+    addHelp: true,
+    help: 'Creates a post-merge master githook'
+  });
+
   const cmdInit = subparsers.addParser('init', {
     addHelp: true,
     help: 'Initialize your Project [github|gitlab]'

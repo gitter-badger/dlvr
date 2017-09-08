@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-const {statusCmd, parsedArgs, releaseCmd} = require('./commands');
+const {statusCmd, parsedArgs, releaseCmd, copyHook} = require('./commands');
 const generator = require('./generator');
 const args = parsedArgs();
 
@@ -19,5 +19,9 @@ switch (args.subcmd) {
 
   case 'release':
     releaseCmd(args);
+    break;
+
+  case 'createhook':
+    copyHook();
     break;
 }
