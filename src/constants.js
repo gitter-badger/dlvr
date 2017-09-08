@@ -5,7 +5,7 @@ const FILE_PACKAGE = path.join(process.cwd(), 'package.json');
 const FILE_CONFIG = path.join(process.cwd(), '.dlvr');
 
 const AUTO_FILTER_MAJOR = '(breaking)';
-const AUTO_FILTER_MINOR = '(feature)';
+const AUTO_FILTER_MINOR = '(feature|plugin|module)';
 
 module.exports = {
   FILE_SECRETS,
