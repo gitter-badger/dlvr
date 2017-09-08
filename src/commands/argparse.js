@@ -59,6 +59,4 @@ const parsedArgs = () => {
   return parser.parseArgs();
 };
 
-module.exports = {
-  parsedArgs
-};
+module.exports = parsedArgs;

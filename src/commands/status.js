@@ -21,6 +21,4 @@ function statusCmd() {
     });
 }
 
-module.exports = {
-  statusCmd
-};
+module.exports = statusCmd;

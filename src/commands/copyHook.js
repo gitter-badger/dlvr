@@ -23,6 +23,4 @@ function copyHook() {
   });
 }
 
-module.exports = {
-  copyHook
-};
+module.exports = copyHook;

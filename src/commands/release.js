@@ -59,6 +59,4 @@ function releaseCmd(args) {
     });
 }
 
-module.exports = {
-  releaseCmd
-};
+module.exports = releaseCmd;
