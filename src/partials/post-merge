@@ -1,5 +1,5 @@
 branch_name=$(git branch | grep "*" | sed "s/\* //")
 
 if [[ $branch_name == "master" ]]; then
-  dlvr release auto
+  dlvr release auto -f
 fi
