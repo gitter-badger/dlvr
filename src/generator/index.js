@@ -23,13 +23,15 @@ function copyHook() {
 
     fs.access(destHook, err => {
       if (!err) {
-        console.log('post-merge hook already exists');
+        console.log('post-merge hook already existsSync(path);');
       }
 
       fs.createReadStream(srcHook).pipe(fs.createWriteStream(destHook));
 
       fs.chmod(destHook, '0700', err => {
-        if (err) throw err;
+        if (err) {
+          utils.fatal(err);
+        }
       });
 
       console.log('post-merge hook was created!');
