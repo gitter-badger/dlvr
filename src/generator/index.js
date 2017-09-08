@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const {spawn} = require('child_process');
 
 const opn = require('opn');
@@ -10,6 +11,31 @@ let template = require('./template');
 const common = require('./common');
 const github = require('./github');
 const secrets = require('./secrets');
+
+function copyHook() {
+  const srcHook = path.join(__dirname, '../', 'partials', 'post-merge');
+  const destHook = path.join(process.cwd(), '.git', 'hooks', 'post-merge');
+
+  fs.access(srcHook, err => {
+    if (err) {
+      utils.fatal(err);
+    }
+
+    fs.access(destHook, err => {
+      if (!err) {
+        console.log('post-merge hook already exists');
+      }
+
+      fs.createReadStream(srcHook).pipe(fs.createWriteStream(destHook));
+
+      fs.chmod(destHook, '0700', err => {
+        if (err) throw err;
+      });
+
+      console.log('post-merge hook was created!');
+    });
+  });
+}
 
 function runEditor() {
   const EDIT = process.env.EDITOR || process.env.VISUAL || false;
@@ -40,6 +66,11 @@ function parse(results) {
       delete template.githost.release['assets'];
     } else if (isNo(results[item]) && item === 'githubdraft') {
       template.githost.release.draft = false;
+    } else if (item === 'githook') {
+      if (!isNo(results[item])) {
+        copyHook();
+      }
+      delete template[item];
     } else if (isNo(results[item])) {
       delete template[item];
     }
@@ -86,7 +117,8 @@ function runGitHub() {
     github.draft,
     github.assets,
     common.compress,
-    common.slack
+    common.slack,
+    common.githook
   ];
   runSchema(schema, template);
 }
@@ -105,7 +137,8 @@ function runGitLab() {
     common.npmpublish,
     github.assets,
     common.compress,
-    common.slack
+    common.slack,
+    common.githook
   ];
   runSchema(schema, template);
 }

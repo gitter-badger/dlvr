@@ -1,3 +1,13 @@
+const githook = {
+  name: 'githook',
+  description: 'Do you want to install a post-merge githook for master to release ?',
+  type: 'string',
+  pattern: /^(y|n)$/i,
+  message: 'Only Y/y (yes) or N/n (no) is allowed',
+  default: 'y',
+  required: true
+};
+
 const dotenv = {
   name: 'dotenv',
   description: 'Where is your .env file for this project ?',
@@ -101,5 +111,6 @@ module.exports = {
   test,
   snyk,
   npmpublish,
-  compress
+  compress,
+  githook
 };
