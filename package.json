@@ -14,8 +14,8 @@
     "codacyreport": "cat ./coverage/lcov.info | codacy-coverage",
     "test:watch": "jasmine-node --verbose --autotest --color --growl --test-dir ./tests --watch ./src",
     "test": "npm run lint && npm run jasmine",
-    "ci": "npm run lint && npm run test:coverage && npm run codacyreport",
-    "lint": "depcheck && eslint ./src",
+    "ci": "depcheck && npm run lint && npm run test:coverage && npm run codacyreport",
+    "lint": "eslint ./src",
     "lintfix": "eslint ./src --fix",
     "release": "npm test && npm run build && dlvr",
     "jasmine": "jasmine-node --test-dir ./tests"
