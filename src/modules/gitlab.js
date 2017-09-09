@@ -98,9 +98,8 @@ const getUser = ({cfg, secrets}) => {
       request.get(opt, (err, res, body) => {
         utils.catchError(err, err, reject);
 
-        // TODO: write body errormessage
         if (res.statusCode !== 200) {
-          reject(new Error('gitlab Token invalid'));
+          reject(new Error(`Something went wrong \n ${res.body.message}`));
         }
         resolve(body.id);
       });

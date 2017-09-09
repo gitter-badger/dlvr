@@ -18,23 +18,21 @@ function copyHook() {
 
   fs.access(srcHook, err => {
     if (err) {
-      utils.fatal(err);
+      utils.fatal(err.message);
     }
 
     fs.access(destHook, err => {
       if (!err) {
-        console.log('post-merge hook already existsSync(path);');
+        utils.fatal('post-merge hook already exists');
       }
 
       fs.createReadStream(srcHook).pipe(fs.createWriteStream(destHook));
 
       fs.chmod(destHook, '0700', err => {
         if (err) {
-          utils.fatal(err);
+          utils.fatal(err.message);
         }
       });
-
-      console.log('post-merge hook was created!');
     });
   });
 }
@@ -44,11 +42,11 @@ function runEditor() {
   if (EDIT) {
     const editorSpawn = spawn(EDIT, [FILE_CONFIG]);
     editorSpawn.stderr.on('data', data => {
-      console.log(`stderr: ${data}`);
+      utils.fatal(`stderr: ${data}`);
     });
 
     editorSpawn.on('close', code => {
-      console.log(`child process exited with code ${code}`);
+      utils.quit(`child process exited with code ${code}`);
     });
   } else {
     opn(FILE_CONFIG);
@@ -89,7 +87,7 @@ function runSchema(schema, data) {
 
     fs.access(FILE_PACKAGE, err => {
       if (err) {
-        utils.fatal(err.message, 0);
+        utils.fatal(err.message);
       }
 
       var fileContent = parse(results);
@@ -167,7 +165,7 @@ function dotEnv() {
         if (err) {
           utils.fatal(err.message);
         }
-        console.log(
+        utils.quit(
           '.env file was written - please ensure that you .gitignore this file'
         );
       });

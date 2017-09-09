@@ -1,6 +1,7 @@
 const {bold, red, blue, yellow, green} = require('chalk'); // eslint-disable-line no-unused-vars
 const utils = require('./utils');
 
+// TODO: refactor console.log
 const successMessage = ({pkg, cfg, changelog}) => {
   console.log('');
   console.log(
@@ -65,21 +66,8 @@ const info = ({cfg, pkg, changelog, version}) => {
   }
 };
 
-const fileInfo = files => {
-  if (files.length > 0) {
-    console.log(
-      `${red(
-        'You have uncommitted changes in your Repository, please commit them first'
-      )}`
-    );
-
-    console.log(files);
-  }
-};
-
 module.exports = {
   intro,
   info,
-  fileInfo,
   successMessage
 };

@@ -110,33 +110,11 @@ const tagExist = ({version}) => {
   });
 };
 
-const checkChanges = () => {
-  const concatFiles = stat => {
-    let out = [];
-    return out
-      .concat(
-        stat.not_added,
-        stat.conflicted,
-        stat.created,
-        stat.deleted,
-        stat.modified,
-        stat.renamed
-      )
-      .join('\n');
-  };
-
+const checkRepo = ({cfg}, quiet) => {
   return new Promise((resolve, reject) => {
-    git(GITPATH).status((err, status) => {
-      utils.catchError(err, err);
-      // console.log(concatFiles(status));
-      resolve(concatFiles(status));
-    });
-  });
-};
-
-const checkRepo = ({cfg}) => {
-  return new Promise((resolve, reject) => {
-    spinner.create('Check git Repository');
+    if (!quiet) {
+      spinner.create('Check git Repository');
+    }
     git(GITPATH)
       .status((err, status) => {
         utils.catchError(err, err, reject);
@@ -184,7 +162,6 @@ const checkRepo = ({cfg}) => {
 
 module.exports = {
   determineVersion,
-  checkChanges,
   generateChangelog,
   tagAndPush,
   commitAndPush,
