@@ -53,10 +53,7 @@ const loadSecrets = cfg => {
     });
 
     secrets.get = function(forService) {
-      return (
-        process.env[`DLVR_${forService.replace('-', '_').toUpperCase()}`] ||
-        false
-      );
+      return process.env[`DLVR_${forService.replace('-', '_').toUpperCase()}`] || false;
     };
 
     return resolve(secrets);
