@@ -1,6 +1,5 @@
 {
   "dotenv": ".env",
-  "snyk": true,
   "logfilter": ".*#",
   "githost": {
     "provider": "github",
