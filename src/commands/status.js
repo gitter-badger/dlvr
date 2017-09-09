@@ -4,7 +4,6 @@ const output = require('../lib/output');
 const utils = require('../lib/utils');
 
 function statusCmd() {
-  // TODO: output that token config is ok
   config
     .boot()
     .then(configs => {
@@ -15,9 +14,9 @@ function statusCmd() {
           .then(() => {
             output.info(configs);
           })
-          .catch(e => {
+          .catch(err => {
             output.info(configs);
-            utils.fatal(e.message);
+            utils.fatal(err.message);
           });
       });
     })
