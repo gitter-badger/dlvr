@@ -22,17 +22,20 @@ Or define this ENV vars globally
 DLVR_GITHUB
 DLVR_SNYK
 DLVR_GITLAB
-DLVR_GITLAB-API
-DLVR_SLACK-WEBHOOK
+DLVR_GITLAB_API
+DLVR_SLACK_WEBHOOK
 ```
 
 ### Write initial config
 `dlvr init [github|gitlab]`
 Opens a Wizard which guides you through the release configuration `($PROJECT_ROOT/.dlvr)`, uses examplepaths for compress and release-assets.
 
-### Get current Changelog
+### Check and get current Changelog
 `dlvr status `
-Checks your configuration integrity and tokens. Shows also the current filtered changelog.
+- Checks integrity of .dlvr config
+- Checks if necessary secrets exist based on .dlvr configuration
+- Warns you if you have changes in your branch
+- Prints out current filtered Changelog
 
 ### Release
 `dlvr release (major|minor|patch|auto)`
@@ -41,7 +44,7 @@ Checks your configuration integrity and tokens. Shows also the current filtered 
 
 Versions and Releases your Project based on your given configuration and release parameter.
 
-If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature" (0.x.0) in your commit messages.
+If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature, module or plugin" (0.x.0) in your commit messages.
 
 ## Config File
 ### .dlvr
