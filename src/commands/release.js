@@ -15,48 +15,34 @@ const promptSchema = {
   required: true
 };
 
-function releaseCmd(args) {
-  config
-    .boot()
-    .then(configs => {
-      git
-        .generateChangelog(configs)
-        .then(changelog => {
-          git
-            .determineVersion(configs)
-            .then(determinedVersion => {
-              const useVersion =
-                args.VERSION === 'auto' ? determinedVersion : args.VERSION;
+const releaseCmd = async args => {
+  try {
+    let configs = await config.boot();
+    const changelog = await git.generateChangelog(configs);
+    const determinedVersion = await git.determineVersion(configs);
+    const useVersion =
+      args.VERSION === 'auto' ? determinedVersion : args.VERSION;
 
-              configs.changelog = changelog;
-              configs.version = semver.inc(configs.pkg.version, useVersion);
+    configs.changelog = changelog;
+    configs.version = semver.inc(configs.pkg.version, useVersion);
 
-              output.intro();
-              output.info(configs);
+    output.intro();
+    output.info(configs);
 
-              if (args.force) {
-                perform.run(configs);
-              } else {
-                prompt.start();
-                prompt.get(promptSchema, (err, result) => {
-                  utils.catchError(err);
-                  if (result.question.toLowerCase() === 'y') {
-                    perform.run(configs);
-                  }
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-}
+    if (args.force) {
+      perform.run(configs);
+    } else {
+      prompt.start();
+      prompt.get(promptSchema, (err, result) => {
+        utils.catchError(err);
+        if (result.question.toLowerCase() === 'y') {
+          perform.run(configs);
+        }
+      });
+    }
+  } catch (err) {
+    utils.fatal(err.message);
+  }
+};
 
 module.exports = releaseCmd;
