@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test:coverage": "istanbul cover --include-all-sources --root ./src jasmine-node ./tests",
-    "codacyreport": "cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
+    "codacyreport": "cat ./coverage/lcov.info | codacy-coverage",
     "test:watch": "jasmine-node --verbose --autotest --color --growl --test-dir ./tests --watch ./src",
     "test": "npm run lint && npm run jasmine",
     "ci": "npm run lint && npm run test:coverage && npm run codacyreport",
@@ -32,6 +32,7 @@
   "author": "FreaKzero",
   "license": "MIT",
   "dependencies": {
+    "argparse": "1.0.9",
     "chalk": "2.0.1",
     "dotenv": "^4.0.0",
     "is-my-json-valid": "2.16.0",
@@ -47,9 +48,6 @@
     "zip-local": "0.3.4"
   },
   "devDependencies": {
-    "argparse": "1.0.9",
-    "codacy-coverage": "^2.0.2",
-    "depcheck": "^0.6.7",
     "eslint": "4.2.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "2.7.0",

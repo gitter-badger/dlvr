@@ -3,6 +3,8 @@ notifications:
   email: false
 node_js:
   - "7"
+before_install:
+  - npm install -g depcheck codacy-coverage
 cache:
   directories:
     - node_modules
