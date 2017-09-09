@@ -46,14 +46,14 @@ const loadSecrets = cfg => {
     ['github', 'gitlab', 'snyk'].map(item => {
       if (
         cfg.githost.provider === item &&
-        !process.env[`DLVR_${item.toUpperCase()}`]
+        !process.env[`DLVR_${item.replace('-', '_').toUpperCase()}`]
       ) {
         return reject(new Error(`No ${item} token given`));
       }
     });
 
     secrets.get = function(forService) {
-      return process.env[`DLVR_${forService.toUpperCase()}`] || false;
+      return process.env[`DLVR_${forService.replace('-', '_').toUpperCase()}`] || false;
     };
 
     return resolve(secrets);

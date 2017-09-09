@@ -26,7 +26,7 @@ const schema = [
     replace: '*'
   },
   {
-    name: 'DLVR_GITLAB-API',
+    name: 'DLVR_GITLAB_API',
     description: 'GitLab API Url ',
     type: 'string',
     default: 'https://gitlab.com/api/v3/',
@@ -42,7 +42,7 @@ const schema = [
     replace: '*'
   },
   {
-    name: 'DLVR_SLACK-WEBHOOK',
+    name: 'DLVR_SLACK_WEBHOOK',
     description: 'Your Slack Webhook Url (enter to skip)',
     type: 'string'
   }
