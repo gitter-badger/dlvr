@@ -38,19 +38,26 @@ const saveVersion = ({version, pkg}) => {
   });
 };
 
-const composeChangelog = (changelog, releases = []) => {
-  changelog =
-    changelog.length > 0 ? `**Changelog**  \n${changelog.join('\n')}  \n` : '';
-  releases =
-    releases.length > 0 ? `**Releases**  \n${releases.join('\n')}  ` : '';
+function openEditor(file) {
+  const EDIT = process.env.EDITOR || process.env.VISUAL || false;
+  if (EDIT) {
+    const editorSpawn = spawn(EDIT, [file]);
+    editorSpawn.stderr.on('data', data => {
+      utils.fatal(`stderr: ${data}`);
+    });
 
-  return `${changelog}\n${releases}`;
-};
+    editorSpawn.on('close', code => {
+      utils.quit(`child process exited with code ${code}`);
+    });
+  } else {
+    opn(FILE_CONFIG);
+  }
+}
 
 module.exports = {
   catchError,
   quit,
   fatal,
   saveVersion,
-  composeChangelog
+  openEditor
 };

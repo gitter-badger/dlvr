@@ -3,12 +3,16 @@ const config = require('../lib/config');
 const output = require('../lib/output');
 const utils = require('../lib/utils');
 
-function statusCmd() {
+function statusCmd(args) {
   config
     .boot()
     .then(configs => {
       git.generateChangelog(configs).then(changelog => {
         configs.changelog = changelog;
+        console.log(args);
+        if (args.edit) {
+          // open stuff
+        }
         git
           .checkRepo(configs, true)
           .then(() => {

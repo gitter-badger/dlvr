@@ -13,14 +13,20 @@ const parsedArgs = () => {
     dest: 'subcmd'
   });
 
-  subparsers.addParser('status', {
+  subparsers.addParser('secrets', {
+    addHelp: true,
+    help: 'Setup your secrets'
+  });
+
+  const cmdStatus = subparsers.addParser('status', {
     addHelp: true,
     help: 'Checks secrets and shows current changelog'
   });
 
-  subparsers.addParser('secrets', {
-    addHelp: true,
-    help: 'Setup your secrets'
+  cmdStatus.addArgument(['-e', '--edit'], {
+    action: 'storeTrue',
+    help: 'Edit changelog',
+    metavar: 'edit'
   });
 
   const cmdInit = subparsers.addParser('init', {

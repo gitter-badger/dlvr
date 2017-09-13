@@ -37,22 +37,6 @@ function copyHook() {
   });
 }
 
-function runEditor() {
-  const EDIT = process.env.EDITOR || process.env.VISUAL || false;
-  if (EDIT) {
-    const editorSpawn = spawn(EDIT, [FILE_CONFIG]);
-    editorSpawn.stderr.on('data', data => {
-      utils.fatal(`stderr: ${data}`);
-    });
-
-    editorSpawn.on('close', code => {
-      utils.quit(`child process exited with code ${code}`);
-    });
-  } else {
-    opn(FILE_CONFIG);
-  }
-}
-
 function parse(results) {
   function isNo(item) {
     return (
@@ -96,7 +80,7 @@ function runSchema(schema, data) {
         if (err) {
           utils.fatal(err.message);
         }
-        runEditor();
+        utils.openEditor(FILE_CONFIG);
       });
     });
   });
