@@ -2,7 +2,6 @@ const fs = require('fs');
 const {FILE_CHANGELOG} = require('../constants');
 const utils = require('./utils');
 
-
 const composeChangelog = (changelog, releases = []) => {
   changelog =
     changelog.length > 0 ? `**Changelog**  \n${changelog.join('\n')}  \n` : '';

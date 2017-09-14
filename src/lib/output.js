@@ -1,5 +1,4 @@
 const {bold, red, blue, yellow, green} = require('chalk'); // eslint-disable-line no-unused-vars
-const utils = require('./utils');
 const changelogHelper = require('./changelog');
 
 // TODO: refactor console.log

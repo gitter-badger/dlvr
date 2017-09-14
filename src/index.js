@@ -4,8 +4,8 @@ const {status, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
 const args = parsedArgs();
 
-process.on('unhandledRejection', (reason) => {
-    console.log('Reason: ' + reason);
+process.on('unhandledRejection', reason => {
+  console.log('Reason: ' + reason);
 });
 
 switch (args.subcmd) {

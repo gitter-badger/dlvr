@@ -4,18 +4,17 @@ const output = require('../lib/output');
 const utils = require('../lib/utils');
 const changelogHelper = require('../lib/changelog');
 
-
 function edit() {
-  config
-    .boot()
-    .then(configs => {
-      git.generateChangelog(configs).then(changelog => {
+  config.boot().then(configs => {
+    git
+      .generateChangelog(configs)
+      .then(changelog => {
         changelogHelper.writeAndOpen(changelog);
-      }).catch(err => {
+      })
+      .catch(err => {
         utils.fatal(err.message);
       });
-});
-
+  });
 }
 
 function info() {
@@ -43,4 +42,4 @@ function info() {
 module.exports = {
   edit,
   info
-}
+};

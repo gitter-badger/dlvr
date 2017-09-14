@@ -20,7 +20,7 @@ const releaseCmd = async args => {
     let configs = await config.boot();
     const changelog = await git.generateChangelog(configs);
     const determinedVersion = await git.determineVersion(configs);
-    const useVersion=
+    const useVersion =
       args.VERSION === 'auto' ? determinedVersion : args.VERSION;
 
     // generate changelog here - or take it from file
