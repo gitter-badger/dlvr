@@ -5,7 +5,7 @@ const {FILE_PACKAGE} = require('../constants');
 const spinner = require('./spinner');
 const utils = require('./utils');
 
-const {spawn} = require('child_process');
+const {spawnSync} = require('child_process');
 const opn = require('opn');
 
 const fatal = msg => {
@@ -45,16 +45,9 @@ const saveVersion = ({version, pkg}) => {
 function openEditor(file) {
   const EDIT = process.env.EDITOR || process.env.VISUAL || false;
   if (EDIT) {
-    const editorSpawn = spawn(EDIT, [file]);
-    editorSpawn.stderr.on('data', data => {
-      utils.fatal(`stderr: ${data}`);
-    });
-
-    editorSpawn.on('close', code => {
-      utils.quit(`child process exited with code ${code}`);
-    });
+    spawnSync(EDIT, [file], {stdio: 'inherit'});
   } else {
-    opn(FILE_CONFIG);
+    opn(file);
   }
 }
 

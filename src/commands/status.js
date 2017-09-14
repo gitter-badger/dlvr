@@ -2,17 +2,28 @@ const git = require('../modules/git');
 const config = require('../lib/config');
 const output = require('../lib/output');
 const utils = require('../lib/utils');
+const changelogHelper = require('../lib/changelog');
 
-function statusCmd(args) {
+
+function edit() {
+  config
+    .boot()
+    .then(configs => {
+      git.generateChangelog(configs).then(changelog => {
+        changelogHelper.writeAndOpen(changelog);
+      }).catch(err => {
+        utils.fatal(err.message);
+      });
+});
+
+}
+
+function info() {
   config
     .boot()
     .then(configs => {
       git.generateChangelog(configs).then(changelog => {
         configs.changelog = changelog;
-        console.log(args);
-        if (args.edit) {
-          // open stuff
-        }
         git
           .checkRepo(configs, true)
           .then(() => {
@@ -29,4 +40,7 @@ function statusCmd(args) {
     });
 }
 
-module.exports = statusCmd;
+module.exports = {
+  edit,
+  info
+}

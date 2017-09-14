@@ -118,23 +118,22 @@ const checkRepo = ({cfg}, quiet) => {
     git(GITPATH)
       .status((err, status) => {
         utils.catchError(err, err, reject);
-
         if (status.ahead > 0 || status.behind > 0) {
-          reject(
+          return reject(
             new Error(
               `Your master branch is not up-to-date with ${cfg.getRemote()}/master - Please pull/push first`
             )
           );
         }
         if (status.files.length > 0) {
-          reject(
+          return reject(
             new Error(
               'You have uncommitted changes - Please commit or stash them before release!'
             )
           );
         }
         if (status.current !== 'master') {
-          reject(new Error('You are not on the master branch'));
+          return reject(new Error('You are not on the master branch'));
         }
       })
       .exec(() => {

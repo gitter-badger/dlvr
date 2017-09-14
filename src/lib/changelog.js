@@ -2,14 +2,6 @@ const fs = require('fs');
 const {FILE_CHANGELOG} = require('../constants');
 const utils = require('./utils');
 
-const writeAndOpen = changelog => {
-  fs.writeFile(FILE_CHANGELOG, changelog, err => {
-    if (err) {
-      utils.fatal(err.message);
-    }
-    utils.openEditor(FILE_CHANGELOG);
-  });
-};
 
 const composeChangelog = (changelog, releases = []) => {
   changelog =
@@ -18,6 +10,15 @@ const composeChangelog = (changelog, releases = []) => {
     releases.length > 0 ? `**Releases**  \n${releases.join('\n')}  ` : '';
 
   return `${changelog}\n${releases}`;
+};
+
+const writeAndOpen = changelog => {
+  fs.writeFile(FILE_CHANGELOG, composeChangelog(changelog), err => {
+    if (err) {
+      utils.fatal(err.message);
+    }
+    utils.openEditor(FILE_CHANGELOG);
+  });
 };
 
 module.exports = {

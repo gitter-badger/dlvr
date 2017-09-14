@@ -1,8 +1,12 @@
 #! /usr/bin/env node
 
-const {statusCmd, parsedArgs, releaseCmd} = require('./commands');
+const {status, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
 const args = parsedArgs();
+
+process.on('unhandledRejection', (reason) => {
+    console.log('Reason: ' + reason);
+});
 
 switch (args.subcmd) {
   case 'secrets':
@@ -14,7 +18,7 @@ switch (args.subcmd) {
     break;
 
   case 'status':
-    statusCmd(args);
+    args.edit ? status.edit() : status.info();
     break;
 
   case 'release':
