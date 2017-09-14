@@ -3,6 +3,10 @@ const {red} = require('chalk');
 
 const {FILE_PACKAGE} = require('../constants');
 const spinner = require('./spinner');
+const utils = require('./utils');
+
+const {spawn} = require('child_process');
+const opn = require('opn');
 
 const fatal = msg => {
   console.error(`😢  ${red(msg)} `);

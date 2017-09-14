@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {spawn} = require('child_process');
 
-const opn = require('opn');
 const prompt = require('prompt');
 const utils = require('../lib/utils');
 const {FILE_SECRETS, FILE_PACKAGE, FILE_CONFIG} = require('../constants');
