@@ -20,6 +20,26 @@ const writeAndOpen = changelog => {
   });
 };
 
+const read = () => new Promise((resolve, reject) => {
+  fs.readFile(FILE_CHANGELOG, (err, changelog) => {
+    err ? reject() : resolve(
+      changelog
+      .join('\n')
+      .splice(2, changelog.length)
+    );
+  });
+});
+
+
+const getLog = () => new Promise((resolve, reject) => {
+  fs.accessSync(FILE_CHANGELOG, err => {
+    if (!err) {
+
+      //utils.fatal(err.message);
+    }
+  })
+});
+
 module.exports = {
   composeChangelog,
   writeAndOpen
