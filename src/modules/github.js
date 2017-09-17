@@ -5,6 +5,7 @@ const og = require('octonode');
 
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
+const changelogHelper = require('../lib/changelog');
 
 const uploadAssets = ({cfg, secrets}, id) => {
   return new Promise((resolve, reject) => {
@@ -75,7 +76,7 @@ const release = ({cfg, version, changelog, secrets}) => {
         {
           name: version,
           tag_name: version,
-          body: utils.composeChangelog(changelog),
+          body: changelogHelper.composeChangelog(changelog),
           draft: cfg.githost.release.draft || true
         },
         (err, data) => {

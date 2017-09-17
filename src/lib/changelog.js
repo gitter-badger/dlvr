@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {FILE_CHANGELOG} = require('../constants');
-const utils = require('./utils');
 const git = require('../modules/git');
+const utils = require('./utils');
 
 const composeChangelog = (changelog, releases = []) => {
   changelog =
@@ -13,7 +13,7 @@ const composeChangelog = (changelog, releases = []) => {
 };
 
 const writeAndOpen = changelog => {
-  fs.writeFile(FILE_CHANGELOG, composeChangelog(changelog), err => {
+  fs.writeFile(FILE_CHANGELOG, changelog.join('\n'), err => {
     if (err) {
       utils.fatal(err.message);
     }
@@ -23,10 +23,8 @@ const writeAndOpen = changelog => {
 
 const read = () =>
   new Promise((resolve, reject) => {
-    fs.readFile(FILE_CHANGELOG, (err, changelog) => {
-      err
-        ? reject(err)
-        : resolve(changelog.join('\n').splice(2, changelog.length));
+    fs.readFile(FILE_CHANGELOG, 'utf8', (err, changelog) => {
+      err ? reject(err) : resolve(changelog.split('\n'));
     });
   });
 

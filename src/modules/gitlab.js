@@ -5,6 +5,7 @@ const asyncLoop = require('node-async-loop');
 const mime = require('mime');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
+const changelogHelper = require('../lib/changelog');
 
 // TODO: write tests
 const uploadAssets = ({cfg, secrets}, projectId) => {
@@ -67,7 +68,7 @@ const release = ({cfg, version, changelog, secrets}, projectId, releases) => {
         },
         body: {
           tag_name: version,
-          description: utils.composeChangelog(changelog, releases)
+          description: changelogHelper.composeChangelog(changelog, releases)
         },
         json: true
       };
