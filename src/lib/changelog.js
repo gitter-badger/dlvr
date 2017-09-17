@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {FILE_CHANGELOG} = require('../constants');
+const {FILE_CHANGELOG, AUTO_FILTER_MINOR, AUTO_FILTER_MAJOR} = require('../constants');
 const git = require('../modules/git');
 const utils = require('./utils');
 
@@ -10,6 +10,27 @@ const composeChangelog = (changelog, releases = []) => {
     releases.length > 0 ? `**Releases**  \n${releases.join('\n')}  ` : '';
 
   return `${changelog}\n${releases}`;
+};
+
+const determineVersion = changelog => {
+  return new Promise((resolve, reject) => {
+    const VERSIONS = ['patch', 'minor', 'major'];
+    let versionId = 0;
+    changelog.map(item => {
+      if (
+        new RegExp(AUTO_FILTER_MINOR, 'i').test(item) &&
+        versionId < 2
+      ) {
+        versionId = 1;
+      }
+
+      if (new RegExp(AUTO_FILTER_MAJOR, 'i').test(item)) {
+        versionId = 2;
+      }
+    });
+
+    resolve(VERSIONS[versionId]);
+  });
 };
 
 const writeAndOpen = changelog => {
@@ -53,6 +74,7 @@ const getLog = configs =>
   });
 
 module.exports = {
+  determineVersion,
   getLog,
   composeChangelog,
   writeAndOpen

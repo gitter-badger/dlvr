@@ -2,7 +2,6 @@ const git = require('simple-git');
 const GITPATH = process.cwd();
 const spinner = require('../lib/spinner');
 const utils = require('../lib/utils');
-const {AUTO_FILTER_MAJOR, AUTO_FILTER_MINOR} = require('../constants');
 
 const getLogsFromLastTag = cfg => {
   return new Promise((resolve, reject) => {
@@ -17,33 +16,6 @@ const getLogsFromLastTag = cfg => {
         resolve(data);
       });
     });
-  });
-};
-
-const determineVersion = ({cfg}) => {
-  return new Promise((resolve, reject) => {
-    getLogsFromLastTag(cfg)
-      .then(data => {
-        const VERSIONS = ['patch', 'minor', 'major'];
-        let versionId = 0;
-        data.all.map(item => {
-          if (
-            new RegExp(AUTO_FILTER_MINOR, 'i').test(item.message) &&
-            versionId < 2
-          ) {
-            versionId = 1;
-          }
-
-          if (new RegExp(AUTO_FILTER_MAJOR, 'i').test(item.message)) {
-            versionId = 2;
-          }
-        });
-
-        resolve(VERSIONS[versionId]);
-      })
-      .catch(err => {
-        utils.catchError(err, err, reject);
-      });
   });
 };
 
@@ -160,7 +132,6 @@ const checkRepo = ({cfg}, quiet) => {
 };
 
 module.exports = {
-  determineVersion,
   generateChangelog,
   tagAndPush,
   commitAndPush,
