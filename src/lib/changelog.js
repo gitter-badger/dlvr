@@ -1,6 +1,7 @@
 const fs = require('fs');
 const {FILE_CHANGELOG} = require('../constants');
 const utils = require('./utils');
+const git = require('../modules/git');
 
 const composeChangelog = (changelog, releases = []) => {
   changelog =
@@ -20,27 +21,41 @@ const writeAndOpen = changelog => {
   });
 };
 
-const read = () => new Promise((resolve, reject) => {
-  fs.readFile(FILE_CHANGELOG, (err, changelog) => {
-    err ? reject() : resolve(
-      changelog
-      .join('\n')
-      .splice(2, changelog.length)
-    );
+const read = () =>
+  new Promise((resolve, reject) => {
+    fs.readFile(FILE_CHANGELOG, (err, changelog) => {
+      err
+        ? reject(err)
+        : resolve(changelog.join('\n').splice(2, changelog.length));
+    });
   });
-});
 
-
-const getLog = () => new Promise((resolve, reject) => {
-  fs.accessSync(FILE_CHANGELOG, err => {
-    if (!err) {
-
-      //utils.fatal(err.message);
-    }
-  })
-});
+const getLog = configs =>
+  new Promise((resolve, reject) => {
+    fs.access(FILE_CHANGELOG, err => {
+      if (err) {
+        git
+          .generateChangelog(configs)
+          .then(changelog => {
+            resolve(changelog);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      } else {
+        read()
+          .then(data => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      }
+    });
+  });
 
 module.exports = {
+  getLog,
   composeChangelog,
   writeAndOpen
 };

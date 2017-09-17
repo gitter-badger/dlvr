@@ -6,14 +6,9 @@ const changelogHelper = require('../lib/changelog');
 
 function edit() {
   config.boot().then(configs => {
-    git
-      .generateChangelog(configs)
-      .then(changelog => {
-        changelogHelper.writeAndOpen(changelog);
-      })
-      .catch(err => {
-        utils.fatal(err.message);
-      });
+    changelogHelper.getLog(configs).then(changelog => {
+      changelogHelper.writeAndOpen(changelog);
+    });
   });
 }
 
@@ -21,7 +16,7 @@ function info() {
   config
     .boot()
     .then(configs => {
-      git.generateChangelog(configs).then(changelog => {
+      changelogHelper.getLog(configs).then(changelog => {
         configs.changelog = changelog;
         git
           .checkRepo(configs, true)
