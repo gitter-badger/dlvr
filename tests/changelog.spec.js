@@ -8,7 +8,6 @@ const changelogHelper = require('../src/lib/changelog');
 
 process.env.DLVR_GITHUB='ma github token';
 
-
 describe('#git determineVersion', function() {
   let changeLog = [];
   beforeEach(function() {
