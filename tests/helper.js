@@ -8,6 +8,11 @@ let gitLogStatusStub = {
   latest: {message: 'More tests (HEAD -> master, origin/master, origin/HEAD)'},
   total: 3 };
 
+let changelogStub = [
+  '- Some message #1',
+  '- Some other message #2'
+];
+
 let gitStatusStub = {
   files: [],
   current: 'master'
@@ -159,6 +164,7 @@ function eachConfig () {
 }
 
 module.exports = {
+  changelogStub,
   eachConfig,
   configMock,
   gitMock,
