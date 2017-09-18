@@ -1,6 +1,6 @@
 {
   "name": "dlvr",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "DeLiVeR - Command Line Tool to automate releasing processes on GitHub/GitLab/npm",
   "bin": {
     "dlvr": "./src/index.js"
