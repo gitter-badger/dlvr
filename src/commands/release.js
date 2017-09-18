@@ -1,7 +1,6 @@
 const semver = require('semver');
 const prompt = require('prompt');
 const perform = require('../perform');
-const git = require('../modules/git');
 const config = require('../lib/config');
 const output = require('../lib/output');
 const utils = require('../lib/utils');

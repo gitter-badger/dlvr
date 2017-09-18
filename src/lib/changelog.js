@@ -1,5 +1,9 @@
 const fs = require('fs');
-const {FILE_CHANGELOG, AUTO_FILTER_MINOR, AUTO_FILTER_MAJOR} = require('../constants');
+const {
+  FILE_CHANGELOG,
+  AUTO_FILTER_MINOR,
+  AUTO_FILTER_MAJOR
+} = require('../constants');
 const git = require('../modules/git');
 const utils = require('./utils');
 
@@ -17,10 +21,7 @@ const determineVersion = changelog => {
     const VERSIONS = ['patch', 'minor', 'major'];
     let versionId = 0;
     changelog.map(item => {
-      if (
-        new RegExp(AUTO_FILTER_MINOR, 'i').test(item) &&
-        versionId < 2
-      ) {
+      if (new RegExp(AUTO_FILTER_MINOR, 'i').test(item) && versionId < 2) {
         versionId = 1;
       }
 

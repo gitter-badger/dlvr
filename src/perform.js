@@ -47,7 +47,6 @@ const run = async configs => {
     utils.cleanup();
     spinner.success();
     output.successMessage(configs);
-
   } catch (err) {
     spinner.fail(err.message);
   }
