@@ -46,6 +46,7 @@ function openEditor(file) {
     spawnSync(EDIT, [file], {stdio: 'inherit'});
   } else {
     opn(file);
+    process.exit(0);
   }
 }
 const cleanup = () => {
