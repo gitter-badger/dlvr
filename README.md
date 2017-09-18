@@ -30,12 +30,17 @@ DLVR_SLACK_WEBHOOK
 `dlvr init [github|gitlab]`
 Opens a Wizard which guides you through the release configuration `($PROJECT_ROOT/.dlvr)`, uses examplepaths for compress and release-assets.
 
-### Check and get current Changelog
+### Check, edit and get current Changelog
 `dlvr status `
 - Checks integrity of .dlvr config
 - Checks if necessary secrets exist based on .dlvr configuration
 - Warns you if you have changes in your branch
 - Prints out current filtered Changelog
+
+  - optional arguments:
+    - `-e [--edit] | Edit the current Changelog`
+
+Edited changelog generates a `.changelog` file in your root which gets deleted on successful release, you should add this file to your `.gitignore`
 
 ### Release
 `dlvr release (major|minor|patch|auto)`
@@ -44,7 +49,7 @@ Opens a Wizard which guides you through the release configuration `($PROJECT_ROO
 
 Versions and Releases your Project based on your given configuration and release parameter.
 
-If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature, module or plugin" (0.x.0) in your commit messages.
+If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature, module or plugin" (0.x.0) in your changelog.
 
 ## Config File
 ### .dlvr
