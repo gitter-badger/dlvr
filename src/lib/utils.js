@@ -69,7 +69,7 @@ function openEditor(file) {
   }
 }
 const cleanup = () => {
-  spinner.create('Cleaning up ...');
+  spinner.create('Remove Changelog file');
   return new Promise((resolve, reject) => {
     fs.unlinkSync(FILE_CHANGELOG);
     resolve();

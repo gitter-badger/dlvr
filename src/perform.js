@@ -30,6 +30,7 @@ const run = async configs => {
     await snyk.check(configs);
     await zip.compress(configs);
     await utils.saveVersion(configs);
+    await utils.cleanup();
     await git.commitAndPush(configs);
     await git.tagAndPush(configs);
     await npm.publish(configs);
@@ -44,7 +45,6 @@ const run = async configs => {
     await gitlab.release(configs, gitlabProject, releaseMarkdown);
     await runner.postRun(configs);
     await slack.send(configs);
-    utils.cleanup();
     spinner.success();
     output.successMessage(configs);
   } catch (err) {
