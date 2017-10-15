@@ -1,9 +1,10 @@
 const status = require('./status');
 const parsedArgs = require('./argparse');
-const releaseCmd = require('./release');
+const release = require('./release');
 
 module.exports = {
   status,
-  releaseCmd,
+  releaseCmd: release.releaseCmd,
+  releaseCiCmd: release.releaseCiCmd,
   parsedArgs
 };
