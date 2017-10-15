@@ -13,6 +13,12 @@ const parsedArgs = () => {
     dest: 'subcmd'
   });
 
+  subparsers.addParser('release-ci', {
+    addHelp: true,
+    help:
+      'Auto releases without prompt or exits process gracefully if current branch is not master'
+  });
+
   subparsers.addParser('secrets', {
     addHelp: true,
     help: 'Setup your secrets'
