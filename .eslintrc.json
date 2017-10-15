@@ -2,7 +2,7 @@
     "rules": {
         "semi": [2,"always"],
         "curly": [2, "multi-line"],
-        "one-var": [2, { var: "always", let: "never", const: "never" }],
+        "one-var": [2, { "var": "always", "let": "never", "const": "never" }],
         "import-order/import-order": 2,
         "guard-for-in": 2,
         "object-shorthand": 2,
@@ -25,5 +25,5 @@
         "import-order",
          "prettier"
     ],
-    "extends": "standard",
+    "extends": "standard"
 }
