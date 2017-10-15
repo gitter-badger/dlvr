@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+var objectFilter = require('object-filter');
 
 const prompt = require('prompt');
 const utils = require('../lib/utils');
@@ -23,16 +24,23 @@ function copyHook() {
 }
 
 function parse(results) {
+  template = Object.assign(
+    {},
+    template,
+    objectFilter(results, item => ['y', 'n', ''].indexOf(item) < 0)
+  );
+
   function isNo(item) {
     return (
       (typeof item === 'string' && item.trim() === '') ||
       (typeof item === 'string' && item.toLowerCase() === 'n')
     );
   }
-
   for (let item in results) {
     if (isNo(results[item]) && item === 'assets') {
       delete template.githost.release['assets'];
+    } else if (item === 'repo') {
+      template.githost.repo = results[item];
     } else if (isNo(results[item]) && item === 'githubdraft') {
       template.githost.release.draft = false;
     } else if (item === 'githook') {
