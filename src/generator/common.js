@@ -5,7 +5,7 @@ const githook = {
   type: 'string',
   pattern: /^(y|n)$/i,
   message: 'Only Y/y (yes) or N/n (no) is allowed',
-  default: 'y',
+  default: 'n',
   required: true
 };
 
