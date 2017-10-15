@@ -15,8 +15,10 @@ const output = require('./lib/output');
 
 const run = async configs => {
   try {
+    if (!utils.isCI()) {
+      await git.checkRepo(configs);
+    }
     await runner.preRun(configs);
-    await git.checkRepo(configs);
     await runner.runTests(configs);
     await github.checkToken(configs);
 

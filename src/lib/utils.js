@@ -68,6 +68,11 @@ function openEditor(file) {
     process.exit(0);
   }
 }
+function isCI() {
+  return Boolean(
+    process.env.CI || process.env.TRAVIS || process.env.CONTINUOUS_INTEGRATION
+  );
+}
 const cleanup = () => {
   spinner.create('Remove Changelog file');
   return new Promise((resolve, reject) => {
@@ -77,8 +82,8 @@ const cleanup = () => {
     });
   });
 };
-
 module.exports = {
+  isCI,
   copyFile,
   cleanup,
   catchError,
