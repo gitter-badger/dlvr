@@ -1,7 +1,7 @@
 const githook = {
   name: 'githook',
   description:
-    'Do you want to install a post-merge githook for master to release ?',
+    'Do you want to automatically release everytime you merge into master ?',
   type: 'string',
   pattern: /^(y|n)$/i,
   message: 'Only Y/y (yes) or N/n (no) is allowed',

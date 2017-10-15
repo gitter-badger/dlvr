@@ -40,6 +40,25 @@ const saveVersion = ({version, pkg}) => {
   });
 };
 
+function copyFile(src, dest, mod = '0700') {
+  return new Promise((resolve, reject) => {
+    let readStream = fs.createReadStream(src);
+
+    readStream.once('error', err => {
+      reject(err);
+    });
+
+    readStream.once('end', () => {
+      fs.chmod(dest, mod, err => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+    readStream.pipe(fs.createWriteStream(dest));
+  });
+}
 function openEditor(file) {
   const EDIT = process.env.EDITOR || process.env.VISUAL || false;
   if (EDIT) {
@@ -58,6 +77,7 @@ const cleanup = () => {
 };
 
 module.exports = {
+  copyFile,
   cleanup,
   catchError,
   quit,

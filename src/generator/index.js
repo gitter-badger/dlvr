@@ -14,25 +14,12 @@ function copyHook() {
   const srcHook = path.join(__dirname, '../', 'partials', 'post-merge');
   const destHook = path.join(process.cwd(), '.git', 'hooks', 'post-merge');
 
-  fs.access(srcHook, err => {
-    if (err) {
-      utils.fatal(err.message);
+  utils.copyFile(srcHook, destHook).then(
+    () => {},
+    err => {
+      utils.fatal(err);
     }
-
-    fs.access(destHook, err => {
-      if (!err) {
-        utils.fatal('post-merge hook already exists');
-      }
-
-      fs.createReadStream(srcHook).pipe(fs.createWriteStream(destHook));
-
-      fs.chmod(destHook, '0700', err => {
-        if (err) {
-          utils.fatal(err.message);
-        }
-      });
-    });
-  });
+  );
 }
 
 function parse(results) {
@@ -87,6 +74,7 @@ function runSchema(schema, data) {
 function runGitHub() {
   template.githost.provider = 'github';
   const schema = [
+    common.githook,
     common.dotenv,
     common.repo,
     common.prerun,
@@ -99,8 +87,7 @@ function runGitHub() {
     github.draft,
     github.assets,
     common.compress,
-    common.slack,
-    common.githook
+    common.slack
   ];
   runSchema(schema, template);
 }
@@ -108,6 +95,7 @@ function runGitHub() {
 function runGitLab() {
   template.githost.provider = 'gitlab';
   const schema = [
+    common.githook,
     common.dotenv,
     common.repo,
     common.prerun,
@@ -119,8 +107,7 @@ function runGitLab() {
     common.npmpublish,
     github.assets,
     common.compress,
-    common.slack,
-    common.githook
+    common.slack
   ];
   runSchema(schema, template);
 }
