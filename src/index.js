@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-const {status, parsedArgs, releaseCmd, releaseCiCmd} = require('./commands');
+const {status, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
 const args = parsedArgs();
 
@@ -23,9 +23,5 @@ switch (args.subcmd) {
 
   case 'release':
     releaseCmd(args);
-    break;
-
-  case 'release-ci':
-    releaseCiCmd();
     break;
 }

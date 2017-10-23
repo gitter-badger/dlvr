@@ -1,5 +1,4 @@
 const semver = require('semver');
-const git = require('simple-git');
 const prompt = require('prompt');
 const perform = require('../perform');
 const config = require('../lib/config');
@@ -46,17 +45,4 @@ const releaseCmd = async args => {
     utils.fatal(err.message);
   }
 };
-
-const releaseCiCmd = async => {
-  git(process.cwd()).status((err, data) => {
-    if (err) utils.fatal(err.message);
-    data.current === 'master' || process.env.TRAVIS_BRANCH === 'master'
-      ? releaseCmd({VERSION: 'auto', force: true})
-      : utils.quit('DLVR: Not on master - skipping release');
-  });
-};
-
-module.exports = {
-  releaseCmd,
-  releaseCiCmd
-};
+module.exports = releaseCmd;
