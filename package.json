@@ -46,7 +46,8 @@
     "request": "^2.81.0",
     "semver": "5.4.1",
     "simple-git": "1.77.0",
-    "zip-local": "0.3.4"
+    "zip-local": "0.3.4",
+    "irc": "0.5.2"
   },
   "devDependencies": {
     "eslint": "4.2.0",

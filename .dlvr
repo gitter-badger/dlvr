@@ -8,6 +8,12 @@
       "draft": true
     }
   },
-  "test":"npm run test",
+  "irc": {
+    "reportfail": true,
+    "server": "euroserv.fr.quakenet.org",
+    "channel": "#dafuqwat",
+    "username": "dlvrBot"
+  },
+  "test": "npm run test",
   "npmpublish": true
 }
