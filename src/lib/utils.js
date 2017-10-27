@@ -23,7 +23,6 @@ const catchError = (err, msg, reject) => {
       reject(new Error(err));
     } else {
       console.log(msg);
-      process.exit(1);
     }
   }
 };

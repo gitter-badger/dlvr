@@ -16,7 +16,8 @@ let template = {
   slack: {
     channel: '#general',
     icon_emoji: ':shipit:',
-    username: 'dlvr.bot'
+    username: 'dlvr.bot',
+    reportfail: true
   },
   githost: {
     provider: '',

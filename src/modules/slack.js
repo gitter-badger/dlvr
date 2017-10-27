@@ -2,13 +2,12 @@ const request = require('request');
 const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 
-const send = ({cfg, version, secrets, changelog}) => {
+const send = ({cfg, version, secrets, changelog}, message) => {
   return new Promise((resolve, reject) => {
     if (cfg.has('slack')) {
-      spinner.create(`Send Slackmessage to ${cfg.slack.channel}`);
       let slackbody = cfg.slack;
+      slackbody.text = message;
 
-      slackbody.text = `<!channel> \n Just released *<${cfg.releaseUrl()}|${cfg.githost.repo}>* Version *${version}* :tada: \n ${changelog}`; //eslint-disable-line
       var opt = {
         url: secrets.get('slack-webhook'),
         json: true,
@@ -30,6 +29,44 @@ const send = ({cfg, version, secrets, changelog}) => {
     }
   });
 };
+
+const checkHook = ({cfg, version, secrets, changelog}) => {
+  return new Promise((resolve, reject) => {
+    if (cfg.has('slack')) {
+      spinner.create(`Check Slack Webhook`);
+      request.get(secrets.get('slack-webhook'), (err, res, data) => {
+        utils.catchError(err, err, reject);
+        if (res.body === 'invalid_payload') {
+          resolve();
+        } else {
+          spinner.fail('Slack Webhook invalid');
+        }
+      });
+    } else {
+      return resolve();
+    }
+  });
+};
+
+const fail = ({cfg, version, secrets, changelog}, failMessage) => {
+  if (cfg.slack.reportfail) {
+    const message = `<!channel> \n :warning: Release *${version}* for *<${cfg.releaseUrl()}|${cfg
+      .githost.repo}>* Failed with Message: \n ${failMessage}`;
+    return send({cfg, version, secrets, changelog}, message);
+  } else {
+    return Promise.resolve();
+  }
+};
+
+const success = ({cfg, version, secrets, changelog}) => {
+  spinner.create(`Send Slack message to ${cfg.slack.channel}`);
+  const message = `<!channel> \n :tada: Just released *<${cfg.releaseUrl()}|${cfg
+    .githost.repo}>* Version *${version}* \n ${changelog}`;
+  return send({cfg, version, secrets, changelog}, message);
+};
+
 module.exports = {
-  send
+  success,
+  fail,
+  checkHook
 };
