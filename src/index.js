@@ -5,7 +5,7 @@ const generator = require('./generator');
 const args = parsedArgs();
 
 process.on('unhandledRejection', reason => {
-  console.log('Reason: ' + reason);
+  console.log('Unhandled Reject Reason: \n' + reason);
 });
 
 switch (args.subcmd) {

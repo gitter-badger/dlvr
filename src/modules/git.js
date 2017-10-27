@@ -70,6 +70,7 @@ const commitAndPush = ({version, cfg}) => {
 };
 
 const tagExist = ({version}) => {
+  spinner.create('Check if Tag exists');
   return new Promise((resolve, reject) => {
     git(GITPATH).tags((err, tags) => {
       utils.catchError(err, err, reject);
