@@ -35,13 +35,6 @@ const schema = [
     }
   },
   {
-    name: 'DLVR_SNYK',
-    description: 'Your SNYK token (enter to skip)',
-    type: 'string',
-    hidden: true,
-    replace: '*'
-  },
-  {
     name: 'DLVR_SLACK_WEBHOOK',
     description: 'Your Slack Webhook Url (enter to skip)',
     type: 'string'

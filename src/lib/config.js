@@ -43,7 +43,7 @@ const checkIntegrity = function(cfg, prop) {
 const loadSecrets = cfg => {
   return new Promise((resolve, reject) => {
     var secrets = {};
-    ['github', 'gitlab', 'snyk'].map(item => {
+    ['github', 'gitlab'].map(item => {
       if (
         cfg.githost.provider === item &&
         !process.env[`DLVR_${item.replace('-', '_').toUpperCase()}`]

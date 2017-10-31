@@ -71,16 +71,6 @@ const slack = {
   required: true
 };
 
-const snyk = {
-  name: 'snyk',
-  description: 'Do you want to use Snyk.io ?',
-  type: 'string',
-  pattern: /^(y|n)$/i,
-  message: 'Only Y/y (yes) or N/n (no) is allowed',
-  default: 'y',
-  required: true
-};
-
 const npmpublish = {
   name: 'npmpublish',
   description: 'Do you want to publish on npm ?',
@@ -110,7 +100,6 @@ module.exports = {
   remote,
   logfilter,
   test,
-  snyk,
   npmpublish,
   compress,
   githook

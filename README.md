@@ -21,7 +21,6 @@ Opens a wizard which guides you through the configuration of a dotenv file which
 Or define this ENV vars globally
 ```
 DLVR_GITHUB
-DLVR_SNYK
 DLVR_GITLAB
 DLVR_GITLAB_API
 DLVR_SLACK_WEBHOOK
@@ -61,7 +60,6 @@ If you use auto - SEMVER will be automatically determined by keywords "breaking"
   "dotenv": ".env",
   "preRun": "npm run build",
   "postRun": "rm -rf ./dist",
-  "snyk": true,
   "compress": [
     {
       "in": "./dist/myfile.bin",

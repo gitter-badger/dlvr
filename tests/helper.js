@@ -19,8 +19,7 @@ let gitStatusStub = {
 };
 
 let tokenStub = {
-  github: 'ma github token',
-  snyk: 'ma snyk token'
+  github: 'ma github token'
 };
 
 let packageStub = {
@@ -143,7 +142,6 @@ let configMock = {
 function eachConfig () {
   tokenStub = {
     github: 'ma github token',
-    snyk: 'ma snyk token'
   };
 
   packageStub = {

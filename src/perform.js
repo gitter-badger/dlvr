@@ -6,12 +6,12 @@ const spinner = require('./lib/spinner');
 const git = require('./modules/git');
 const zip = require('./modules/zip');
 const npm = require('./modules/npm');
-const snyk = require('./modules/snyk');
 const runner = require('./modules/runner');
 const github = require('./modules/github');
 const gitlab = require('./modules/gitlab');
 const slack = require('./modules/slack');
 const output = require('./lib/output');
+const irc = require('./modules/irc');
 
 const run = async configs => {
   try {
@@ -26,9 +26,7 @@ const run = async configs => {
     const gitlabProject = await gitlab.getProject(configs, gitlabUser);
 
     await npm.checkLogin(configs);
-    await snyk.login(configs);
 
-    await snyk.check(configs);
     await zip.compress(configs);
     await utils.saveVersion(configs);
     await utils.cleanup();
@@ -45,11 +43,13 @@ const run = async configs => {
 
     await runner.postRun(configs);
     await slack.success(configs);
+    await irc.success(configs);
 
     spinner.success();
     output.successMessage(configs);
   } catch (err) {
     await slack.fail(configs, err.message);
+    await irc.fail(configs, err.message);
     spinner.fail(err.message);
   }
 };

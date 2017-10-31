@@ -6,7 +6,6 @@ let template = {
   postRun: '',
   test: 'npm run test',
   npmpublish: false,
-  snyk: true,
   compress: [
     {
       in: './dist/myfile.bin',

@@ -3,9 +3,6 @@ exports.default = {
     dotenv: {
       type: 'string'
     },
-    snyk: {
-      type: 'boolean'
-    },
     npmpublish: {
       type: 'boolean'
     },

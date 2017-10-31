@@ -4,7 +4,6 @@ const {configMock, eachConfig, setStubConfig} = require('./helper');
 const config = proxyquire('../src/lib/config', configMock);
 
 process.env.DLVR_GITHUB='ma github token';
-process.env.DLVR_SNYK='ma snyk token';
 
 describe('#config   parse', function () {
   beforeEach(eachConfig);
@@ -31,7 +30,6 @@ describe('#config   parse', function () {
   it('Should contain secrets and version', function (done) {
     config.boot().then((configs) => {
       expect(configs.secrets.get('github')).toBe('ma github token');
-      expect(configs.secrets.get('snyk')).toBe('ma snyk token');
       expect(configs.pkg.version).toBe('0.0.1');
       done();
     });

@@ -1,5 +1,6 @@
 const irc = require('irc');
 const spinner = require('../lib/spinner');
+const {IRC_RECONNECT} = require('../constants');
 
 // TODO: support multiple channels
 function send({cfg, version, secrets, changelog}) {
@@ -12,7 +13,7 @@ function send({cfg, version, secrets, changelog}) {
         realName: cfg.irc.username
       });
 
-      client.connect(5, function(serverReply) {
+      client.connect(IRC_RECONNECT, function(serverReply) {
         console.log('connected to:', JSON.stringify(cfg.irc, null, 2));
         console.log(serverReply);
 
