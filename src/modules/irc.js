@@ -13,10 +13,12 @@ function send({cfg, version, secrets, changelog}) {
     });
 
     client.connect(IRC_RECONNECT, function(serverReply) {
+      // scrap this
       console.log('connected to:', JSON.stringify(cfg.irc, null, 2));
       console.log(serverReply);
 
       client.addListener('error', function(message) {
+        // TODO: reject ...
         console.log('error: ', message);
       });
 
