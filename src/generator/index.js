@@ -94,7 +94,8 @@ function runGitHub() {
     github.draft,
     github.assets,
     common.compress,
-    common.slack
+    common.slack,
+    common.irc
   ];
   runSchema(schema, template);
 }
@@ -113,7 +114,8 @@ function runGitLab() {
     common.npmpublish,
     github.assets,
     common.compress,
-    common.slack
+    common.slack,
+    common.irc
   ];
   runSchema(schema, template);
 }

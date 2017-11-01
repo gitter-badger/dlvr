@@ -6,12 +6,19 @@ let template = {
   postRun: '',
   test: 'npm run test',
   npmpublish: false,
+  notify: true,
   compress: [
     {
       in: './dist/myfile.bin',
       out: './dist/myfile.zip'
     }
   ],
+  irc: {
+    channel: '#general',
+    server: 'irc.myserver.com',
+    username: 'dvlrbot',
+    reportfail: true
+  },
   slack: {
     channel: '#general',
     icon_emoji: ':shipit:',

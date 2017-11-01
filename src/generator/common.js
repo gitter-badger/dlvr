@@ -71,6 +71,16 @@ const slack = {
   required: true
 };
 
+const irc = {
+  name: 'irc',
+  description: 'Do you want to use IRC notifier ?',
+  type: 'string',
+  pattern: /^(y|n)$/i,
+  message: 'Only Y/y (yes) or N/n (no) is allowed',
+  default: 'y',
+  required: true
+};
+
 const npmpublish = {
   name: 'npmpublish',
   description: 'Do you want to publish on npm ?',
@@ -94,6 +104,7 @@ const compress = {
 module.exports = {
   dotenv,
   slack,
+  irc,
   repo,
   prerun,
   postrun,
