@@ -1,6 +1,10 @@
-const irc = require('./modules/irc');
+const notify = require('./modules/notify');
 const config = require('./lib/config');
 
+process.on('unhandledRejection', reason => {
+  console.log('Unhandled Reject Reason: \n' + reason);
+});
+
 config.boot().then(configs => {
-  irc.doEet(configs);
+  notify.success(configs);
 });

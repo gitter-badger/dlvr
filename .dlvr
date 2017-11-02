@@ -8,6 +8,7 @@
       "draft": true
     }
   },
+  "notify": true,
   "irc": {
     "reportfail": true,
     "server": "euroserv.fr.quakenet.org",
