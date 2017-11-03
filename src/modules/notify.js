@@ -34,9 +34,3 @@ module.exports = {
   success,
   fail
 };
-
-
-/*
-    const message = `Just released *<${cfg.releaseUrl()}|${cfg.githost
-      .repo}>* Version *${version}* \n ${changelog}`;
-*/

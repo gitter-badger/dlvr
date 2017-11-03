@@ -54,6 +54,7 @@ const commitAndPush = ({version, cfg}) => {
         utils.catchError(err, err, reject);
       })
       .push([cfg.getRemote(), 'master'], (err, res) => {
+        utils.catchError(err, err, reject);
         git(GITPATH).pushTags(cfg.getRemote(), (err, res) => {
           utils.catchError(err, err, reject);
           resolve();
