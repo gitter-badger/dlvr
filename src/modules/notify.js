@@ -1,19 +1,20 @@
-const notifier = require('node-notifier');
-const utils = require('../lib/utils');
-const spinner = require('../lib/spinner');
+const notify = require('node-notify');
+const {NOTIFICATION_TITLE} = require('../constants');
 
 const send = ({cfg, version, secrets, changelog}, message) => {
   return new Promise((resolve, reject) => {
-    notifier.notify({
-      title: 'My notification',
-      message: 'Hello, there!'
+    notify({
+      title: NOTIFICATION_TITLE,
+      open: cfg.releaseUrl(),
+      message
     });
   });
 };
 
 const fail = ({cfg, version, secrets, changelog}, failMessage) => {
   if (cfg.has('notify')) {
-    return send({cfg, version, secrets, changelog}, null);
+    const message = `Release ${cfg.releaseUrl()} Failed with Message: ${failMessage}`;
+    return send({cfg, version, secrets, changelog}, message);
   } else {
     return Promise.resolve();
   }
@@ -21,9 +22,9 @@ const fail = ({cfg, version, secrets, changelog}, failMessage) => {
 
 const success = ({cfg, version, secrets, changelog}) => {
   if (cfg.has('notify')) {
-    //spinner.create(`kkk`);
-
-    return send({cfg, version, secrets, changelog}, null);
+    const message = `Just released ${cfg.releaseUrl()} - Version ${version}`;
+    console.log(cfg.releaseUrl());
+    return send({cfg, version, secrets, changelog}, message);
   } else {
     return Promise.resolve();
   }
@@ -33,3 +34,9 @@ module.exports = {
   success,
   fail
 };
+
+
+/*
+    const message = `Just released *<${cfg.releaseUrl()}|${cfg.githost
+      .repo}>* Version *${version}* \n ${changelog}`;
+*/

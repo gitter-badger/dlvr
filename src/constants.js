@@ -1,5 +1,6 @@
 const path = require('path');
 
+const NOTIFICATION_TITLE = 'dlvr';
 const FILE_SECRETS = path.join(process.cwd(), '.env');
 const FILE_PACKAGE = path.join(process.cwd(), 'package.json');
 const FILE_CONFIG = path.join(process.cwd(), '.dlvr');
@@ -17,5 +18,6 @@ module.exports = {
   FILE_CHANGELOG,
   AUTO_FILTER_MAJOR,
   AUTO_FILTER_MINOR,
-  IRC_RECONNECT
+  IRC_RECONNECT,
+  NOTIFICATION_TITLE
 };

@@ -12,6 +12,7 @@ const gitlab = require('./modules/gitlab');
 const slack = require('./modules/slack');
 const output = require('./lib/output');
 const irc = require('./modules/irc');
+const notify = require('./modules/notify');
 
 const run = async configs => {
   try {
@@ -44,12 +45,14 @@ const run = async configs => {
     await runner.postRun(configs);
     await slack.success(configs);
     await irc.success(configs);
+    await notify.success(configs);
 
     spinner.success();
     output.successMessage(configs);
   } catch (err) {
     await slack.fail(configs, err.message);
     await irc.fail(configs, err.message);
+    await notify.fail(configs, err.message);
     spinner.fail(err.message);
   }
 };
