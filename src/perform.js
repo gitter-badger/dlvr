@@ -32,7 +32,7 @@ const run = async configs => {
     await utils.saveVersion(configs);
     await utils.cleanup();
     await git.commitAndPush(configs);
-    await git.tagAndPush(configs);
+
     await npm.publish(configs);
 
     const releaseId = await github.release(configs);

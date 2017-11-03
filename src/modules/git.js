@@ -44,28 +44,21 @@ const generateChangelog = ({cfg}) => {
   });
 };
 
-const tagAndPush = ({version, cfg}) => {
-  spinner.create('Tag Release');
-  return new Promise((resolve, reject) => {
-    git(GITPATH)
-      .addTag(version, (err, res) => {
-        utils.catchError(err, err, reject);
-      })
-      .pushTags(cfg.getRemote(), (err, res) => {
-        utils.catchError(err, err, reject);
-        resolve('Tag created and pushed');
-      });
-  });
-};
-
 const commitAndPush = ({version, cfg}) => {
-  spinner.create('Commit and Push Release');
+  spinner.create('Commit, Tag and Push Release');
   return new Promise((resolve, reject) => {
     git(GITPATH)
       .add('./*')
       .commit(`🎉 Release ${version}`)
-      .push([cfg.getRemote(), 'master']);
-    resolve();
+      .addTag(version, (err, res) => {
+        utils.catchError(err, err, reject);
+      })
+      .push([cfg.getRemote(), 'master'], (err, res) => {
+        git(GITPATH).pushTags(cfg.getRemote(), (err, res) => {
+          utils.catchError(err, err, reject);
+          resolve();
+        });
+      });
   });
 };
 
@@ -134,7 +127,6 @@ const checkRepo = ({cfg}, quiet) => {
 
 module.exports = {
   generateChangelog,
-  tagAndPush,
   commitAndPush,
   checkRepo,
   tagExist
