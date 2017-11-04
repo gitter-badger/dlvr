@@ -1,6 +1,8 @@
 const path = require('path');
 
 const NOTIFICATION_TITLE = 'dlvr';
+const INTEGRITY_CHECK_SCHEMES = ['root', 'githost', 'compress', 'slack', 'irc'];
+
 const FILE_SECRETS = path.join(process.cwd(), '.env');
 const FILE_PACKAGE = path.join(process.cwd(), 'package.json');
 const FILE_CONFIG = path.join(process.cwd(), '.dlvr');
@@ -19,5 +21,6 @@ module.exports = {
   AUTO_FILTER_MAJOR,
   AUTO_FILTER_MINOR,
   IRC_RECONNECT,
-  NOTIFICATION_TITLE
+  NOTIFICATION_TITLE,
+  INTEGRITY_CHECK_SCHEMES
 };

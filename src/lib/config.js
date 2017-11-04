@@ -1,8 +1,10 @@
 const fs = require('fs');
 const validator = require('is-my-json-valid');
 const {FILE_SECRETS, FILE_CONFIG, FILE_PACKAGE} = require('../constants');
+const {INTEGRITY_CHECK_SCHEMES} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
+
 
 const loadPackage = () => {
   return new Promise((resolve, reject) => {
@@ -112,7 +114,7 @@ const loadConfig = () => {
         );
       };
 
-      ['root', 'githost', 'compress', 'slack'].map(item => {
+      INTEGRITY_CHECK_SCHEMES.map(item => {
         var err = checkIntegrity(cfg, item);
         if (err) {
           reject(new Error(err));

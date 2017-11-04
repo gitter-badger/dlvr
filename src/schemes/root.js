@@ -11,6 +11,10 @@ exports.default = {
     },
     logfilter: {
       type: 'string'
+    },
+    notify: {
+      type: 'boolean',
+      required: true
     }
   },
   type: 'object'
