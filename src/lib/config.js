@@ -5,7 +5,6 @@ const {INTEGRITY_CHECK_SCHEMES} = require('../constants');
 const schemes = require('../schemes');
 const utils = require('./utils');
 
-
 const loadPackage = () => {
   return new Promise((resolve, reject) => {
     fs.readFile(FILE_PACKAGE, (err, result) => {
