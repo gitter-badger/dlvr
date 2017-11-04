@@ -13,8 +13,7 @@ exports.default = {
       type: 'string'
     },
     notify: {
-      type: 'boolean',
-      required: true
+      type: 'boolean'
     }
   },
   type: 'object'

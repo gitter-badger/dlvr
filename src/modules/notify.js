@@ -5,7 +5,6 @@ const send = ({cfg, version, secrets, changelog}, message) => {
   return new Promise((resolve, reject) => {
     notify({
       title: NOTIFICATION_TITLE,
-      open: cfg.releaseUrl(),
       message
     });
     resolve();
@@ -14,7 +13,7 @@ const send = ({cfg, version, secrets, changelog}, message) => {
 
 const fail = ({cfg, version, secrets, changelog}, failMessage) => {
   if (cfg.has('notify')) {
-    const message = `Release ${cfg.releaseUrl()} Failed with Message: ${failMessage}`;
+    const message = `Release Failed: ${failMessage}`;
     return send({cfg, version, secrets, changelog}, message);
   } else {
     return Promise.resolve();
