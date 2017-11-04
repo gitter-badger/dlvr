@@ -84,6 +84,7 @@ function runGitHub() {
   const schema = [
     common.githook,
     common.dotenv,
+    common.notify,
     common.repo,
     common.prerun,
     common.postrun,
@@ -105,6 +106,7 @@ function runGitLab() {
   const schema = [
     common.githook,
     common.dotenv,
+    common.notify,
     common.repo,
     common.prerun,
     common.postrun,

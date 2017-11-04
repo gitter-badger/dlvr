@@ -81,6 +81,16 @@ const irc = {
   required: true
 };
 
+const notify = {
+  name: 'notify',
+  description: 'Do you want to enable OS notifies ?',
+  type: 'string',
+  pattern: /^(y|n)$/i,
+  message: 'Only Y/y (yes) or N/n (no) is allowed',
+  default: 'y',
+  required: true
+};
+
 const npmpublish = {
   name: 'npmpublish',
   description: 'Do you want to publish on npm ?',
@@ -113,5 +123,6 @@ module.exports = {
   test,
   npmpublish,
   compress,
-  githook
+  githook,
+  notify
 };
