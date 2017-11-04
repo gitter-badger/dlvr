@@ -2,7 +2,6 @@ const irc = require('irc');
 const spinner = require('../lib/spinner');
 const {IRC_RECONNECT} = require('../constants');
 
-// TODO: support multiple channels
 function send({cfg, version, secrets, changelog}) {
   return new Promise((resolve, reject) => {
     var client = new irc.Client(cfg.irc.server, cfg.irc.username, {
@@ -13,13 +12,8 @@ function send({cfg, version, secrets, changelog}) {
     });
 
     client.connect(IRC_RECONNECT, function(serverReply) {
-      // scrap this
-      console.log('connected to:', JSON.stringify(cfg.irc, null, 2));
-      console.log(serverReply);
-
       client.addListener('error', function(message) {
-        // TODO: reject ...
-        console.log('error: ', message);
+        reject(message);
       });
 
       client.join(cfg.irc.channel, function(input) {

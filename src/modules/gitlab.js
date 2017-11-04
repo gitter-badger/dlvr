@@ -7,7 +7,6 @@ const utils = require('../lib/utils');
 const spinner = require('../lib/spinner');
 const changelogHelper = require('../lib/changelog');
 
-// TODO: write tests
 const uploadAssets = ({cfg, secrets}, projectId) => {
   return new Promise((resolve, reject) => {
     if (cfg.isProvider('gitlab') && cfg.hasAssets()) {
