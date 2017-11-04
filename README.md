@@ -60,6 +60,7 @@ If you use auto - SEMVER will be automatically determined by keywords "breaking"
   "dotenv": ".env",
   "preRun": "npm run build",
   "postRun": "rm -rf ./dist",
+  "notify": true,
   "compress": [
     {
       "in": "./dist/myfile.bin",
@@ -71,7 +72,14 @@ If you use auto - SEMVER will be automatically determined by keywords "breaking"
   "slack": {
     "channel": "#github",
     "icon_emoji": ":shipit:",
-    "username": "dlvr.bot"
+    "username": "dlvr.bot",
+    "reportfail": true
+  },
+  "irc": {
+    "channel": "#general",
+    "server": "irc.myserver.com",
+    "username": "dvlrbot",
+    "reportfail": true
   },
   "githost": {
     "provider": "github",
