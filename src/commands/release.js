@@ -5,6 +5,7 @@ const config = require('../lib/config');
 const output = require('../lib/output');
 const utils = require('../lib/utils');
 const changelogHelper = require('../lib/changelog');
+const versionHelper = require('../lib/version');
 
 const reallyScheme = {
   description: 'Do you really want to release ? y/n',
@@ -19,7 +20,11 @@ const releaseCmd = async args => {
   try {
     let configs = await config.boot();
     const changelog = await changelogHelper.getLog(configs);
-    const determinedVersion = await changelogHelper.determineVersion(changelog);
+    const determinedVersion = await versionHelper.determineVersion(
+      configs,
+      changelog
+    );
+
     const useVersion =
       args.VERSION === 'auto' ? determinedVersion : args.VERSION;
 
