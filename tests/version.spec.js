@@ -100,4 +100,100 @@ describe('#git determineVersion', function () {
       });
     });
   });
+
+  it('Should determine the correct version (patch) with custom filters', function(done) {
+    changelog = ['some stuff', 'deprecated method X', 'some other stuff'];
+
+    setStubConfig(
+      {
+        filterminor: ['wat'],
+        filtermajor: ['rly']
+      },
+      true
+    );
+
+    config.boot().then(configs => {
+      versionHelper.determineVersion(configs, changelog).then(data => {
+        expect(data).toEqual('patch');
+        done();
+      });
+    });
+  });
+
+  it('Should determine the correct version (minor) with custom filters', function(done) {
+    changelog = ['some stuff', 'wat method X', 'some other stuff'];
+
+    setStubConfig(
+      {
+        filterminor: ['wat'],
+        filtermajor: ['rly']
+      },
+      true
+    );
+
+    config.boot().then(configs => {
+      versionHelper.determineVersion(configs, changelog).then(data => {
+        expect(data).toEqual('minor');
+        done();
+      });
+    });
+  });
+
+  it('Should determine the correct version (major) with custom filters', function(done) {
+    changelog = ['rly stuff', 'method X', 'wat other stuff'];
+
+    setStubConfig(
+      {
+        filterminor: ['wat'],
+        filtermajor: ['rly']
+      },
+      true
+    );
+
+    config.boot().then(configs => {
+      versionHelper.determineVersion(configs, changelog).then(data => {
+        expect(data).toEqual('major');
+        done();
+      });
+    });
+  });
+
+  it('Should determine the correct version (major|multi) with custom filters', function(done) {
+    changelog = ['rly stuff', 'wat X', 'wat other stuff'];
+
+    setStubConfig(
+      {
+        filterminor: ['wat', 'rly'],
+        filtermajor: ['one', 'two']
+      },
+      true
+    );
+
+    config.boot().then(configs => {
+      versionHelper.determineVersion(configs, changelog).then(data => {
+        expect(data).toEqual('minor');
+        done();
+      });
+    });
+  });
+
+  it('Should determine the correct version (major|multi) with custom filters', function(done) {
+    changelog = ['wat stuff', 'one method X', 'rly other stuff'];
+
+    setStubConfig(
+      {
+        filterminor: ['wat', 'rly'],
+        filtermajor: ['one', 'two']
+      },
+      true
+    );
+
+    config.boot().then(configs => {
+      versionHelper.determineVersion(configs, changelog).then(data => {
+        expect(data).toEqual('major');
+        done();
+      });
+    });
+  });
+
 });

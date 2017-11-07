@@ -17,7 +17,6 @@ const determineVersion = ({cfg}, changelog) => {
     const VERSIONS = ['patch', 'minor', 'major'];
     let versionId = 0;
     const FILTERS = getFilters(cfg);
-
     changelog.map(item => {
       if (new RegExp(FILTERS.MINOR, 'i').test(item) && versionId < 2) {
         versionId = 1;
