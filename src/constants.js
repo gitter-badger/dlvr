@@ -8,8 +8,8 @@ const FILE_PACKAGE = path.join(process.cwd(), 'package.json');
 const FILE_CONFIG = path.join(process.cwd(), '.dlvr');
 const FILE_CHANGELOG = path.join(process.cwd(), '.changelog');
 
-const AUTO_FILTER_MAJOR = '(breaking|deprecate)';
-const AUTO_FILTER_MINOR = '(feature|plugin|module)';
+const FILTER_MAJOR_DEFAULT = ['breaking', 'deprecate'];
+const FILTER_MINOR_DEFAULT = ['feature', 'plugin', 'module'];
 
 const IRC_RECONNECT = 5;
 
@@ -18,8 +18,8 @@ module.exports = {
   FILE_PACKAGE,
   FILE_CONFIG,
   FILE_CHANGELOG,
-  AUTO_FILTER_MAJOR,
-  AUTO_FILTER_MINOR,
+  FILTER_MAJOR_DEFAULT,
+  FILTER_MINOR_DEFAULT,
   IRC_RECONNECT,
   NOTIFICATION_TITLE,
   INTEGRITY_CHECK_SCHEMES
