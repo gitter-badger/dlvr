@@ -58,6 +58,8 @@ If you use auto - SEMVER will be automatically determined by keywords "breaking"
 ```
 {
   "dotenv": ".env",
+  "filterminor": ["feature", "plugin", "module"],
+  "filtermajor": ["breaking", "deprecate"],
   "preRun": "npm run build",
   "postRun": "rm -rf ./dist",
   "notify": true,
