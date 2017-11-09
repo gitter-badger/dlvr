@@ -12,6 +12,7 @@ const FILTER_MAJOR_DEFAULT = ['breaking', 'deprecate'];
 const FILTER_MINOR_DEFAULT = ['feature', 'plugin', 'module'];
 
 const IRC_RECONNECT = 5;
+const CHECK_UPDATE_URL = 'https://api.npms.io/v2/package/dlvr';
 
 module.exports = {
   FILE_SECRETS,
@@ -22,5 +23,6 @@ module.exports = {
   FILTER_MINOR_DEFAULT,
   IRC_RECONNECT,
   NOTIFICATION_TITLE,
-  INTEGRITY_CHECK_SCHEMES
+  INTEGRITY_CHECK_SCHEMES,
+  CHECK_UPDATE_URL
 };

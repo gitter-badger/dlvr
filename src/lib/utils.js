@@ -2,8 +2,15 @@ const fs = require('fs');
 const {spawnSync} = require('child_process');
 const {red} = require('chalk');
 const opn = require('opn');
+const request = require('request');
+const semver = require('semver');
+const dlvrPkg = require('../../package.json');
 
-const {FILE_PACKAGE, FILE_CHANGELOG} = require('../constants');
+const {
+  FILE_PACKAGE,
+  FILE_CHANGELOG,
+  CHECK_UPDATE_URL
+} = require('../constants');
 const spinner = require('./spinner');
 
 const fatal = msg => {
@@ -25,6 +32,20 @@ const catchError = (err, msg, reject) => {
       console.log(msg);
     }
   }
+};
+
+const checkUpdate = () => {
+  const opt = {
+    url: CHECK_UPDATE_URL,
+    json: true
+  };
+
+  return new Promise((resolve, reject) => {
+    request.get(opt, (err, res, body) => {
+      catchError(err, err, reject);
+      resolve(semver.gt(dlvrPkg.version, res.body.collected.metadata.version));
+    });
+  });
 };
 
 const saveVersion = ({version, pkg}) => {
@@ -83,5 +104,6 @@ module.exports = {
   quit,
   fatal,
   saveVersion,
-  openEditor
+  openEditor,
+  checkUpdate
 };
