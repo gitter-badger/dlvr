@@ -3,6 +3,7 @@
 const {status, parsedArgs, releaseCmd} = require('./commands');
 const generator = require('./generator');
 const args = parsedArgs();
+const output = require('./lib/output');
 
 process.on('unhandledRejection', reason => {
   console.log('Unhandled Reject Reason: \n' + reason);
@@ -18,6 +19,7 @@ switch (args.subcmd) {
     break;
 
   case 'status':
+    output.updateNotification();
     args.edit ? status.edit() : status.info();
     break;
 

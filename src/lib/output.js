@@ -1,5 +1,20 @@
 const {bold, red, blue, yellow, green} = require('chalk'); // eslint-disable-line no-unused-vars
 const changelogHelper = require('./changelog');
+const utils = require('./utils');
+
+const updateNotification = () => {
+  utils.checkUpdate().then(newVersion => {
+    if (newVersion) {
+      console.log(
+        `${yellow.bold(`
+        ===========================================
+         New Version of DLVR (${newVersion}) is available
+        ===========================================
+        `)}`
+      );
+    }
+  });
+};
 
 // TODO: refactor console.log
 const successMessage = ({pkg, cfg, changelog}) => {
@@ -26,14 +41,14 @@ const successMessage = ({pkg, cfg, changelog}) => {
 };
 
 const intro = () => {
-  console.log(blue(`=========================================`));
+  console.log(blue(`===========================================`));
   console.log(yellow('________  .____ ____   ______________ '));
   console.log(yellow('\\______ \\ |    |\\   \\ /   /\\______   \\'));
   console.log(yellow(' |    |  \\|    | \\   Y   /  |       _/'));
   console.log(yellow(' |    `   \\    |__\\     /   |    |   \\'));
   console.log(yellow('/_______  /_______ \\___/    |____|_  /'));
   console.log(yellow('        \\/        \\/               \\/ '));
-  console.log(blue(`=========================================`));
+  console.log(blue(`===========================================`));
 };
 
 const info = ({cfg, pkg, changelog, version}) => {
@@ -69,5 +84,6 @@ const info = ({cfg, pkg, changelog, version}) => {
 module.exports = {
   intro,
   info,
-  successMessage
+  successMessage,
+  updateNotification
 };

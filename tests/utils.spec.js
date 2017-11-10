@@ -6,15 +6,16 @@ const config = proxyquire('../src/lib/config', configMock);
 describe('#utils', function() {
   beforeEach(eachConfig);
   it('should want to update', function(done) {
+    const VER = '20.0.0';
     const utils = proxyquire('../src/lib/utils.js', {
       request: {
         get: (a, func) =>
-          func(null, {body: {collected: {metadata: {version: '1.1.1'}}}},  null)
+          func(null, {body: {collected: {metadata: {version: VER}}}},  null)
       }
     });
 
     utils.checkUpdate().then(data => {
-      expect(data).toBe(true);
+      expect(data).toBe(VER);
       done();
     });
   });

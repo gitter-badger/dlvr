@@ -43,7 +43,11 @@ const checkUpdate = () => {
   return new Promise((resolve, reject) => {
     request.get(opt, (err, res, body) => {
       catchError(err, err, reject);
-      resolve(semver.gt(dlvrPkg.version, res.body.collected.metadata.version));
+      resolve(
+        semver.gt(res.body.collected.metadata.version, dlvrPkg.version)
+          ? res.body.collected.metadata.version
+          : false
+      );
     });
   });
 };
