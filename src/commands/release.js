@@ -18,7 +18,7 @@ const reallyScheme = {
 
 const releaseCmd = async args => {
   try {
-    let configs = await config.boot();
+    let configs = await config.boot(args);
     const changelog = await changelogHelper.getLog(configs);
     const determinedVersion = await versionHelper.determineVersion(
       configs,

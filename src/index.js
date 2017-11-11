@@ -20,7 +20,8 @@ switch (args.subcmd) {
 
   case 'status':
     output.updateNotification();
-    args.edit ? status.edit() : status.info();
+    // TODO: refactor this - do that in a main status method
+    args.edit ? status.edit(args) : status.info(args);
     break;
 
   case 'release':

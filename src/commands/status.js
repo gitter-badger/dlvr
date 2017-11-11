@@ -4,17 +4,17 @@ const output = require('../lib/output');
 const utils = require('../lib/utils');
 const changelogHelper = require('../lib/changelog');
 
-function edit() {
-  config.boot().then(configs => {
+function edit(args) {
+  config.boot(args).then(configs => {
     changelogHelper.getLog(configs).then(changelog => {
       changelogHelper.writeAndOpen(changelog);
     });
   });
 }
 
-function info() {
+function info(args) {
   config
-    .boot()
+    .boot(args)
     .then(configs => {
       changelogHelper.getLog(configs).then(changelog => {
         configs.changelog = changelog;

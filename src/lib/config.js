@@ -125,7 +125,7 @@ const loadConfig = () => {
   });
 };
 
-const boot = () => {
+const boot = (args = {}) => {
   return new Promise((resolve, reject) => {
     loadPackage()
       .then(pkg => {
@@ -134,7 +134,7 @@ const boot = () => {
             require('dotenv').config({path: cfg.getDotEnv()});
             loadSecrets(cfg)
               .then(secrets => {
-                return resolve({cfg, pkg, secrets});
+                return resolve({cfg, pkg, secrets, args});
               })
               .catch(err => {
                 reject(err);
