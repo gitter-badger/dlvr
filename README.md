@@ -36,6 +36,7 @@ Opens a Wizard which guides you through the release configuration `($PROJECT_ROO
 - Checks if necessary secrets exist based on .dlvr configuration
 - Warns you if you have changes in your branch
 - Prints out current filtered Changelog
+- Checks if Update is available 
 
   - optional arguments:
     - `-e [--edit] | Edit the current Changelog`
