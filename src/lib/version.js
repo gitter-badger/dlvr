@@ -1,3 +1,4 @@
+const semver = require('semver');
 const {FILTER_MAJOR_DEFAULT, FILTER_MINOR_DEFAULT} = require('../constants');
 
 const getFilters = cfg => ({
@@ -12,7 +13,7 @@ const getFilters = cfg => ({
   ).join('|')})`
 });
 
-const determineVersion = ({cfg}, changelog) => {
+const determineVersion = ({pkg, cfg, args}, changelog) => {
   return new Promise((resolve, reject) => {
     const VERSIONS = ['patch', 'minor', 'major'];
     let versionId = 0;
@@ -28,7 +29,14 @@ const determineVersion = ({cfg}, changelog) => {
       }
     });
 
-    resolve(VERSIONS[versionId]);
+    const useVersion =
+      args.VERSION === 'auto' ? VERSIONS[versionId] : args.VERSION;
+
+    resolve(
+      args.pre
+        ? semver.inc(pkg.version, 'prerelease', args.pre)
+        : semver.inc(pkg.version, useVersion)
+    );
   });
 };
 

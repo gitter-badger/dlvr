@@ -1,4 +1,3 @@
-const semver = require('semver');
 const prompt = require('prompt');
 const perform = require('../perform');
 const config = require('../lib/config');
@@ -26,14 +25,7 @@ const releaseCmd = async args => {
     );
     configs.args = args;
     configs.changelog = changelog;
-
-    // TODO: move this into determineversion and test it
-    const useVersion =
-      args.VERSION === 'auto' ? determinedVersion : args.VERSION;
-
-    configs.version = args.pre
-      ? semver.inc(configs.pkg.version, 'prerelease', args.pre)
-      : semver.inc(configs.pkg.version, useVersion);
+    configs.version = determinedVersion;
 
     output.intro();
     output.info(configs);

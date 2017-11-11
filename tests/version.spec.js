@@ -41,9 +41,9 @@ describe('#git determineVersion', function () {
       'fix bug',
       'change controller'
     ];
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('patch');
+        expect(data).toEqual('0.0.2');
         done();
       });
     });
@@ -51,9 +51,9 @@ describe('#git determineVersion', function () {
 
   it('Should determine the correct version (minor|feature)', function(done) {
     changelog = ['some stuff', 'feature X added', 'some other stuff'];
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('minor');
+        expect(data).toEqual('0.1.0');
         done();
       });
     });
@@ -61,9 +61,9 @@ describe('#git determineVersion', function () {
 
   it('Should determine the correct version (minor|plugin)', function(done) {
     changelog = ['some stuff', 'plugin X added', 'some other stuff'];
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('minor');
+        expect(data).toEqual('0.1.0');
         done();
       });
     });
@@ -71,9 +71,9 @@ describe('#git determineVersion', function () {
 
   it('Should determine the correct version (minor|module)', function(done) {
     changelog = ['some stuff', 'module X added', 'some other stuff'];
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('minor');
+        expect(data).toEqual('0.1.0');
         done();
       });
     });
@@ -82,9 +82,9 @@ describe('#git determineVersion', function () {
   it('Should determine the correct version (major|breaking)', function(done) {
     changelog = ['some stuff', 'breaking X added', 'some other stuff'];
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('major');
+        expect(data).toEqual('1.0.0');
         done();
       });
     });
@@ -93,9 +93,9 @@ describe('#git determineVersion', function () {
   it('Should determine the correct version (major|deprecated)', function(done) {
     changelog = ['some stuff', 'deprecated method X', 'some other stuff'];
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('major');
+        expect(data).toEqual('1.0.0');
         done();
       });
     });
@@ -112,9 +112,9 @@ describe('#git determineVersion', function () {
       true
     );
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('patch');
+        expect(data).toEqual('0.0.2');
         done();
       });
     });
@@ -131,9 +131,9 @@ describe('#git determineVersion', function () {
       true
     );
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('minor');
+        expect(data).toEqual('0.1.0');
         done();
       });
     });
@@ -150,16 +150,16 @@ describe('#git determineVersion', function () {
       true
     );
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('major');
+        expect(data).toEqual('1.0.0');
         done();
       });
     });
   });
 
   it('Should determine the correct version (major|multi) with custom filters', function(done) {
-    changelog = ['rly stuff', 'wat X', 'wat other stuff'];
+    changelog = ['rly stuff', 'wat one X', 'wat other stuff'];
 
     setStubConfig(
       {
@@ -169,9 +169,9 @@ describe('#git determineVersion', function () {
       true
     );
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('minor');
+        expect(data).toEqual('1.0.0');
         done();
       });
     });
@@ -188,9 +188,9 @@ describe('#git determineVersion', function () {
       true
     );
 
-    config.boot().then(configs => {
+    config.boot({VERSION: 'auto'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
-        expect(data).toEqual('major');
+        expect(data).toEqual('1.0.0');
         done();
       });
     });
