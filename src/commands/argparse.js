@@ -57,6 +57,11 @@ const parsedArgs = () => {
     metavar: 'FORCE'
   });
 
+  cmdMain.addArgument(['-p', '--pre'], {
+    action: 'store',
+    help: ''
+  });
+
   return parser.parseArgs();
 };
 

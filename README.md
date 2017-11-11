@@ -47,6 +47,7 @@ Edited changelog generates a `.changelog` file in your root which gets deleted o
 `dlvr release (major|minor|patch|auto)`
 - optional arguments:
   - `-f [--force] | Omit the "do you want to release" prompt`
+  - `-p [--pre] IDENTIFIER | Make a Prerelease (IDENTIFIER:alpha -> 0.0.1-alpha.0)`
 
 Versions and Releases your Project based on your given configuration and release parameter.
 
