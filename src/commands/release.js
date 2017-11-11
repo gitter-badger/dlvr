@@ -17,7 +17,6 @@ const reallyScheme = {
 };
 
 const releaseCmd = async args => {
-  // TODO: save args in main config
   try {
     let configs = await config.boot();
     const changelog = await changelogHelper.getLog(configs);
@@ -25,13 +24,13 @@ const releaseCmd = async args => {
       configs,
       changelog
     );
+    configs.args = args;
+    configs.changelog = changelog;
 
+    // TODO: move this into determineversion and test it
     const useVersion =
       args.VERSION === 'auto' ? determinedVersion : args.VERSION;
 
-    configs.changelog = changelog;
-
-    // TODO: move this into determineversion for testing ? 
     configs.version = args.pre
       ? semver.inc(configs.pkg.version, 'prerelease', args.pre)
       : semver.inc(configs.pkg.version, useVersion);

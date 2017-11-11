@@ -77,7 +77,7 @@ const tagExist = ({version}) => {
   });
 };
 
-const checkRepo = ({cfg}, quiet) => {
+const checkRepo = ({cfg, args}, quiet) => {
   return new Promise((resolve, reject) => {
     if (!quiet) {
       spinner.create('Check git Repository');
@@ -99,7 +99,7 @@ const checkRepo = ({cfg}, quiet) => {
             )
           );
         }
-        if (status.current !== 'master') {
+        if (status.current !== 'master' && !args.pre) {
           return reject(new Error('You are not on the master branch'));
         }
       })
