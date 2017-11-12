@@ -10,6 +10,7 @@ const runner = require('./modules/runner');
 const github = require('./modules/github');
 const gitlab = require('./modules/gitlab');
 const slack = require('./modules/slack');
+const gitter = require('./modules/gitter');
 const output = require('./lib/output');
 const irc = require('./modules/irc');
 const notify = require('./modules/notify');
@@ -44,6 +45,7 @@ const run = async configs => {
 
     await runner.postRun(configs);
     await slack.success(configs);
+    await gitter.success(configs);
     await irc.success(configs);
     await notify.success(configs);
 
@@ -51,6 +53,7 @@ const run = async configs => {
     output.successMessage(configs);
   } catch (err) {
     await slack.fail(configs, err.message);
+    await gitter.fail(configs, err.message);
     await irc.fail(configs, err.message);
     await notify.fail(configs, err.message);
     spinner.fail(err.message);
