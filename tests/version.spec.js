@@ -103,7 +103,7 @@ describe('#git determineVersion', function () {
 
   it('Should use prerelease versions', function(done) {
     changelog = ['break stuff', 'plugin X added', 'some other stuff'];
-    config.boot({VERSION: 'auto', pre: 'test'}).then(configs => {
+    config.boot({VERSION: 'pre', preid: 'test'}).then(configs => {
       versionHelper.determineVersion(configs, changelog).then(data => {
         expect(data).toEqual('0.0.2-test.0');
         done();
@@ -113,7 +113,7 @@ describe('#git determineVersion', function () {
 
   it('Should increment prerelease versions', function(done) {
     changelog = ['break stuff', 'plugin X added', 'some other stuff'];
-    config.boot({VERSION: 'auto', pre: 'test'}).then(configs => {
+    config.boot({VERSION: 'pre', preid: 'test'}).then(configs => {
       configs.pkg.version = '0.0.2-test.0';
       versionHelper.determineVersion(configs, changelog).then(data => {
         expect(data).toEqual('0.0.2-test.1');

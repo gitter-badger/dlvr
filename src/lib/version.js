@@ -33,8 +33,8 @@ const determineVersion = ({pkg, cfg, args}, changelog) => {
       args.VERSION === 'auto' ? VERSIONS[versionId] : args.VERSION;
 
     resolve(
-      args.pre
-        ? semver.inc(pkg.version, 'prerelease', args.pre)
+      args.VERSION === 'pre'
+        ? semver.inc(pkg.version, 'prerelease', args.preid)
         : semver.inc(pkg.version, useVersion)
     );
   });

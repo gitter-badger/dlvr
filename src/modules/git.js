@@ -99,7 +99,7 @@ const checkRepo = ({cfg, args}, quiet) => {
             )
           );
         }
-        if (status.current !== 'master' && !args.pre) {
+        if (status.current !== 'master' && !args.VERSION !== 'pre') {
           return reject(new Error('You are not on the master branch'));
         }
       })

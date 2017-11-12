@@ -48,7 +48,7 @@ const parsedArgs = () => {
   cmdMain.addArgument(['VERSION'], {
     action: 'store',
     help: 'Release-version parameter',
-    choices: ['major', 'minor', 'patch', 'auto']
+    choices: ['major', 'minor', 'patch', 'auto', 'pre']
   });
 
   cmdMain.addArgument(['-f', '--force'], {
@@ -57,9 +57,10 @@ const parsedArgs = () => {
     metavar: 'FORCE'
   });
 
-  cmdMain.addArgument(['-p', '--pre'], {
+  cmdMain.addArgument(['-p', '--preid'], {
     action: 'store',
-    help: ''
+    help: '',
+    defaultValue: 'prerelease'
   });
 
   return parser.parseArgs();

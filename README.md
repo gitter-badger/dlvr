@@ -44,14 +44,16 @@ Opens a Wizard which guides you through the release configuration `($PROJECT_ROO
 Edited changelog generates a `.changelog` file in your root which gets deleted on successful release, you should add this file to your `.gitignore`
 
 ### Release
-`dlvr release (major|minor|patch|auto)`
+`dlvr release (major|minor|patch|auto|pre)`
 - optional arguments:
   - `-f [--force] | Omit the "do you want to release" prompt`
-  - `-p [--pre] IDENTIFIER | Make a Prerelease (IDENTIFIER:alpha -> 0.0.1-alpha.0)`
+  - `-p [--preid] IDENTIFIER | Make a Prerelease (IDENTIFIER:alpha -> 0.0.1-alpha.0)`
 
 Versions and Releases your Project based on your given configuration and release parameter.
 
 If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature, module or plugin" (0.x.0) in your changelog.
+
+If you use pre - dlvr will release a new minor version with "prerelease" suffix, you can change that with the --preid flag (alpha, beta, rc).
 
 ## Config File
 ### .dlvr
