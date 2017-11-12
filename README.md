@@ -1,8 +1,8 @@
 # DLVR
-[![NPMS Score](https://badges.npms.io/dlvr.svg)](https://npms.io/search?q=dlvr)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ec5758e41d734261ad66394abd7ecff3)](https://www.codacy.com/app/FreaKzero/dlvr?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=FreaKzero/dlvr&amp;utm_campaign=Badge_Grade)
 [![Known Vulnerabilities](https://snyk.io/test/github/freakzero/dlvr/badge.svg)](https://snyk.io/test/github/freakzero/dlvr)
 [![Dependencies](https://david-dm.org/freakzero/dlvr.svg)](https://david-dm.org/freakzero/dlvr)
+[![NPMS Score](https://badges.npms.io/dlvr.svg)](https://npms.io/search?q=dlvr)
 [![npm version](https://badge.fury.io/js/dlvr.svg)](https://badge.fury.io/js/dlvr)
 [![Build Status](https://travis-ci.org/FreaKzero/dlvr.svg?branch=master)](https://travis-ci.org/FreaKzero/dlvr)
 
