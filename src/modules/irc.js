@@ -2,7 +2,7 @@ const irc = require('irc');
 const spinner = require('../lib/spinner');
 const {IRC_RECONNECT} = require('../constants');
 
-function send({cfg, version, secrets, changelog}) {
+function send({cfg, version, secrets, changelog}, message) {
   return new Promise((resolve, reject) => {
     var client = new irc.Client(cfg.irc.server, cfg.irc.username, {
       autoConnect: false,
@@ -12,13 +12,15 @@ function send({cfg, version, secrets, changelog}) {
     });
 
     client.connect(IRC_RECONNECT, function(serverReply) {
-      client.addListener('error', function(message) {
-        reject(message);
+      client.addListener('error', function(msg) {
+        reject(msg);
       });
 
       client.join(cfg.irc.channel, function(input) {
-        client.say(cfg.irc.channel);
-        client.disconnect();
+        client.say(cfg.irc.channel, message);
+        client.disconnect('', () => {
+          resolve();
+        });
       });
     });
   });
@@ -26,8 +28,8 @@ function send({cfg, version, secrets, changelog}) {
 
 const fail = ({cfg, version, secrets, changelog}, failMessage) => {
   if (cfg.has('irc') && cfg.irc.reportfail) {
-    const message = `Release *${version}* for *<${cfg.releaseUrl()}|${cfg
-      .githost.repo}>* Failed with Message: ${failMessage}`;
+    const message = `Release ${version} for ${cfg.githost
+      .repo}> Failed with Message: \n ${failMessage}`;
     return send({cfg, version, secrets, changelog}, message);
   } else {
     return Promise.resolve();
@@ -37,8 +39,7 @@ const fail = ({cfg, version, secrets, changelog}, failMessage) => {
 const success = ({cfg, version, secrets, changelog}) => {
   if (cfg.has('irc')) {
     spinner.create(`Send IRC message to ${cfg.irc.channel}`);
-    const message = `Just released *<${cfg.releaseUrl()}|${cfg.githost
-      .repo}>* Version *${version}* \n ${changelog}`;
+    const message = `Just released ${cfg.releaseUrl()} Version ${version} \n ${changelog}`;
     return send({cfg, version, secrets, changelog}, message);
   } else {
     return Promise.resolve();
