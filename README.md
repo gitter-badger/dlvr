@@ -53,7 +53,7 @@ Versions and Releases your Project based on your given configuration and release
 
 If you use auto - SEMVER will be automatically determined by keywords "breaking" (x.0.0) and "feature, module or plugin" (0.x.0) in your changelog.
 
-If you use pre - dlvr will release a new minor version with "prerelease" suffix, you can change that with the --preid flag (alpha, beta, rc).
+If you use pre - dlvr will release a new minor version with "prerelease" suffix, you can change the name of the suffix with the --preid flag (alpha, beta, rc).
 
 ## Config File
 ### .dlvr
