@@ -13,6 +13,10 @@ let template = {
       out: './dist/myfile.zip'
     }
   ],
+  gitter: {
+    channel: 'username/repo',
+    reportfail: true
+  },
   irc: {
     channel: '#general',
     server: 'irc.myserver.com',

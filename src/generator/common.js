@@ -71,6 +71,16 @@ const slack = {
   required: true
 };
 
+const gitter = {
+  name: 'gitter',
+  description: 'Do you want to use Gitter notifier ?',
+  type: 'string',
+  pattern: /^(y|n)$/i,
+  message: 'Only Y/y (yes) or N/n (no) is allowed',
+  default: 'y',
+  required: true
+};
+
 const irc = {
   name: 'irc',
   description: 'Do you want to use IRC notifier ?',
@@ -114,6 +124,7 @@ const compress = {
 module.exports = {
   dotenv,
   slack,
+  gitter,
   irc,
   repo,
   prerun,

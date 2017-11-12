@@ -25,6 +25,7 @@ DLVR_GITHUB
 DLVR_GITLAB
 DLVR_GITLAB_API
 DLVR_SLACK_WEBHOOK
+DLVR_GITTER
 ```
 
 ### Write initial config
@@ -80,6 +81,10 @@ If you use pre - dlvr will release a new minor version with "prerelease" suffix,
     "channel": "#github",
     "icon_emoji": ":shipit:",
     "username": "dlvr.bot",
+    "reportfail": true
+  },
+  "gitter" : {
+    "channel" : "username/repo",
     "reportfail": true
   },
   "irc": {

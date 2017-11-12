@@ -95,6 +95,7 @@ function runGitHub() {
     github.draft,
     github.assets,
     common.compress,
+    common.gitter,
     common.slack,
     common.irc
   ];
@@ -116,6 +117,7 @@ function runGitLab() {
     common.npmpublish,
     github.assets,
     common.compress,
+    common.gitter,
     common.slack,
     common.irc
   ];

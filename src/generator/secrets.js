@@ -35,6 +35,11 @@ const schema = [
     }
   },
   {
+    name: 'DLVR_GITTER',
+    description: 'Your Gitter token (enter to skip)',
+    type: 'string'
+  },
+  {
     name: 'DLVR_SLACK_WEBHOOK',
     description: 'Your Slack Webhook Url (enter to skip)',
     type: 'string'
